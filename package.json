@@ -1,0 +1,68 @@
+{
+    "name": "mass-killings-front-end",
+    "version": "1.0.0",
+    "description": "",
+    "author": "Mitchell Thorson & Pim Linders, USA TODAY",
+    "homepage": "",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/USATODAY/usat-graphics-kit"
+    },
+    "engines": {
+        "node": ">=10.13.0",
+        "npm": ">=6.4.1"
+    },
+    "scripts": {
+        "start": "npm run  dev",
+        "dev": "webpack-dev-server --config ./webpack.config.js --mode development --open",
+        "build": "webpack --config ./webpack.config.js --mode production",
+        "deploy": "npm run build && node scripts/deploy.js",
+        "purge": "node scripts/purge.js",
+        "setup": "npm install && node scripts/configure.js && rm -rf .git && git init"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.3.4",
+        "@babel/preset-env": "^7.3.4",
+        "@google-cloud/storage": "1.7.0",
+        "@webcomponents/custom-elements": "^1.2.4",
+        "archieml": "^0.4.2",
+        "autoprefixer": "^9.5.0",
+        "babel-loader": "^8.0.5",
+        "clean-webpack-plugin": "^2.0.1",
+        "copy-webpack-plugin": "^5.0.1",
+        "core-js": "^3.1.4",
+        "css-loader": "^2.1.1",
+        "fastly-purge": "^1.0.1",
+        "html-webpack-plugin": "^3.2.0",
+        "jsdoc": "^3.5.5",
+        "minami": "^1.2.3",
+        "mini-css-extract-plugin": "^0.5.0",
+        "npm-check": "^5.9.0",
+        "optimize-css-assets-webpack-plugin": "^5.0.1",
+        "postcss-flexbugs-fixes": "^4.1.0",
+        "postcss-loader": "^3.0.0",
+        "react-string-replace": "^0.4.1",
+        "style-loader": "^0.23.1",
+        "svelte": "^3.6.8",
+        "svelte-loader": "^2.13.5",
+        "webpack": "^4.29.6",
+        "webpack-cli": "^3.3.0",
+        "webpack-dev-server": "^3.2.1"
+    },
+    "dependencies": {
+        "baseplate-ads": "^0.1.0",
+        "baseplate-sharing": "^0.0.6",
+        "baseplate-utag-analytics": "^0.0.3",
+        "d3": "^5.15.0"
+    },
+    "browserList": [
+        ">1%",
+        "last 4 versions",
+        "Firefox ESR",
+        "not ie < 11"
+    ],
+    "config": {
+        "graphic_slug": "mass-killings-front-end",
+        "asset_path": "https://www.gannett-cdn.com/experiments/usatoday/mass-killings-front-end/"
+    }
+}

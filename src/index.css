@@ -1,0 +1,20 @@
+html, body, div, p, ul, ol, li, h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+}
+
+.usat-interactive-graphic {
+    font-family: "Unify Sans", sans-serif;
+    font-size: 16px;
+}
+
+.usat-interactive-graphic p {
+    font-family: "Unify Serif", serif;
+}
+
+.usat-interactive-graphic h1, .usat-interactive-graphic h2, .usat-interactive-graphic h3, .usat-interactive-graphic h4, .usat-interactive-graphic h5, .usat-interactive-graphic h6 {
+    font-family: "Unify Sans", sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+
+}
