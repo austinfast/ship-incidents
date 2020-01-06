@@ -6,17 +6,24 @@ export let incidents;
 let el;
 let category = "All";
 
+/*
+@TODO Make years variable dynamic so this does not break in 2021
+
+*/
+let years = Object.keys(incidents);
+
 const width = 900;
 const height = 900;
 const margin = 100;
 
 function drawChart() {
+
   const svg = d3.select(el)
     .append("svg")
     .attr("height", height)
     .attr("width", width)
-    .style("width", "100%")
-    .style("height", "auto")
+    // .style("width", "100%")
+    // .style("height", "auto")
     .style("background", "#F7F7F7");
   
   const maxRadius = 50;
@@ -25,8 +32,12 @@ function drawChart() {
   let arc = d3.arc();
   
   let incident_filter = category == "All" ? null : category;
-  
-  const extent = d3.extent(incidents, d => +d.victims);
+
+  let flatIncidents = [];
+  for (var key in incidents) {
+    flatIncidents = flatIncidents.concat(incidents[key]);
+  }
+  const extent = d3.extent(flatIncidents, d => +d.victims);
   
   const circleRadiusScale = d3.scaleSqrt()
     .domain(extent)
@@ -66,7 +77,7 @@ function drawChart() {
   
   yearGroups
     .selectAll('.data-circle')
-    .data(d => {return incident_filter ? incidents_by_year.get(d).filter(incident => incident.type == incident_filter) : incidents_by_year.get(d)})
+    .data(d => {return incident_filter ? incident[d].filter(incident => incident.type == incident_filter) : incidents[d]})
     .enter()
     .append('path')
     .attr('class', 'data-circle')
@@ -101,12 +112,9 @@ function drawChart() {
     .call(monthAxis)
 }
 
-
-onMount(() => {
-  console.log(el);
+$: if (incidents && el) {
   drawChart();
-});
-
+}
 </script>
 
 
