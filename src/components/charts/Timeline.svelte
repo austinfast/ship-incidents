@@ -81,7 +81,7 @@ function drawChart() {
     .enter()
     .append('path')
     .attr('class', 'data-circle')
-    .attr('transform', (d, i) => `translate(${yearScales.get(d.year)(new Date(d.date))}, 0)`)
+    .attr('transform', (d, i) => `translate(${yearScales.get(d.year)(d.real_date)}, 0)`)
     .attr('d', d => {
       return arc({
       		innerRadius: 0,

@@ -1,9 +1,18 @@
 class DataManager {
+  constructor() {
+    this._data = null;
+  }
   async getData() {
-     const response = await fetch(this.getDataURL())
-     let rawData = await response.json();
-     rawData["timeline"] = this.formatTimeline(rawData.incidents);
-     return rawData;
+    if (!this._data) {
+      const response = await fetch(this.getDataURL())
+      let rawData = await response.json();
+      this._data = rawData;
+      this._data.incidents.forEach(incident => {
+        incident.real_date = this.parseDate(incident.date);
+      })
+      this._data["timeline"] = this.formatTimeline(rawData.incidents);
+    }
+    return this._data;
   }
 
   getDataURL() {
@@ -24,6 +33,12 @@ class DataManager {
       }
     }
     return incidentsByYear;
+  }
+
+  parseDate(dateStr) {
+    let dateParts = dateStr.split("-");
+    let date = new Date(dateParts[0], parseInt(dateParts[1]) - 1, dateParts[2], 12)
+    return date;
   }
 
 
