@@ -1,6 +1,16 @@
 <style>
+
+.loading-module-wrapper {
+  min-height: 300px;
+  height: 50vh;
+  max-height: 600px;
+  background: #F7F7F7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .loading-icon {
-  --accent-color: #009BFF;
+  --accent-color: #A61103;
 }
 .loading-icon-content .loading-icon-text {
     text-align: center;
@@ -69,15 +79,17 @@
   }
 }
 </style>
-<div class="loading-icon">
-  <div class="loading-icon-content">
-    <div class="loading-icon-text">Loading</div>
-    <div class="loading-icon-content-loader">
-      <div class="rect1"></div>
-      <div class="rect2"></div>
-      <div class="rect3"></div>
-      <div class="rect4"></div>
-      <div class="rect5"></div>
+<div class="loading-module-wrapper">
+  <div class="loading-icon">
+    <div class="loading-icon-content">
+      <div class="loading-icon-text">Loading</div>
+      <div class="loading-icon-content-loader">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+      </div>
     </div>
   </div>
 </div>

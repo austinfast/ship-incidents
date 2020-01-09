@@ -4,19 +4,29 @@ class DataManager {
   }
   async getData() {
     if (!this._data) {
-      const response = await fetch(this.getDataURL())
+      const response = await fetch(this.getDataURL("all.json"))
       let rawData = await response.json();
       this._data = rawData;
       this._data.incidents.forEach(incident => {
         incident.real_date = this.parseDate(incident.date);
-      })
+        incident.year = incident.date.split("-")[0];
+      });
       this._data["timeline"] = this.formatTimeline(rawData.incidents);
+      this._data["yearly_summaries"] = this.formatYearlySummaries(rawData.incidents);
     }
+
+    /*
+    @TODO load in the geodata seperately, but keep caching working as is
+    */
     return this._data;
   }
 
-  getDataURL() {
-    let url = "static/data/all.json";
+  async getGeoData() {
+    return await fetch(this.getDataURL("incidents_geo_projected.json"));
+  }
+
+  getDataURL(filename) {
+    let url = "static/data/json/" + filename;
     return url;
   }
 
@@ -24,8 +34,7 @@ class DataManager {
     let incidentsByYear = {};
     for (var i = 0; i < rawIncidents.length; i += 1) {
       let incident = rawIncidents[i];
-      let year = incident.date.split("-")[0]
-      incident.year = year;
+      let year = incident.year;
       if (incidentsByYear[year]) {
         incidentsByYear[year].push(incident);
       } else {
@@ -33,6 +42,28 @@ class DataManager {
       }
     }
     return incidentsByYear;
+  }
+
+  formatYearlySummaries(rawIncidents) {
+    let yearsData = [];
+    let years = Object.keys(this._data.timeline);
+    years.forEach((year) => {
+    let incidents = this._data.timeline[year];
+    let yearSummary = incidents.reduce((yearInfo, incident) => {
+      return Object.assign(yearInfo, {
+        victims: yearInfo.victims + incident.victims,
+        numinjured: yearInfo.numinjured + incident.numinjured,
+        incidents: yearInfo.incidents + 1
+      });
+      }, {
+        year,
+        victims: 0,
+        numinjured: 0,
+        incidents: 0
+      });
+      yearsData.push(yearSummary);
+    });
+    return yearsData;
   }
 
   parseDate(dateStr) {

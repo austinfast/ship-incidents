@@ -3,13 +3,9 @@ import { onMount } from "svelte";
 import * as d3 from "d3";
 
 export let incidents;
-let el;
+let svgEl;
 let category = "All";
 
-/*
-@TODO Make years variable dynamic so this does not break in 2021
-
-*/
 let years = Object.keys(incidents);
 
 const width = 900;
@@ -18,12 +14,9 @@ const margin = 100;
 
 function drawChart() {
 
-  const svg = d3.select(el)
-    .append("svg")
+  const svg = d3.select(svgEl)
     .attr("height", height)
     .attr("width", width)
-    // .style("width", "100%")
-    // .style("height", "auto")
     .style("background", "#F7F7F7");
   
   const maxRadius = 50;
@@ -112,10 +105,10 @@ function drawChart() {
     .call(monthAxis)
 }
 
-$: if (incidents && el) {
+$: if (incidents && svgEl) {
   drawChart();
 }
 </script>
 
 
-<div id="chart-timeline" bind:this={el}></div>
+<svg bind:this={svgEl}></svg>
