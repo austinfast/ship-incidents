@@ -2,7 +2,7 @@ const path = require("path");
 const sander = require("sander");
 const axios = require("axios");
 const mapshaper = require("mapshaper");
-const reporoject = require("dirty-reprojectors");
+const reproject = require("dirty-reprojectors");
 const projections = require("dirty-reprojectors/projections");
 
 
@@ -101,13 +101,16 @@ axios.post(api_token_url, auth_credentials)
   .then(geometry => {
     let geo = JSON.parse(geometry);
     var features = geo.features;
+    let options = {
+      forward: "albersUsa",
+      reverse: 'mercator',
+      projections
+    };
     let reprojected = features.map(feature => {
+      let reprojectedPoint = reproject(options, feature.geometry);
       return Object.assign({}, feature, {
-        geometry: reporoject({
-          forward: "albersUsa",
-          projections: projections
-        }, feature.geometry)
-      })
+        geometry: reprojectedPoint
+      });
     });
     geo.features = reprojected;
     return sander.writeFile(path.join(output_dir, "json", "incidents_geo_projected.json"), JSON.stringify(geo));

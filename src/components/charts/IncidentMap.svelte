@@ -5,6 +5,8 @@
   let el;
 
   let extent = d3.extent(incidents.features.map(feature => feature.properties.victims))
+
+  mapboxgl.accessToken = "pk.eyJ1IjoidXNhdG9kYXlncmFwaGljcyIsImEiOiJ0S3BGdndrIn0.5juF5LWz_GRcndian32tZA";
     
   const minRadius = 5;
   const maxRadius = 25;
@@ -13,6 +15,7 @@
     .range([minRadius, maxRadius]);
   
   incidents.features = incidents.features.map(feature => {
+    console.log(feature);
     let props = Object.assign({}, feature.properties);
     props.radius = circleRadiusScale(props.victims);
     return Object.assign({}, feature, {properties: props})
@@ -22,7 +25,7 @@
   function renderMap() {
 
     let map = new mapboxgl.Map({
-      el,
+      container: el,
       bounds: [-24.0,-13.2,20.7,12.8],
       style: "mapbox://styles/usatodaygraphics/ck0gz14210qh11cq6w8fqzjvz?fresh=true",
       scrollZoom: false
@@ -50,7 +53,8 @@
     });
   }
 
-  $: if(el & incidents) {
+  $: if(el && incidents) {
+    console.log(incidents);
     renderMap();
   }
 </script>

@@ -9,7 +9,6 @@
 
   let dataManager = new DataManager();
   let data = null;
-  let incidents_geo = null;
 
   dataManager.getData().then((responseData) => {
     data = responseData;
@@ -56,9 +55,9 @@
     <VizModule
       subhead="Incidents by location"
       leadInText="In gravida eros nisi. Quisque in lectus condimentum, lobortis magna quis, rutrum nisi. Etiam a nulla pulvinar, dapibus tortor vel, egestas leo. Aliquam erat volutpat."> 
-      {#if incidents_geo}
+      {#if data}
         <IncidentMap 
-          incidents={incidents_geo} />
+          incidents={data.incidents_geo} />
       {:else}
         <Loading />
       {/if}

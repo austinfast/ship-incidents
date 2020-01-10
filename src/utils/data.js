@@ -13,11 +13,8 @@ class DataManager {
       });
       this._data["timeline"] = this.formatTimeline(rawData.incidents);
       this._data["yearly_summaries"] = this.formatYearlySummaries(rawData.incidents);
+      this._data["incidents_geo"] = await (await this.getGeoData()).json();
     }
-
-    /*
-    @TODO load in the geodata seperately, but keep caching working as is
-    */
     return this._data;
   }
 
