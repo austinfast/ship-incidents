@@ -46,14 +46,6 @@ function categorize_relationships(victims) {
   });
 } 
 
-
-// function to create geojson of incidents
-async function createIncidentGeo(inputFile, outputFile) {
-  const command = `-i ${inputFile} encoding=utf8 -filter-fields "latitude,longitude,victims,type,casename,date,city,state,id" -points x=longitude y=latitude -o ${outputFile} format=geojson`
-  let result = await mapshaper.applyCommands(command);
-  return result;
-}
-
 // output data directory
 const output_dir = path.join(__dirname, "../src/static/data");
 const auth_credentials = get_auth();
@@ -91,13 +83,16 @@ axios.post(api_token_url, auth_credentials)
       sander.writeFile(path.join(output_dir, "json", "offenders.json"), JSON.stringify(offenders))
     ]);
   })
+  // create geojson file of incidents
   .then((d) => {
     const command = `-i ${path.join(output_dir, "json", "incidents.json")} encoding=utf8 -filter-fields "latitude,longitude,victims,type,casename,date,city,state,id" -points x=longitude y=latitude -o ${path.join(output_dir, "json", "incidents_geo.json")} format=geojson`
     return mapshaper.runCommands(command)
   })
+  // load the geojson
   .then(() => {
     return sander.readFile(path.join(output_dir, "json", "incidents_geo.json"), {encoding: "utf8"})
   })
+  // reproject geojson into mapbox friendly albers projection
   .then(geometry => {
     let geo = JSON.parse(geometry);
     var features = geo.features;
