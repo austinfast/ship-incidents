@@ -59,3 +59,23 @@
     font-weight: 900;
     font-style: normal;
 }
+
+@font-face {
+    font-family: "Unify Sans Condensed";
+    src:url("https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySansCd_W_Bd.eot");
+    src:url("https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySansCd_W_Bd.eot?#iefix") format("embedded-opentype"),
+    url("https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySansCd_W_Bd.woff") format("woff"),
+    url("https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySansCd_W_Bd.ttf") format("truetype");
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Unify Sans Condensed";
+    src:url("https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySansCd_W_SBd.eot");
+    src:url("https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySansCd_W_SBd.eot?#iefix") format("embedded-opentype"),
+    url("https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySansCd_W_SBd.woff") format("woff"),
+    url("https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySansCd_W_SBd.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+}

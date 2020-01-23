@@ -6,6 +6,7 @@
   import YearlySummary from "./components/charts/YearlySummary.svelte";
   import IncidentMap from "./components/charts/IncidentMap.svelte";
   import DataManager from "./utils/data.js";
+  import { prettyNumber } from "./utils/text.js";
 
   let dataManager = new DataManager();
   let data = null;
@@ -16,8 +17,30 @@
   });
 
 </script>
+
+<style>
+  article {
+    overflow: auto;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+</style>
 <article>
-  <Header></Header>
+  <p>Praesent tortor sapien, pharetra a odio ut, scelerisque varius libero. Aliquam elementum ipsum et odio cursus aliquet. Vestibulum sed ipsum eu est viverra blandit non vitae leo. Sed iaculis nulla sed imperdiet cursus. Aliquam nec volutpat turpis. Cras nibh magna, posuere et sapien a, ultrices pellentesque nisi. Pellentesque a porttitor arcu. Phasellus finibus egestas elit, vel condimentum quam tempor vel. Mauris dictum lorem pharetra cursus feugiat. Cras quis est vel nulla egestas fermentum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer maximus lobortis mauris, a condimentum enim ultrices sed. Vestibulum at tristique tellus. Fusce fringilla convallis leo non faucibus.</p>
+  <p>Praesent tortor sapien, pharetra a odio ut, scelerisque varius libero. Aliquam elementum ipsum et odio cursus aliquet. Vestibulum sed ipsum eu est viverra blandit non vitae leo. Sed iaculis nulla sed imperdiet cursus. Aliquam nec volutpat turpis. Cras nibh magna, posuere et sapien a, ultrices pellentesque nisi. Pellentesque a porttitor arcu. Phasellus finibus egestas elit, vel condimentum quam tempor vel. Mauris dictum lorem pharetra cursus feugiat. Cras quis est vel nulla egestas fermentum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer maximus lobortis mauris, a condimentum enim ultrices sed. Vestibulum at tristique tellus. Fusce fringilla convallis leo non faucibus.</p>
+  <p>Praesent tortor sapien, pharetra a odio ut, scelerisque varius libero. Aliquam elementum ipsum et odio cursus aliquet. Vestibulum sed ipsum eu est viverra blandit non vitae leo. Sed iaculis nulla sed imperdiet cursus. Aliquam nec volutpat turpis. Cras nibh magna, posuere et sapien a, ultrices pellentesque nisi. Pellentesque a porttitor arcu. Phasellus finibus egestas elit, vel condimentum quam tempor vel. Mauris dictum lorem pharetra cursus feugiat. Cras quis est vel nulla egestas fermentum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer maximus lobortis mauris, a condimentum enim ultrices sed. Vestibulum at tristique tellus. Fusce fringilla convallis leo non faucibus.</p>
+  <p>Praesent tortor sapien, pharetra a odio ut, scelerisque varius libero. Aliquam elementum ipsum et odio cursus aliquet. Vestibulum sed ipsum eu est viverra blandit non vitae leo. Sed iaculis nulla sed imperdiet cursus. Aliquam nec volutpat turpis. Cras nibh magna, posuere et sapien a, ultrices pellentesque nisi. Pellentesque a porttitor arcu. Phasellus finibus egestas elit, vel condimentum quam tempor vel. Mauris dictum lorem pharetra cursus feugiat. Cras quis est vel nulla egestas fermentum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer maximus lobortis mauris, a condimentum enim ultrices sed. Vestibulum at tristique tellus. Fusce fringilla convallis leo non faucibus.</p>
+  <p>Praesent tortor sapien, pharetra a odio ut, scelerisque varius libero. Aliquam elementum ipsum et odio cursus aliquet. Vestibulum sed ipsum eu est viverra blandit non vitae leo. Sed iaculis nulla sed imperdiet cursus. Aliquam nec volutpat turpis. Cras nibh magna, posuere et sapien a, ultrices pellentesque nisi. Pellentesque a porttitor arcu. Phasellus finibus egestas elit, vel condimentum quam tempor vel. Mauris dictum lorem pharetra cursus feugiat. Cras quis est vel nulla egestas fermentum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer maximus lobortis mauris, a condimentum enim ultrices sed. Vestibulum at tristique tellus. Fusce fringilla convallis leo non faucibus.</p>
+  {#if data}
+    <Header 
+      incidents={prettyNumber(data.incidents.length)} 
+      victims={prettyNumber(data.victims.length)} 
+      offenders={prettyNumber(data.offenders.length)}></Header>
+  {:else}
+    <Loading />
+  {/if}
   <section class="main-content-section">
     <VizModule
       subhead="My subhead"

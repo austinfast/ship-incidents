@@ -58,4 +58,9 @@
     renderMap();
   }
 </script>
+<style>
+.incident-map-wrapper {
+  height: 600px;
+}
+</style>
 <div class="incident-map-wrapper" bind:this={el}></div>
