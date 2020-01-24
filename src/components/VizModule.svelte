@@ -1,4 +1,5 @@
 <script>
+  // PROPS
   export let subhead;
   export let leadInText;
 </script>

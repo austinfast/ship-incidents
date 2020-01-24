@@ -1,28 +1,30 @@
 <script>
   import mapboxgl from "mapbox-gl";
   import * as d3 from "d3";
+
+  // PROPS
   export let incidents;
+
   let el;
-
-  let extent = d3.extent(incidents.features.map(feature => feature.properties.victims))
-
-  mapboxgl.accessToken = "pk.eyJ1IjoidXNhdG9kYXlncmFwaGljcyIsImEiOiJ0S3BGdndrIn0.5juF5LWz_GRcndian32tZA";
-    
-  const minRadius = 5;
-  const maxRadius = 25;
-  const circleRadiusScale = d3.scaleSqrt()
-    .domain(extent)
-    .range([minRadius, maxRadius]);
-  
-  incidents.features = incidents.features.map(feature => {
-    console.log(feature);
-    let props = Object.assign({}, feature.properties);
-    props.radius = circleRadiusScale(props.victims);
-    return Object.assign({}, feature, {properties: props})
-  })
 
   // Configure map
   function renderMap() {
+    // Mapbox KEY
+    mapboxgl.accessToken = "pk.eyJ1IjoidXNhdG9kYXlncmFwaGljcyIsImEiOiJ0S3BGdndrIn0.5juF5LWz_GRcndian32tZA";
+    
+    // Set circle radius scale based on data
+    let extent = d3.extent(incidents.features.map(feature => feature.properties.victims))
+    let minRadius = 5;
+    let maxRadius = 25;
+    let circleRadiusScale = d3.scaleSqrt()
+      .domain(extent)
+      .range([minRadius, maxRadius]);
+    
+    incidents.features = incidents.features.map(feature => {
+      let props = Object.assign({}, feature.properties);
+      props.radius = circleRadiusScale(props.victims);
+      return Object.assign({}, feature, {properties: props})
+    })
 
     let map = new mapboxgl.Map({
       container: el,
@@ -54,7 +56,6 @@
   }
 
   $: if(el && incidents) {
-    console.log(incidents);
     renderMap();
   }
 </script>
