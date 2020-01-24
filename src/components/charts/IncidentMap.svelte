@@ -47,7 +47,7 @@
           paint: {
             'circle-radius': ['get', 'radius'],
             'circle-opacity': 0.75,
-            'circle-color': '#A61103',
+            'circle-color': '#d9501e',
             'circle-stroke-color': '#FFFFFF',
             'circle-stroke-width': 1
           }
@@ -59,6 +59,9 @@
     renderMap();
   }
 </script>
+<svelte:head>
+  <link href='https://www.gannett-cdn.com/experiments/usatoday/_common/mapbox-gl-1.0/mapbox-gl.css' rel='stylesheet' />
+</svelte:head>
 <style>
 .incident-map-wrapper {
   height: 600px;
