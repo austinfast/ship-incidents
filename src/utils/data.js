@@ -45,6 +45,9 @@ class DataManager {
     let yearsData = [];
     let years = Object.keys(this._data.timeline);
     years.forEach((year) => {
+    if(year == "null") {
+      return;
+    }
     let incidents = this._data.timeline[year];
     let yearSummary = incidents.reduce((yearInfo, incident) => {
       return Object.assign(yearInfo, {

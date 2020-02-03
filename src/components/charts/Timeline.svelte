@@ -9,7 +9,7 @@ let svgEl;
 let wrapEl;
 let width = 900;
 let category = "All";
-let years = Object.keys(incidents).filter(year => year !== null);
+let years = Object.keys(incidents).filter(year => year !== null && year !== "null");
 
 function drawChart() {
   let height = width;
