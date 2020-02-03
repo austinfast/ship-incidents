@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from "svelte";
   import mapboxgl from "mapbox-gl";
   import * as d3 from "d3";
 
@@ -6,6 +7,7 @@
   export let incidents;
 
   let el;
+  let width;
 
   // Configure map
   function renderMap() {
@@ -14,8 +16,8 @@
     
     // Set circle radius scale based on data
     let extent = d3.extent(incidents.features.map(feature => feature.properties.victims))
-    let minRadius = 5;
-    let maxRadius = 25;
+    let minRadius = width < 600 ? 3 : 5;
+    let maxRadius = width < 600 ? 15 : 25;
     let circleRadiusScale = d3.scaleSqrt()
       .domain(extent)
       .range([minRadius, maxRadius]);
@@ -56,15 +58,14 @@
   }
 
   $: if(el && incidents) {
+    width = el.offsetWidth;
     renderMap();
   }
 </script>
-<svelte:head>
-  <link href='https://www.gannett-cdn.com/experiments/usatoday/_common/mapbox-gl-1.0/mapbox-gl.css' rel='stylesheet' />
-</svelte:head>
 <style>
 .incident-map-wrapper {
-  height: 600px;
+  height: 67vw;
+  max-height: 600px;
 }
 </style>
 <div class="incident-map-wrapper" bind:this={el}></div>

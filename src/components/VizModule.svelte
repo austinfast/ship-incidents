@@ -3,6 +3,11 @@
   export let subhead;
   export let leadInText;
 </script>
+<style>
+  .viz-module-w {
+    margin-bottom: 50px;
+  }
+</style>
 <div class="viz-module-w">
   {#if subhead}
     <h2 class="viz-module-subhead subhead">{subhead}</h2>

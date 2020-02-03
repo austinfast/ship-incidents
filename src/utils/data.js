@@ -9,7 +9,7 @@ class DataManager {
       this._data = rawData;
       this._data.incidents.forEach(incident => {
         incident.real_date = this.parseDate(incident.date);
-        incident.year = incident.date.split("-")[0];
+        incident.year = incident.date ? incident.date.split("-")[0] : null;
       });
       this._data["timeline"] = this.formatTimeline(rawData.incidents);
       this._data["yearly_summaries"] = this.formatYearlySummaries(rawData.incidents);
@@ -64,6 +64,10 @@ class DataManager {
   }
 
   parseDate(dateStr) {
+    // handle null dates
+    if (!dateStr) {
+      return null;
+    }
     let dateParts = dateStr.split("-");
     let date = new Date(dateParts[0], parseInt(dateParts[1]) - 1, dateParts[2], 12)
     return date;

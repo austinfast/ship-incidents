@@ -7,9 +7,9 @@ export let incidents;
 
 let svgEl;
 let wrapEl;
-let category = "All";
-let years = Object.keys(incidents);
 let width = 900;
+let category = "All";
+let years = Object.keys(incidents).filter(year => year !== null);
 
 function drawChart() {
   let height = width;
@@ -47,6 +47,7 @@ function drawChart() {
     .range(['#A61103', '#D9501E', '#416986', '#8C8C8C', '#590902']);
   
   let yearScales = new Map();
+  console.log(years);
   years.forEach(year => {
     yearScales.set(year, d3.scaleTime()
       .domain([new Date(parseInt(year), 0, 1), new Date(parseInt(year), 11, 31)])
@@ -86,8 +87,8 @@ function drawChart() {
       		endAngle: Math.PI*0.5
     	});
     })
-    .attr("fill", d => colorScale(d.type))
-    .attr("fill", "#A61103")
+    // .attr("fill", d => colorScale(d.type))
+    .attr("fill", "#d9501e")
     .attr("stroke", "white")
     .attr("opacity", 0.75);
   

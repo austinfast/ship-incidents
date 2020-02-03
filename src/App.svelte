@@ -30,10 +30,11 @@
 </style>
 <article>
   {#if data}
-    <Header 
-      incidents={prettyNumber(data.incidents.length)} 
-      victims={prettyNumber(data.victims.length)} 
-      offenders={prettyNumber(data.offenders.length)}></Header>
+  <Header 
+    incidents={prettyNumber(data.incidents.length)} 
+    victims={prettyNumber(data.victims.length)} 
+    offenders={prettyNumber(data.offenders.length)}></Header>
+
   <section class="main-content-section">
     <VizModule
       subhead="My subhead"
@@ -42,7 +43,7 @@
     </VizModule>
     <VizModule
       subhead="Incidents by year"
-      leadInText="In gravida eros nisi. Quisque in lectus condimentum, lobortis magna quis, rutrum nisi. Etiam a nulla pulvinar, dapibus tortor vel, egestas leo. Aliquam erat volutpat."> 
+    >
         <YearlySummary 
           yearlyData={data.yearly_summaries}
           yearlyVariable={"incidents"}/>
@@ -50,7 +51,7 @@
 
     <VizModule
       subhead="Victims by year"
-      leadInText="In gravida eros nisi. Quisque in lectus condimentum, lobortis magna quis, rutrum nisi. Etiam a nulla pulvinar, dapibus tortor vel, egestas leo. Aliquam erat volutpat."> 
+    >
         <YearlySummary 
           yearlyData={data.yearly_summaries}
           yearlyVariable={"victims"}/>

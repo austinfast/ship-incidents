@@ -72,7 +72,7 @@ axios.post(api_token_url, auth_credentials)
     let { incidents, victims, offenders} = all_data;
     let incidents_w_year = incidents.map((incident) => {
       return Object.assign({}, incident, {
-        year: incident.date.split("-")[0]
+        year: incident.date ? incident.date.split("-")[0] : null
       });
     });
     victims = categorize_relationships(victims);

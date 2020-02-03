@@ -1,5 +1,6 @@
-import  "./fonts.css" // eslint-disable-line
-import styles from "./index.css" // eslint-disable-line
+import  "./style/fonts.css"
+import "./style/index.css"
+import "./style/mapbox-gl.css";
 import App from "./App.svelte";
 
 // check to see if static web environment

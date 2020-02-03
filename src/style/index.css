@@ -1,4 +1,6 @@
 :root {
+    --font-family-sans: "Unify Sans", sans-serif;
+    --font-family-serif: "Unify Serif", serif;
     --font-size-small: 12px;
     --line-height-small: 20px;
     --font-size-medium: 16px;
@@ -21,11 +23,8 @@ html, body, div, p, ul, ol, li, h1, h2, h3, h4, h5, h6 {
     color: var(--color-text);
 }
 
-html {
-}
-
 .usat-interactive-graphic {
-    font-family: "Unify Sans", sans-serif;
+    font-family: var(--font-family-sans, sans-serif);
     font-size: 16px;
     font-size: var(--font-size-medium);
     line-height: 22px;
@@ -38,7 +37,7 @@ html {
 }
 
 .usat-interactive-graphic h1, .usat-interactive-graphic h2, .usat-interactive-graphic h3, .usat-interactive-graphic h4, .usat-interactive-graphic h5, .usat-interactive-graphic h6 {
-    font-family: "Unify Sans", sans-serif;
+    font-family: var(--font-family-sans, sans-serif);
     font-weight: 700;
     font-size: 1rem;
 }
@@ -46,7 +45,7 @@ html {
 .usat-interactive-graphic h2 {
     font-size: 32px;
     line-height: 36px;
-    font-family: "Unify Serif", serif;
+    font-family: var(--font-family-serif, serif);
     font-weight: 700;
     margin-bottom: 10px;
 }
