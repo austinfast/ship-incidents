@@ -7,11 +7,17 @@ let wrapEl;
 let width;
 let victims;
 let height;
-let sortedIncidents;
 let mode = "incidents";
+let counts;
+let victimCounts;
+let countLookup = {};
+let order;
+let victimOrder;
+let victimCountLookup = {};
+let sortedIncidents;
 
 // chart sizing properties
-let squareSize = 15;
+let squareSize = 20;
 let squareMargin = 1;
 let numCols = 20;
 let colorsByType = {
@@ -22,16 +28,53 @@ let colorsByType = {
   "Felony": "#590902"
 };
 
-$: if (width) {
-  squareSize = width < 600 ? 10 : 15;
-  squareMargin = width < 600 ? 1 : 1;
+let labelPositions = [];
+
+
+// get counts of each type
+function getIncidentCounts() {
+  let typeCounts = [];
+  let types = incidents.reduce((types, incident) => {
+    if (types.indexOf(incident.type) < 0 && incident.type) {
+      return types.concat([incident.type]);
+    } else {
+      return types;
+    }
+  }, []);
+
+  for (var i = 0; i < types.length; i += 1) {
+    let type = types[i];
+    let count = getCount(type);
+    typeCounts.push([type, count]);
+  }
+
+  typeCounts = typeCounts.sort((a, b) => b[1] - a[1]);
+  return typeCounts;
+}
+
+// get counts of victims of each type
+function getVictimCounts() {
+  let typeCounts = [];
+  let types = victims.reduce((allTypes, victimType) => {
+    if (allTypes.indexOf(victimType) < 0 && victimType) {
+      return allTypes.concat([victimType]);
+    } else {
+      return allTypes;
+    }
+  }, []);
+  for (var i = 0; i < types.length; i += 1) {
+    let type = types[i];
+    let count = victims.filter(victimType => victimType == type).length;
+    typeCounts.push([type, count]);
+  }
+
+  typeCounts = typeCounts.sort((a, b) => b[1] - a[1]);
+  return typeCounts;
 }
 
 // function to sort incidents by type
 function sortByType(incidents) {
 
-  // maybe this should be dynamic and order based on count of each
-  let order = ["Family", "Public", "Felony", "Other", "Unsolved"]
   return incidents.sort((a, b) => {
     for (var i = 0; i < order.length; i += 1) {
       let orderType = order[i];
@@ -45,16 +88,25 @@ function sortByType(incidents) {
   });
 }
 
-$: sortedIncidents = sortByType(incidents);
+function getCount(incidentType) {
+  let incidentsByType = incidents.filter(incident => incident.type == incidentType);
+  return incidentsByType.length;
+}
 
-$: victims = sortedIncidents.reduce((all, incident) => {
-  for (var i = 0; i < incident.victims; i +=1) {
-    all.push(incident.type);
-  }
-  return all;
-}, []);
-
-$: height = mode == "incidents" ? (Math.floor(incidents.length / numCols) * (squareSize + squareMargin)) : (Math.floor(victims.length / numCols) * (squareSize + squareMargin));
+function computeLabelPositions() {
+  let labelOrder = mode == "incidents" ? order : victimOrder;
+  let lookup = mode == "incidents" ? countLookup : victimCountLookup;
+  return labelOrder.map((type, i) => {
+    let numPrevious = i - 1;
+    let totalPrevious = 0;
+    while(numPrevious >= 0) {
+      totalPrevious += lookup[order[numPrevious]];
+      numPrevious -= 1;
+    }
+    let rows = Math.floor(totalPrevious / numCols) + Math.ceil(lookup[type] / numCols / 2);
+    return [type, rows * (squareSize + squareMargin)];
+  });
+}
 
 // take an index and return an x position;
 function getXPosition(i) {
@@ -71,8 +123,59 @@ function getColor(type) {
   return colorsByType[type];
 }
 
+$: if (width) {
+  squareSize = width < 600 ? 10 : 20;
+  squareMargin = width < 600 ? 1 : 1;
+  labelPositions = computeLabelPositions();
+}
+
+// set our dynamic variables based on our incidents;
+
+// raw counts of each type
+$: counts = getIncidentCounts();
+
+// a lookup object of counts
+$: countLookup = counts.reduce((lookup, typeCount) => {
+  lookup[typeCount[0]] = typeCount[1];
+  return lookup;
+}, countLookup);
+
+// ordering based on counts
+$: order = counts.map(type => type[0]);
+$: victimOrder = victimCounts.map(type => type[0]);
+
+// sort the incidents based on order
+$: sortedIncidents = sortByType(incidents);
+
+// count victims by incident type
+$: victims = sortedIncidents.reduce((all, incident) => {
+  for (var i = 0; i < incident.victims; i +=1) {
+    all.push(incident.type);
+  }
+  return all;
+}, []);
+
+$: if (victims) {
+  victimCounts = getVictimCounts();
+}
+
+$: victimCountLookup = victimCounts.reduce((lookup, typeCount) => {
+  lookup[typeCount[0]] = typeCount[1];
+  return lookup;
+}, victimCountLookup);
+// re compute the height based on mode and the sizing variables
+$: height = mode == "incidents" ? (Math.floor(incidents.length / numCols) * (squareSize + squareMargin)) : (Math.floor(victims.length / numCols) * (squareSize + squareMargin));
+
+$: if(mode) {
+  labelPositions = computeLabelPositions();
+}
+
 onMount(() => {
   width = wrapEl.offsetWidth;
+  counts = getIncidentCounts();
+  victimCounts = getVictimCounts();
+  labelPositions = computeLabelPositions();
+
 })
 </script>
 <style>
@@ -101,6 +204,33 @@ onMount(() => {
     background-position: right .7em top 50%, 0 0;
     background-size: .65em auto, 100%;
   }
+
+  .incident-type-chart-label-wrapper {
+    display: flex;
+  }
+  
+  .chart-labels-wrapper {
+    position: relative;
+    padding-left: 10px;
+  }
+
+  .chart-label {
+    position: absolute;
+    transform: translateY(-50%);
+  }
+
+  .chart-label p {
+    margin: 0;
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+  }
+
+  .chart-label p.type-count {
+    font-size: var(--font-size-medium);
+    line-height: var(--line-height-small);
+    font-weight: 700;
+    margin: 0;
+  }
 </style>
 <div class="incident-type-wrap" bind:this={wrapEl}>
 <div class="select-wrap">
@@ -109,27 +239,39 @@ onMount(() => {
     <option value="victims">Victims</option>
   </select>
 </div>
-<svg class="incident-type-chart" height={height}>
-  {#if mode == "incidents"}
-  {#each incidents as incident, i}
-    <rect 
-      width={squareSize + "px"} 
-      height={squareSize + "px"} 
-      fill={getColor(incident.type)} 
-      x={(i % numCols) * (squareSize + squareMargin)} 
-      y={Math.floor(i / numCols) * (squareSize + squareMargin)}
-    />
-  {/each}
-  {:else if mode == "victims"}
-  {#each victims as victim, i}
-    <rect 
-      width={squareSize + "px"} 
-      height={squareSize + "px"} 
-      fill={getColor(victim)} 
-      x={(i % numCols) * (squareSize + squareMargin)} 
-      y={Math.floor(i / numCols) * (squareSize + squareMargin)}
-    />
-  {/each}
-  {/if}
-</svg>
+<div class="incident-type-chart-label-wrapper">
+  <svg class="incident-type-chart" height={height} width={(squareSize + squareMargin) * numCols }>
+    {#if mode == "incidents"}
+    {#each incidents as incident, i}
+      <rect 
+        width={squareSize + "px"} 
+        height={squareSize + "px"} 
+        fill={getColor(incident.type)} 
+        x={(i % numCols) * (squareSize + squareMargin)} 
+        y={Math.floor(i / numCols) * (squareSize + squareMargin)}
+      />
+    {/each}
+    {:else if mode == "victims"}
+    {#each victims as victim, i}
+      <rect 
+        width={squareSize + "px"} 
+        height={squareSize + "px"} 
+        fill={getColor(victim)} 
+        x={(i % numCols) * (squareSize + squareMargin)} 
+        y={Math.floor(i / numCols) * (squareSize + squareMargin)}
+      />
+    {/each}
+    {/if}
+  </svg>
+  <div class="chart-labels-wrapper">
+    {#each labelPositions as label}
+      <div class="chart-label"
+        style={"top: " + label[1] + "px"}>
+        <p class="type-count"
+          style={"color: " + getColor(label[0]) + ";"}>{mode == "incidents" ? countLookup[label[0]] : victimCountLookup[label[0]]}</p>
+        <p class="type-label">{label[0]}</p>
+      </div>
+    {/each}
+  </div>
+</div>
 </div>
