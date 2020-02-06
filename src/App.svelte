@@ -4,6 +4,7 @@
   import Loading from "./components/Loading.svelte";
   import Timeline from "./components/charts/Timeline.svelte";
   import YearlySummary from "./components/charts/YearlySummary.svelte";
+  import TrendLine from "./components/charts/TrendLine.svelte";
   import IncidentMap from "./components/charts/IncidentMap.svelte";
   import IncidentTypeWaffleChart from "./components/charts/IncidentTypeWaffleChart.svelte";
   import DataManager from "./utils/data.js";
@@ -40,6 +41,13 @@
       subhead="My subhead"
       leadInText="In gravida eros nisi. Quisque in lectus condimentum, lobortis magna quis, rutrum nisi. Etiam a nulla pulvinar, dapibus tortor vel, egestas leo. Aliquam erat volutpat."> 
         <Timeline incidents={data.timeline}/>
+    </VizModule>
+    <VizModule
+      subhead="Incidents by year"
+    >
+        <TrendLine 
+          yearlyData={data.yearly_summaries}
+          yearlyVariable={"incidents"}/>
     </VizModule>
     <VizModule
       subhead="Incidents by year"

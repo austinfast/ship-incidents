@@ -44,7 +44,7 @@ function getIncidentCounts() {
 
   for (var i = 0; i < types.length; i += 1) {
     let type = types[i];
-    let count = getCount(type);
+    let count = incidents.filter(incident => incident.type == type).length;
     typeCounts.push([type, count]);
   }
 
@@ -88,11 +88,14 @@ function sortByType(incidents) {
   });
 }
 
+
 function getCount(incidentType) {
   let incidentsByType = incidents.filter(incident => incident.type == incidentType);
   return incidentsByType.length;
 }
 
+
+// function to compute label positions based on data, order, and mode
 function computeLabelPositions() {
   let labelOrder = mode == "incidents" ? order : victimOrder;
   let lookup = mode == "incidents" ? countLookup : victimCountLookup;
@@ -131,18 +134,17 @@ $: if (width) {
 
 // set our dynamic variables based on our incidents;
 
-// raw counts of each type
+// raw counts of each type of incident
 $: counts = getIncidentCounts();
 
-// a lookup object of counts
+// a lookup object of counts of incidents
 $: countLookup = counts.reduce((lookup, typeCount) => {
   lookup[typeCount[0]] = typeCount[1];
   return lookup;
 }, countLookup);
 
-// ordering based on counts
+// ordering based on counts of incidents
 $: order = counts.map(type => type[0]);
-$: victimOrder = victimCounts.map(type => type[0]);
 
 // sort the incidents based on order
 $: sortedIncidents = sortByType(incidents);
@@ -155,21 +157,31 @@ $: victims = sortedIncidents.reduce((all, incident) => {
   return all;
 }, []);
 
+// victim counts
 $: if (victims) {
   victimCounts = getVictimCounts();
 }
 
+// ordering based on counts of victims
+$: victimOrder = victimCounts.map(type => type[0]);
+
+
+// vicitm count lookup
 $: victimCountLookup = victimCounts.reduce((lookup, typeCount) => {
   lookup[typeCount[0]] = typeCount[1];
   return lookup;
 }, victimCountLookup);
+
 // re compute the height based on mode and the sizing variables
 $: height = mode == "incidents" ? (Math.floor(incidents.length / numCols) * (squareSize + squareMargin)) : (Math.floor(victims.length / numCols) * (squareSize + squareMargin));
 
+// recompute label positions if mode changes
 $: if(mode) {
   labelPositions = computeLabelPositions();
 }
 
+
+// initialize some values onMount
 onMount(() => {
   width = wrapEl.offsetWidth;
   counts = getIncidentCounts();

@@ -57,6 +57,7 @@ class DataManager {
       });
       }, {
         year,
+        yearDate: this.parseDate(year + "-1-1"),
         victims: 0,
         numinjured: 0,
         incidents: 0

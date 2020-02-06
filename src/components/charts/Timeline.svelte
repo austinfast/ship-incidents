@@ -47,7 +47,6 @@ function drawChart() {
     .range(['#A61103', '#D9501E', '#416986', '#8C8C8C', '#590902']);
   
   let yearScales = new Map();
-  console.log(years);
   years.forEach(year => {
     yearScales.set(year, d3.scaleTime()
       .domain([new Date(parseInt(year), 0, 1), new Date(parseInt(year), 11, 31)])
