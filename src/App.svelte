@@ -37,41 +37,46 @@
     offenders={prettyNumber(data.offenders.length)}></Header>
 
   <section class="main-content-section">
+    <!-- incident timeline -->
     <VizModule
-      subhead="My subhead"
-      leadInText="In gravida eros nisi. Quisque in lectus condimentum, lobortis magna quis, rutrum nisi. Etiam a nulla pulvinar, dapibus tortor vel, egestas leo. Aliquam erat volutpat."> 
+      subhead="Timeline of mass killing incidents"
+      leadInText="Center of arc represents data of incident, radius represents the number of victims killed."> 
         <Timeline incidents={data.timeline}/>
     </VizModule>
-    <VizModule
-      subhead="Incidents by year"
-    >
-        <TrendLine 
-          yearlyData={data.yearly_summaries}
-          yearlyVariables={["incidents", "mass_shootings", "mass_public_shootings"]}/>
-    </VizModule>
-    <VizModule
-      subhead="Incidents by year"
-    >
-        <YearlySummary 
-          yearlyData={data.yearly_summaries}
-          yearlyVariable={"incidents"}/>
-    </VizModule>
-
-    <VizModule
-      subhead="Victims by year"
-    >
-        <YearlySummary 
-          yearlyData={data.yearly_summaries}
-          yearlyVariable={"victims"}/>
-    </VizModule>
-    
+    <!-- incident location map -->
     <VizModule
       subhead="Incidents by location"
       leadInText="In gravida eros nisi. Quisque in lectus condimentum, lobortis magna quis, rutrum nisi. Etiam a nulla pulvinar, dapibus tortor vel, egestas leo. Aliquam erat volutpat."> 
         <IncidentMap 
           incidents={data.incidents_geo} />
     </VizModule>
+    <!-- trends in mass killings -->
+    <VizModule
+      subhead="Trends in mass killing incidents"
+      leadInText="Explain the significance of mass shootings and mass public shootings as indicators."
+    >
+        <TrendLine 
+          yearlyData={data.yearly_summaries}
+          yearlyVariables={[
+            ["incidents", "#D9501E", "Mass killings"], 
+            ["mass_shootings", "#A61103", "Mass shootings"], 
+            ["mass_public_shootings", "#590902", "Mass public shootings"]]}/>
+    </VizModule>
 
+     <VizModule
+      subhead="Trends in mass killing incidents by type"
+      leadInText="trends by type"
+    >
+        <TrendLine 
+          yearlyData={data.yearly_summaries}
+          yearlyVariables={[
+            ["incidents_family", "#D9501E", "Family"], 
+            ["incidents_public", "#A61103", "Public"], 
+            ["incidents_felony", "#590902", "Felony"], 
+            ["incidents_other", "#8C8C8C", "Other/unkown"]]}/>
+    </VizModule>
+
+    <!-- incident type breakdown -->
     <VizModule
       subhead="Incidents by type"
       leadInText="In gravida eros nisi. Quisque in lectus condimentum, lobortis magna quis, rutrum nisi. Etiam a nulla pulvinar, dapibus tortor vel, egestas leo. Aliquam erat volutpat."> 
