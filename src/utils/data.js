@@ -53,14 +53,18 @@ class DataManager {
       return Object.assign(yearInfo, {
         victims: yearInfo.victims + incident.victims,
         numinjured: yearInfo.numinjured + incident.numinjured,
-        incidents: yearInfo.incidents + 1
+        incidents: yearInfo.incidents + 1,
+        mass_shootings: incident.firstcod == "Shooting" ? yearInfo.mass_shootings + 1 : yearInfo.mass_shootings,
+        mass_public_shootings: incident.firstcod == "Shooting" && incident.type == "Public" ? yearInfo.mass_public_shootings + 1 : yearInfo.mass_public_shootings
       });
       }, {
         year,
-        yearDate: this.parseDate(year + "-1-1"),
+        year_date: this.parseDate(year + "-1-1"),
         victims: 0,
         numinjured: 0,
-        incidents: 0
+        incidents: 0,
+        mass_shootings: 0,
+        mass_public_shootings: 0
       });
       yearsData.push(yearSummary);
     });

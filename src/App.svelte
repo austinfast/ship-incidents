@@ -47,7 +47,7 @@
     >
         <TrendLine 
           yearlyData={data.yearly_summaries}
-          yearlyVariable={"incidents"}/>
+          yearlyVariables={["incidents", "mass_shootings", "mass_public_shootings"]}/>
     </VizModule>
     <VizModule
       subhead="Incidents by year"
