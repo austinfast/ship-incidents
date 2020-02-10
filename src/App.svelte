@@ -7,6 +7,8 @@
   import TrendLine from "./components/charts/TrendLine.svelte";
   import IncidentMap from "./components/charts/IncidentMap.svelte";
   import IncidentTypeWaffleChart from "./components/charts/IncidentTypeWaffleChart.svelte";
+  import RankedBar from "./components/charts/RankedBar.svelte";
+  import GunType from "./components/charts/GunType.svelte";
   import DataManager from "./utils/data.js";
   import { prettyNumber } from "./utils/text.js";
 
@@ -82,6 +84,22 @@
       leadInText="In gravida eros nisi. Quisque in lectus condimentum, lobortis magna quis, rutrum nisi. Etiam a nulla pulvinar, dapibus tortor vel, egestas leo. Aliquam erat volutpat."> 
         <IncidentTypeWaffleChart 
           incidents={data.incidents} />
+    </VizModule>
+
+    <!-- location type breakdown -->
+    <VizModule
+      subhead="Location types"
+      leadInText="In gravida eros nisi. Quisque in lectus condimentum, lobortis magna quis, rutrum nisi. Etiam a nulla pulvinar, dapibus tortor vel, egestas leo. Aliquam erat volutpat."> 
+        <RankedBar 
+          items={data.location_type_counts} />
+    </VizModule>
+
+    <!-- weapon type breakdown -->
+    <VizModule
+      subhead="Weapons used"
+      leadInText="Which types of weapons were used in the most incidents"> 
+        <GunType 
+           />
     </VizModule>
   </section>
   {:else}

@@ -4,16 +4,39 @@ class DataManager {
   }
   async getData() {
     if (!this._data) {
+
+      // request data from API
       const response = await fetch(this.getDataURL("all.json"))
       let rawData = await response.json();
       this._data = rawData;
+
+      // set parse and set a few additional variables for each incident
       this._data.incidents.forEach(incident => {
+
+        // a real JS date
         incident.real_date = this.parseDate(incident.date);
+
+        // a string version of just the year
         incident.year = incident.date ? incident.date.split("-")[0] : null;
+
+        // an array of gun types rather than a string
+        incident.gun_type_array = this.parseGunTypes(incident.gun_type);
       });
+
+      // format timeline data
       this._data["timeline"] = this.formatTimeline(rawData.incidents);
+
+      // format yearly summary data
       this._data["yearly_summaries"] = this.formatYearlySummaries(rawData.incidents);
+
+      // fetch geographic data seperately
       this._data["incidents_geo"] = await (await this.getGeoData()).json();
+
+      // count location types
+      this._data["location_type_counts"] = this.countTypes(rawData.incidents, "location_type");
+
+      // count gun types
+      this._data["gun_type_counts"] = this.countTypes(rawData.incidents, "gun_type_array");
     }
     return this._data;
   }
@@ -93,7 +116,54 @@ class DataManager {
     return date;
   }
 
+  countTypes(rawIncidents, countKey) {
+    let typeLookup = {};
+    let typeArray = []
 
+    rawIncidents.forEach(incident => {
+      if (typeof incident[countKey] == "string") {
+        if (typeLookup[incident[countKey]]) {
+          typeLookup[incident[countKey]] += 1;
+        } else {
+          typeLookup[incident[countKey]] = 1;
+        }
+      } else if (typeof incident[countKey] == "object") {
+        incident[countKey].forEach(countCategory => {
+          if (typeLookup[countCategory]) {
+            typeLookup[countCategory] += 1;
+          } else {
+            typeLookup[countCategory] = 1;
+          }
+        })
+      }
+    });
+
+    for (var key in typeLookup) {
+      typeArray.push({
+        location_type: key,
+        count: typeLookup[key]
+      });
+    }
+
+    return typeArray.sort((a,b) => b.count - a.count);
+  }
+
+  parseGunTypes(gun_type_string) {
+    let split_1 = gun_type_string.split("&");
+    if (split_1.length < 2) {
+      // if type is blank, override to "Unknown"
+      if (split_1 == "") {
+        return ["Unknown"];
+      }
+      return split_1;
+    }
+    let split_2 = split_1[0].split(",");
+    let result = split_2.concat([split_1[1]]);
+    result.forEach((item, i) => {
+      result[i] = item.trim();
+    });
+    return result;
+  }
 }
 
 export default DataManager;
