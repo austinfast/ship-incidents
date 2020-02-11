@@ -25,6 +25,9 @@
 <style>
   article {
     overflow: auto;
+  }
+
+  :global(.article-width) {
     max-width: 900px;
     margin: 0 auto;
     padding: 0 20px;
@@ -97,8 +100,11 @@
     <!-- weapon type breakdown -->
     <VizModule
       subhead="Weapons used"
-      leadInText="Which types of weapons were used in the most incidents"> 
+      leadInText="Which types of weapons were used in the most incidents"
+      backgroundColor="#416986"
+      textColor="light"> 
         <GunType 
+          gunTypes={data.gun_type_counts}
            />
     </VizModule>
   </section>

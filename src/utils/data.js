@@ -152,7 +152,7 @@ class DataManager {
 
     for (var key in typeLookup) {
       typeArray.push({
-        location_type: key,
+        label: key,
         count: typeLookup[key]
       });
     }

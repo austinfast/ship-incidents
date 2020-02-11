@@ -49,7 +49,7 @@
           transform={`translate(0, ${i * (barHeight + barMargin * 2 + labelSize)})`}
           >
           <text
-            style="fill: #404040; font-size: var(--font-size-medium)">{item.location_type}</text>
+            style="fill: #404040; font-size: var(--font-size-medium)">{item.label}</text>
           <rect 
             height={barHeight}
             width={getScale(width)(item.count)}
