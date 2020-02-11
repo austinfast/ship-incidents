@@ -3,9 +3,10 @@ class DataManager {
     this._data = null;
   }
   async getData() {
+    // this function returns all data, formatted and ready to go. Returns a cached version if data has been loaded already.
     if (!this._data) {
 
-      // request data from API
+      // request data from JSON files
       const response = await fetch(this.getDataURL("all.json"))
       let rawData = await response.json();
       this._data = rawData;
@@ -42,26 +43,37 @@ class DataManager {
   }
 
   async getGeoData() {
+    // function requests geographically projected data file
     return await fetch(this.getDataURL("incidents_geo_projected.json"));
   }
 
   getDataURL(filename) {
+    // function to determine the correct URL path for data files. Currently only returns relative path.
     let url = "static/data/json/" + filename;
     return url;
   }
 
   formatTimeline(rawIncidents) {
-    let incidentsByYear = {};
+    // formats incidents in a timeline frindly way, grouping by year, and simplifies data associated with incidents.
+    let incidents_by_year = {};
     for (var i = 0; i < rawIncidents.length; i += 1) {
       let incident = rawIncidents[i];
+      let timeline_incident = {
+        "real_date": incident.real_date,
+        year: incident.year,
+        victims: incident.victims,
+        id: incident.id,
+        type: incident.type,
+        firstcod: incident.firstcod
+      };
       let year = incident.year;
-      if (incidentsByYear[year]) {
-        incidentsByYear[year].push(incident);
+      if (incidents_by_year[year]) {
+        incidents_by_year[year].push(timeline_incident);
       } else {
-        incidentsByYear[year] = [incident];
+        incidents_by_year[year] = [timeline_incident];
       }
     }
-    return incidentsByYear;
+    return incidents_by_year;
   }
 
   formatYearlySummaries(rawIncidents) {
