@@ -1,28 +1,40 @@
-USAT-Graphics-Kit
-============
+# USA TODAY/AP/Northeastern University Mass Killings data project front-end
 
-# What this kit does
-- runs autoprefixer on CSS
-- bundles JS files via Webpack/Babel
-- runs a dev server with live reload
-- runs a build and deploys project to CDN
+This project is the front-end, user-facing version of the collaboration between USA TODAY, the Associated Press, and Northeastern University. The page will serve as an overview of the latest data in the data set, employing a visually-driven way of illuminating the facts around mass killings in the United States.
 
-# Dependencies
-This kit depends on NodeJS, and currently suppports version 10.13.0 and above.
+## Who is involved
+From USA TODAY graphics:
+- Mitchell Thorson mthorson@usatoday.com
+- Shawn Sullivan sjsullivan@usatoday.com
+- Veronica Bravo vbravo@usatoday.com
 
-# Getting Started
+From AP:
+- Seth Rasmussen srasmussen@ap.org
+- Meaghan Hoyer mhoyer@ap.org
+- Troy Thibodeaux tthibodeaux@ap.org
+- Josh Hoffner jhoffner@ap.org
 
-To start a new standalone project from this template, clone this repository into a new directory:
+From Northeastern:
+- Dr. Jamie Fox j.fox@northeastern.edu
+
+## About the data
+
+The data is managed with an application maintained by AP, located at: http://mka.ap.org/
+
+Login credentials can be obtained from Seth Rasmussen. API access is also available and is used to power this front end.
+
+## Design
+
+Style and art direction led by Veronica Bravo, and data viz work led by Mitchell Thorson. Medium-fidellity mockup of front-end can be seen here:
+
+https://gannett-my.sharepoint.com/:b:/p/mthorson/ESlrbK-MAjhFvtXHc8-WfcwBifZbLvU4Em6o_Dw8sC7ZhQ?e=icrl0J
+
+
+## Dependencies
+This project depends on NodeJS, and currently suppports version 10.13.0 and above. Install project dependencies with:
 ```
-git clone git@github.com:USATODAY/usat-graphics-kit.git <project-folder>
+npm install
 ```
-
-Then run the setup script:
-```
-npm run setup 
-```
-
-This will setup the template and install dependencies as a clean project.
 
 ## Start running project locally
 
