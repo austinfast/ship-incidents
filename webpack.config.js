@@ -6,6 +6,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
+const { DefinePlugin } = require("webpack");
 const helper = require('./scripts/helper');
 
 
@@ -33,8 +34,13 @@ module.exports = (env, argv) => {
 			},
 		}),
 		new MiniCssExtractPlugin({
-            filename: '[name].css',
-        })
+				filename: '[name].css',
+		}),
+		new DefinePlugin({
+			'process.env.ASSET_PATH': production ? JSON.stringify(ASSET_PATH) : null,
+			'process.env.PRODUCTION': production,
+			'process.env.APP_NAME': helper.app_package.config.graphic_slug
+		})
 	];
 	let babelRule = {
 		test:  /\.(m?js|svelte)$/,
