@@ -66,7 +66,12 @@ module.exports = (env, argv) => {
 			use: [				
 				require.resolve('style-loader'),
 				MiniCssExtractPlugin.loader,
-				"css-loader",
+				{
+					loader: "css-loader",
+					options: {
+						url: false
+					}
+				},
 				{
 					loader: require.resolve('postcss-loader'),
 					options: {

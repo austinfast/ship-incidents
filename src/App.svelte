@@ -101,8 +101,7 @@
     <VizModule
       subhead="Weapons used"
       leadInText="Which types of weapons were used in the most incidents"
-      backgroundColor="#416986"
-      textColor="light"> 
+      theme="dark"> 
         <GunType 
           gunTypes={data.gun_type_counts}
            />

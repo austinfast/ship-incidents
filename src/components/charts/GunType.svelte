@@ -16,6 +16,7 @@
   let squareMargin = 1;
   let numCols = 10;
   let chartMargin = 20;
+  let labelSize = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--font-size-small").replace("px", ""));
 
   function getHeight() {
     return getWaffleHeight(gunTypes[0].count) + chartMargin * 5 + getWaffleHeight(gunTypes[chartsPerRow].count);
@@ -29,13 +30,20 @@
     return Math.ceil(count / numCols);
   }
 
-  // $: squareSize = width < 600 ? 8 : 15;
-
+  // override unnecessarily long label
+  $: gunTypes.forEach(gunType => {
+    if (gunType.label == "Undetermined gun type") {
+      gunType.label = gunType.label.replace(" type", "");
+    }
+  })
 
   onMount(() => {
     width = wrapEl.offsetWidth;
     squareSize = width < 600 ? 8 : 15;
     height = getHeight();
+    if (width > 600) {
+      labelSize = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--font-size-medium").replace("px", ""));
+    }
   })
 </script>
 
@@ -55,8 +63,9 @@
             fill={"#D7D7D7"}></rect>
         {/each}
         <text
+          font-size={labelSize + "px"}
           fill={"#D7D7D7"}
-          y={i < chartsPerRow ? getWaffleHeight(gunTypes[0].count) + squareSize + chartMargin : getWaffleHeight(gunTypes[chartsPerRow].count + squareSize  + chartMargin)}
+          y={i < chartsPerRow ? getWaffleHeight(gunTypes[0].count) + squareSize + squareMargin + labelSize : getWaffleHeight(gunTypes[3].count) + (squareSize + squareMargin  + labelSize)}
           >{gunType.label}</text>
       </g>
     {/each}
