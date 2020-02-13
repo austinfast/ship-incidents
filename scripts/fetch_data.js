@@ -23,18 +23,18 @@ function get_auth() {
 // function to categorize victims relationships in to clean categories
 
 function categorize_relationships(victims) {
-  const family = ["Sibling", "Spouse", "Cousin", "Child (including step)", "Parent", "Niece/Nephew", "Other familial relationship", "Aunt/Uncle", "Relative in law", "Grandparent", "Grandchild", "Relative or in-law", "Child or stepchild", "Parent or stepparent"];
-  const second_degree = ["Ex dating relationship", "Neighbor", "Coworker or employer", "Classmate", "Roommate", "Friend", "Dating relationship", "Ex spouse", "Co-worker or employer", "Criminal associate"];
-  const third_degree = ["Individual with some non-blood/marriage relationship to a known person", "Relative of a known person", "Other", "Ex relative in law", "Acquaintence"]
-  const stranger = ["Random bystander/stranger", "First responder"]
+  const family = ["Sibling", "Spouse", "Cousin", "Child (including step)", "Parent", "Niece/Nephew", "Other familial relationship", "Aunt/Uncle", "Relative in law", "Grandparent", "Grandchild", "Relative or in-law", "Child or stepchild", "Parent or stepparent", "Ex dating relationship", "Dating relationship", "Ex spouse", "Ex relative in law"];
+  const acquaintance = ["Neighbor", "Coworker or employer", "Classmate", "Roommate", "Friend",  "Co-worker or employer", "Criminal associate", "Individual with some non-blood/marriage relationship to a known person", "Relative of a known person", "Other", "Acquaintence"];
+  const first_responder = ["First responder"];
+  const stranger = ["Random bystander/stranger"];
   return victims.map((victim) => {
     let relationshipcat;
     if (family.indexOf(victim.vorelationship) >= 0) {
       relationshipcat = "family";
-    } else if (second_degree.indexOf(victim.vorelationship) >= 0) {
-      relationshipcat = "second-degree"
-    } else if (third_degree.indexOf(victim.vorelationship) >= 0) {
-      relationshipcat = "third-degree"
+    } else if (acquaintance.indexOf(victim.vorelationship) >= 0) {
+      relationshipcat = "acquaintance"
+    } else if (first_responder.indexOf(victim.vorelationship) >= 0) {
+      relationshipcat = "first_responder"
     } else if (stranger.indexOf(victim.vorelationship) >= 0) {
       relationshipcat = "stranger"
     } else if (!victim.vorelationship) {
@@ -69,18 +69,18 @@ axios.post(api_token_url, auth_credentials)
   // write data to json files
   .then((response) => {
     let all_data = response.data;
-    let { incidents, victims, offenders} = all_data;
-    let incidents_w_year = incidents.map((incident) => {
+    let incidents_w_year = all_data.incidents.map((incident) => {
       return Object.assign({}, incident, {
         year: incident.date ? incident.date.split("-")[0] : null
       });
     });
-    victims = categorize_relationships(victims);
+    all_data.victims = categorize_relationships(all_data.victims);
+    all_data.incidents = incidents_w_year;
     return Promise.all([
       sander.writeFile(path.join(output_dir, "json", "all.json"), JSON.stringify(all_data)),
-      sander.writeFile(path.join(output_dir, "json", "incidents.json"), JSON.stringify(incidents_w_year)),
-      sander.writeFile(path.join(output_dir, "json", "victims.json"), JSON.stringify(victims)),
-      sander.writeFile(path.join(output_dir, "json", "offenders.json"), JSON.stringify(offenders))
+      sander.writeFile(path.join(output_dir, "json", "incidents.json"), JSON.stringify(all_data.incidents)),
+      sander.writeFile(path.join(output_dir, "json", "victims.json"), JSON.stringify(all_data.victims)),
+      sander.writeFile(path.join(output_dir, "json", "offenders.json"), JSON.stringify(all_data.offenders))
     ]);
   })
   // create geojson file of incidents
