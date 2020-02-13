@@ -19,13 +19,15 @@ let sortedIncidents;
 // chart sizing properties
 let squareSize = 20;
 let squareMargin = 1;
-let numCols = 20;
+let numCols = 30;
 let colorsByType = {
   "Public": "#A61103",
   "Family": "#D9501E",
+  "Felony": "#590902",
+  "Suspected Felony": "#bc4d42",
   "Unsolved": "#416986",
   "Other": "#8C8C8C",
-  "Felony": "#590902"
+  "Undetermined": "#90a4b3",
 };
 
 let labelPositions = [];
@@ -79,9 +81,9 @@ function sortByType(incidents) {
     for (var i = 0; i < order.length; i += 1) {
       let orderType = order[i];
       if (a.type == orderType) {
-        return -1;
-      } else if (b.type == orderType) {
         return 1;
+      } else if (b.type == orderType) {
+        return -1;
       } 
     }
     return 0;
@@ -106,7 +108,7 @@ function computeLabelPositions() {
       totalPrevious += lookup[order[numPrevious]];
       numPrevious -= 1;
     }
-    let rows = Math.floor(totalPrevious / numCols) + Math.ceil(lookup[type] / numCols / 2);
+    let rows = Math.ceil(totalPrevious / numCols) + Math.ceil(lookup[type] / numCols / 2);
     return [type, rows * (squareSize + squareMargin)];
   });
 }
@@ -173,7 +175,7 @@ $: victimCountLookup = victimCounts.reduce((lookup, typeCount) => {
 }, victimCountLookup);
 
 // re compute the height based on mode and the sizing variables
-$: height = mode == "incidents" ? (Math.floor(incidents.length / numCols) * (squareSize + squareMargin)) : (Math.floor(victims.length / numCols) * (squareSize + squareMargin));
+$: height = mode == "incidents" ? (Math.ceil(incidents.length / numCols) * (squareSize + squareMargin)) : (Math.ceil(victims.length / numCols) * (squareSize + squareMargin));
 
 // recompute label positions if mode changes
 $: if(mode) {
@@ -198,14 +200,11 @@ onMount(() => {
     color: #404040;
     padding: .6em 1.8em .5em .8em;
     cursor: pointer;
-    /* width: 100%; */
     max-width: 100%;
     margin: 0;
     margin-bottom: 20px;
     border-radius: 0;
     border: none;
-    /* border: 1px solid #aaa; */
-    /* box-shadow: 0 1px 0 1px rgba(0,0,0,.04); */
     -moz-appearance: none;
     -webkit-appearance: none;
     appearance: none;
@@ -226,9 +225,16 @@ onMount(() => {
     padding-left: 10px;
   }
 
+  .chart-labels-wrapper-top {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
   .chart-label {
-    position: absolute;
-    transform: translateY(-50%);
+    margin-right: 10px;
+    margin-bottom: 5px;
+    font-weight: 700;
+    font-size: var(--font-size-small);
   }
 
   .chart-label p {
@@ -243,6 +249,12 @@ onMount(() => {
     font-weight: 700;
     margin: 0;
   }
+
+  @media(min-width: 600px) {
+    .chart-label {
+      font-size: var(--font-size-medium);
+    }
+  }
 </style>
 <div class="incident-type-wrap" bind:this={wrapEl}>
 <div class="select-wrap">
@@ -251,6 +263,16 @@ onMount(() => {
     <option value="victims">Victims</option>
   </select>
 </div>
+<div class="chart-labels-wrapper-top">
+    {#each labelPositions as label}
+      <p class="chart-label"
+        style={"color: " + getColor(label[0]) + ";"}>
+        <span class="type-label">{label[0]}:</span>
+        <span class="type-count"
+          style={"color: " + getColor(label[0]) + ";"}>{mode == "incidents" ? countLookup[label[0]] : victimCountLookup[label[0]]}</span>
+      </p>
+    {/each}
+  </div>
 <div class="incident-type-chart-label-wrapper">
   <svg class="incident-type-chart" height={height} width={(squareSize + squareMargin) * numCols }>
     {#if mode == "incidents"}
@@ -260,7 +282,7 @@ onMount(() => {
         height={squareSize + "px"} 
         fill={getColor(incident.type)} 
         x={(i % numCols) * (squareSize + squareMargin)} 
-        y={Math.floor(i / numCols) * (squareSize + squareMargin)}
+        y={(height - squareSize - squareMargin) - Math.floor(i / numCols) * (squareSize + squareMargin)}
       />
     {/each}
     {:else if mode == "victims"}
@@ -270,12 +292,12 @@ onMount(() => {
         height={squareSize + "px"} 
         fill={getColor(victim)} 
         x={(i % numCols) * (squareSize + squareMargin)} 
-        y={Math.floor(i / numCols) * (squareSize + squareMargin)}
+        y={(height - squareSize - squareMargin) - Math.floor(i / numCols) * (squareSize + squareMargin)}
       />
     {/each}
     {/if}
   </svg>
-  <div class="chart-labels-wrapper">
+  <!-- <div class="chart-labels-wrapper">
     {#each labelPositions as label}
       <div class="chart-label"
         style={"top: " + label[1] + "px"}>
@@ -284,6 +306,6 @@ onMount(() => {
         <p class="type-label">{label[0]}</p>
       </div>
     {/each}
-  </div>
+  </div> -->
 </div>
 </div>
