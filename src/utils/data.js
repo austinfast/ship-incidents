@@ -87,8 +87,8 @@ class DataManager {
     let yearSummary = incidents.reduce((yearInfo, incident) => {
       return Object.assign(yearInfo, {
         victims: yearInfo.victims + incident.victims,
-        mass_shooting_victims: incident.firstcod == "Shooting" ? yearInfo.mass_shooting_victims + 1 : yearInfo.mass_shooting_victims,
-        mass_public_shooting_victims: incident.firstcod == "Shooting" && incident.type == "Public" ? yearInfo.mass_public_shooting_victims + 1 : yearInfo.mass_public_shooting_victims,
+        mass_shooting_victims: (incident.firstcod == "Shooting" || incident.secondcod == "Shooting" || incident.thirdcod == "Shooting") ? yearInfo.mass_shooting_victims + incident.victims : yearInfo.mass_shooting_victims,
+        mass_public_shooting_victims: (incident.firstcod == "Shooting" || incident.secondcod == "Shooting" || incident.thirdcod == "Shooting") && incident.type == "Public" ? yearInfo.mass_public_shooting_victims + incident.victims : yearInfo.mass_public_shooting_victims,
         numinjured: yearInfo.numinjured + incident.numinjured,
         incidents: yearInfo.incidents + 1,
         incidents_family: incident.type == "Family" ? yearInfo.incidents_family + 1 : yearInfo.incidents_family,

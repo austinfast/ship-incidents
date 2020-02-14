@@ -68,6 +68,18 @@
             ["mass_public_shootings", "#590902", "Mass public shootings"]]}/>
     </VizModule>
 
+    <!-- trends in mass killings victims -->
+    <VizModule
+      subhead="Trends in mass killing victims"
+    >
+        <TrendLine 
+          yearlyData={data.yearly_summaries}
+          yearlyVariables={[
+            ["victims", "#D9501E", "Mass killing victims"], 
+            ["mass_shooting_victims", "#A61103", "Mass shooting victims"], 
+            ["mass_public_shooting_victims", "#590902", "Mass public shooting victims"]]}/>
+    </VizModule>
+
      <VizModule
       subhead="Trends in mass killing incidents by type"
       leadInText="trends by type"
