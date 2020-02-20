@@ -6,8 +6,6 @@
   export let yearlyData;
   export let yearlyVariables;
 
-  $:console.log(yearlyData, yearlyVariables);
-  
   let svgEl;
   let wrapEl;
   let width;
