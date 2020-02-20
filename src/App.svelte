@@ -9,6 +9,7 @@
   import IncidentTypeWaffleChart from "./components/charts/IncidentTypeWaffleChart.svelte";
   import RankedBar from "./components/charts/RankedBar.svelte";
   import GunType from "./components/charts/GunType.svelte";
+  import RelationshipBars from "./components/charts/RelationshipBars.svelte";
   import DataManager from "./utils/data.js";
   import { prettyNumber } from "./utils/text.js";
 
@@ -112,10 +113,20 @@
     <!-- weapon type breakdown -->
     <VizModule
       subhead="Weapons used"
-      leadInText="Which types of weapons were used in the most incidents"
+      leadInText="Which types of weapons were used in the most incidents."
       theme="dark"> 
         <GunType 
           gunTypes={data.gun_type_counts}
+           />
+    </VizModule>
+
+    <!-- relationships -->
+    <VizModule
+      subhead="Relationships"
+      leadInText="Information about relationships between victims and their killers."
+    > 
+        <RelationshipBars 
+          counts={data.victim_relationship_counts}
            />
     </VizModule>
   </section>

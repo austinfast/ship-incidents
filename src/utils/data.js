@@ -38,6 +38,9 @@ class DataManager {
 
       // count gun types
       this._data["gun_type_counts"] = this.countTypes(rawData.incidents, "gun_type_array");
+
+      // count victim relationships
+      this._data["victim_relationship_counts"] = this.getRelationshipCounts(rawData.victims);
     }
     return this._data;
   }
@@ -175,6 +178,17 @@ class DataManager {
       result[i] = item.trim();
     });
     return result;
+  }
+
+  getRelationshipCounts(victims) {
+    return victims.reduce((allCounts, victim) => {
+      if (allCounts[victim.relationshipcat]) {
+        allCounts[victim.relationshipcat] += 1;
+      } else {
+        allCounts[victim.relationshipcat] = 1;
+      }
+      return allCounts;
+    }, {});
   }
 }
 
