@@ -136,6 +136,7 @@
 
   p.key-item-label {
     font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
     margin-bottom: 0;
     margin-left: 5px;
   }

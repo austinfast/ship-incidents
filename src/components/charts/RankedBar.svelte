@@ -38,6 +38,25 @@
   .ranked-bar-chart {
     display: block;
   }
+
+  .ranked-bar-label {
+    fill: #404040; 
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+  }
+
+  .ranked-bar-count {
+    font-weight: 700; 
+    fill: #404040;
+  }
+
+  @media(min-width: 600px) {
+    .ranked-bar-label {
+      font-size: var(--font-size-medium);
+      line-height: var(--line-height-medium);
+    }
+
+  }
 </style>
 
 <div class="ranked-bar-wrap" bind:this={wrapEl}>
@@ -49,7 +68,7 @@
           transform={`translate(0, ${i * (barHeight + barMargin * 2 + labelSize)})`}
           >
           <text
-            style="fill: #404040; font-size: var(--font-size-medium)">{item.label}</text>
+            class="ranked-bar-label">{item.label}</text>
           <rect 
             height={barHeight}
             width={getScale(width)(item.count)}
@@ -58,7 +77,7 @@
           />
           <text
             transform={`translate(${getScale(width)(item.count) + barMargin}, ${(labelSize/2 + barMargin + barHeight / 2)})`}
-            style="font-weight: 700; fill: #404040;"
+            class="ranked-bar-count"
             >{item.count}</text>
         </g>
       {/each}
