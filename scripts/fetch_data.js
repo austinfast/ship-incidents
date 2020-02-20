@@ -6,6 +6,10 @@ const reproject = require("dirty-reprojectors");
 const projections = require("dirty-reprojectors/projections");
 
 
+// list of the final fields included in the victims data
+const victim_fields = ["relationshipcat",];
+
+
 // function to grab necessary environment variables
 function get_auth() {
   const email = process.env.MASS_KILLINGS_DB_EMAIL || null;
@@ -21,12 +25,12 @@ function get_auth() {
 }
 
 // function to categorize victims relationships in to clean categories
-
 function categorize_relationships(victims) {
   const family = ["Sibling", "Spouse", "Cousin", "Child (including step)", "Parent", "Niece/Nephew", "Other familial relationship", "Aunt/Uncle", "Relative in law", "Grandparent", "Grandchild", "Relative or in-law", "Child or stepchild", "Parent or stepparent", "Ex dating relationship", "Dating relationship", "Ex spouse", "Ex relative in law"];
   const acquaintance = ["Neighbor", "Coworker or employer", "Classmate", "Roommate", "Friend",  "Co-worker or employer", "Criminal associate", "Individual with some non-blood/marriage relationship to a known person", "Relative of a known person", "Other", "Acquaintence"];
   const first_responder = ["First responder"];
   const stranger = ["Random bystander/stranger"];
+  const unknown = ["Unknown"]
   return victims.map((victim) => {
     let relationshipcat;
     if (family.indexOf(victim.vorelationship) >= 0) {
@@ -37,12 +41,19 @@ function categorize_relationships(victims) {
       relationshipcat = "first_responder"
     } else if (stranger.indexOf(victim.vorelationship) >= 0) {
       relationshipcat = "stranger"
+    } else if (unknown.indexOf(victim.vorelationship >= 0)) {
+      relationshipcat = "unknown"
     } else if (!victim.vorelationship) {
-      relationshipcat = null;
+      relationshipcat = "unknown";
     }
-    return Object.assign({}, victim, {
+    let victim_with_category = Object.assign({}, victim, {
       relationshipcat
     });
+    let clean_victim = {};
+    victim_fields.forEach(field => {
+      clean_victim[field] = victim_with_category[field];
+    });
+    return clean_victim;
   });
 } 
 
