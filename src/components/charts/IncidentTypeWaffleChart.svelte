@@ -1,5 +1,7 @@
 <script>
 import { onMount } from "svelte";
+import { smartResizeListener } from "../../utils/events.js";
+
 // PROPS
 export let incidents;
 
@@ -101,16 +103,7 @@ function getCount(incidentType) {
 function computeLabelPositions() {
   let labelOrder = mode == "incidents" ? order : victimOrder;
   let lookup = mode == "incidents" ? countLookup : victimCountLookup;
-  return labelOrder.map((type, i) => {
-    let numPrevious = i - 1;
-    let totalPrevious = 0;
-    while(numPrevious >= 0) {
-      totalPrevious += lookup[order[numPrevious]];
-      numPrevious -= 1;
-    }
-    let rows = Math.ceil(totalPrevious / numCols) + Math.ceil(lookup[type] / numCols / 2);
-    return [type, rows * (squareSize + squareMargin)];
-  });
+  return labelOrder;
 }
 
 // take an index and return an x position;
@@ -189,7 +182,9 @@ onMount(() => {
   counts = getIncidentCounts();
   victimCounts = getVictimCounts();
   labelPositions = computeLabelPositions();
-
+  smartResizeListener(() => {
+    width = wrapEl.offsetWidth;
+  });
 })
 </script>
 <style>
@@ -266,10 +261,10 @@ onMount(() => {
 <div class="chart-labels-wrapper-top">
     {#each labelPositions as label}
       <p class="chart-label"
-        style={"color: " + getColor(label[0]) + ";"}>
-        <span class="type-label">{label[0]}:</span>
+        style={"color: " + getColor(label) + ";"}>
+        <span class="type-label">{label}:</span>
         <span class="type-count"
-          style={"color: " + getColor(label[0]) + ";"}>{mode == "incidents" ? countLookup[label[0]] : victimCountLookup[label[0]]}</span>
+          style={"color: " + getColor(label) + ";"}>{mode == "incidents" ? countLookup[label] : victimCountLookup[label]}</span>
       </p>
     {/each}
   </div>
