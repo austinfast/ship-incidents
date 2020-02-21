@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { range } from "d3";
+  import { smartResizeListener } from "../../utils/events.js"
   
   export let gunTypes = [];
 
@@ -37,14 +38,19 @@
     }
   })
 
-  onMount(() => {
+  function draw() {
     width = wrapEl.offsetWidth;
     squareSize = width < 600 ? 8 : 15;
     height = getHeight();
     if (width > 600) {
       labelSize = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--font-size-medium").replace("px", ""));
     }
-  })
+  }
+
+  onMount(() => {
+    draw();
+    smartResizeListener(draw);
+  });
 </script>
 
 <div

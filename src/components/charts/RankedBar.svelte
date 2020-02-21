@@ -1,6 +1,8 @@
 <script>
   import { onMount } from "svelte";
   import { scaleLinear, max } from "d3";
+  import { smartResizeListener } from "../../utils/events.js";
+
 
   export let items = [];
 
@@ -26,11 +28,16 @@
       .range([0, chartWidth < 600 ? chartWidth : 600]);
   }
 
-  onMount(() => {
+  function draw() {
     width = wrapEl.offsetWidth;
     barHeight = width >= 600 ? 30 : 20;
     height = items.length * (barHeight + barMargin * 2 + labelSize) + margin.top + margin.bottom;
-  })
+  }
+
+  onMount(() => {
+    draw();
+    smartResizeListener(draw);
+  });
 
 </script>
 
