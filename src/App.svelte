@@ -10,6 +10,7 @@
   import RankedBar from "./components/charts/RankedBar.svelte";
   import GunType from "./components/charts/GunType.svelte";
   import RelationshipBars from "./components/charts/RelationshipBars.svelte";
+  import AgeHistogram from "./components/charts/AgeHistogram.svelte";
   import DataManager from "./utils/data.js";
   import { prettyNumber } from "./utils/text.js";
 
@@ -127,6 +128,30 @@
     > 
         <RelationshipBars 
           counts={data.victim_relationship_counts}
+           />
+    </VizModule>
+
+    <!-- victim ages -->
+    <VizModule
+      subhead="Victims by age"
+      leadInText="Age distribution"
+    > 
+        <AgeHistogram 
+          binned_data={data.victim_binned_ages}
+          age_scale={data.victim_age_scale}
+          color="#d9501e"
+           />
+    </VizModule>
+
+    <!-- offender ages -->
+    <VizModule
+      subhead="Offenders by age"
+      leadInText="Age distribution"
+    > 
+        <AgeHistogram 
+          binned_data={data.offender_binned_ages}
+          age_scale={data.offender_age_scale}
+          color="#416986"
            />
     </VizModule>
   </section>

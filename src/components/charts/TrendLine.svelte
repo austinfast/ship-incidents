@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import * as d3 from "d3";
+  import { smartResizeListener } from "../../utils/events.js";
 
     // PROPS
   export let yearlyData;
@@ -13,6 +14,7 @@
 
 
   function draw() {
+    width = wrapEl.offsetWidth;
     let margin = {
       top: 20,
       right: 20,
@@ -44,6 +46,10 @@
 
 
     let svg = d3.select(svgEl);
+
+    // start with a clean slate
+    svg.selectAll("g")
+      .remove();
 
     let chartG = svg.append("g")
       .attr("class", "chart-g")
@@ -103,12 +109,9 @@
     })
   }
 
-  $: if (svgEl && yearlyData && yearlyVariables) {
-    draw();
-  }
-
   onMount(() => {
-    width = wrapEl.offsetWidth;
+    draw();
+    smartResizeListener(draw);
   })
 </script>
 <style>

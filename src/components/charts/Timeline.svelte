@@ -1,6 +1,7 @@
 <script>
 import { onMount } from "svelte";
 import * as d3 from "d3";
+import { smartResizeListener } from "../../utils/events.js";
 
 // PROPS
 export let incidents;
@@ -8,11 +9,12 @@ export let incidents;
 let svgEl;
 let wrapEl;
 let width = 900;
+let height = width;
 let category = "All";
 let years = Object.keys(incidents).filter(year => year !== null && year !== "null");
 
-function drawChart() {
-  let height = width;
+function draw() {
+  width = wrapEl.offsetWidth;
   let topMargin = 20;
   
   const maxRadius = width < 600 ? 20 : 50;
@@ -30,10 +32,9 @@ function drawChart() {
 
   height = years.length * maxRadius + topMargin * 2;
 
-  const svg = d3.select(svgEl)
-    .attr("height", height)
-    .attr("width", width)
-    .style("background", "#F7F7F7");
+  const svg = d3.select(svgEl);
+
+  svg.selectAll("g").remove();
 
   const extent = d3.extent(flatIncidents, d => +d.victims);
   
@@ -111,12 +112,13 @@ function drawChart() {
     .call(monthAxis)
 }
 
-$: if (incidents && svgEl) {
-  drawChart();
-}
+// $: if (incidents && svgEl) {
+//   drawChart();
+// }
 
 onMount(() => {
-  width = wrapEl.offsetWidth;
+  draw();
+  smartResizeListener(draw);
 })
 </script>
 <style>
@@ -140,5 +142,5 @@ onMount(() => {
 </style>
 
 <div class="timeline-wrapper" bind:this={wrapEl}>
-  <svg class="timeline-svg" bind:this={svgEl}></svg>
+  <svg class="timeline-svg" bind:this={svgEl} width={width} height={height}></svg>
 </div>
