@@ -45,10 +45,12 @@ class DataManager {
       this._data["victim_relationship_counts"] = this.getRelationshipCounts(rawData.victims);
 
       // victims age bins
-      this._data["victim_binned_ages"] = this.getAgeBins(this._data.victims);
+      this._data["victim_age_scale"] = this.getAgeScale(this._data.victims);
+      this._data["victim_binned_ages"] = this.getAgeBins(this._data.victims, this._data.victim_age_scale);
 
       // offender age bins
-      this._data["offender_binned_ages"] = this.getAgeBins(this._data.offenders);
+      this._data["offender_age_scale"] = this.getAgeScale(this._data.offenders);
+      this._data["offender_binned_ages"] = this.getAgeBins(this._data.offenders, this._data.offender_age_scale);
     }
     return this._data;
   }
@@ -199,13 +201,17 @@ class DataManager {
     }, {});
   }
 
-  getAgeBins(people) {
-    // filter out null ages
+  getAgeScale(people) {
     let people_with_ages = people.filter(person => person.age !== null);
-    let age_scale = scaleLinear()
+    return scaleLinear()
     .domain([0, max(people_with_ages, d => d.age)])
     .range([0,1]);
+  }
 
+  getAgeBins(people, age_scale) {
+    // filter out null ages
+    let people_with_ages = people.filter(person => person.age !== null);
+    
     let age_bins = histogram()
     .domain(age_scale.domain())
     .thresholds(age_scale.ticks(20))
