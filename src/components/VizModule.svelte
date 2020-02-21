@@ -3,6 +3,7 @@
   export let subhead;
   export let leadInText;
   export let theme = "light";
+  export let vizSize = "small";
 </script>
 <style>
   .viz-module-wrapper {
@@ -25,13 +26,15 @@
   class:light={theme == "light"}
   class:dark={theme == "dark"}
 >
-  <div class="viz-module-inner-wrapper article-width">
-    {#if subhead}
-      <h2 class="viz-module-subhead subhead">{subhead}</h2>
-    {/if}
-    {#if leadInText}
-    <p class="viz-module-leadin-text">{leadInText}</p>
-    {/if}
+  <div class="viz-module-inner-wrapper" class:article-width={vizSize == "wide"} class:article-width-small={vizSize == "small"}>
+    <div class="viz-module-text-wrapper article-text-width">
+      {#if subhead}
+        <h2 class="viz-module-subhead subhead">{subhead}</h2>
+      {/if}
+      {#if leadInText}
+      <p class="viz-module-leadin-text">{leadInText}</p>
+      {/if}
+    </div>
     <slot></slot>
   </div>
 </div>

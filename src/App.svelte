@@ -36,6 +36,17 @@
     padding: 0 20px;
   }
 
+  :global(.article-width-small) {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  :global(.article-text-width) {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
 </style>
 <article>
   {#if data}
@@ -48,13 +59,17 @@
     <!-- incident timeline -->
     <VizModule
       subhead="Timeline of mass killing incidents"
-      leadInText="Center of arc represents data of incident, radius represents the number of victims killed."> 
+      leadInText="Center of arc represents data of incident, radius represents the number of victims killed."
+      vizSize="wide"
+      > 
         <Timeline incidents={data.timeline}/>
     </VizModule>
     <!-- incident location map -->
     <VizModule
       subhead="Incidents by location"
-      leadInText="In gravida eros nisi. Quisque in lectus condimentum, lobortis magna quis, rutrum nisi. Etiam a nulla pulvinar, dapibus tortor vel, egestas leo. Aliquam erat volutpat."> 
+      leadInText="In gravida eros nisi. Quisque in lectus condimentum, lobortis magna quis, rutrum nisi. Etiam a nulla pulvinar, dapibus tortor vel, egestas leo. Aliquam erat volutpat."
+      vizSize="wide"
+      >
         <IncidentMap 
           incidents={data.incidents_geo} />
     </VizModule>
@@ -99,7 +114,9 @@
     <!-- incident type breakdown -->
     <VizModule
       subhead="Incidents by type"
-      leadInText="In gravida eros nisi. Quisque in lectus condimentum, lobortis magna quis, rutrum nisi. Etiam a nulla pulvinar, dapibus tortor vel, egestas leo. Aliquam erat volutpat."> 
+      leadInText="In gravida eros nisi. Quisque in lectus condimentum, lobortis magna quis, rutrum nisi. Etiam a nulla pulvinar, dapibus tortor vel, egestas leo. Aliquam erat volutpat."
+      vizSize="wide"
+      > 
         <IncidentTypeWaffleChart 
           incidents={data.incidents} />
     </VizModule>
@@ -116,7 +133,8 @@
     <VizModule
       subhead="Weapons used"
       leadInText="Which types of weapons were used in the most incidents."
-      theme="dark"> 
+      theme="dark"
+      vizSize="wide"> 
         <GunType 
           gunTypes={data.gun_type_counts}
            />
@@ -160,6 +178,7 @@
     <VizModule
       subhead="Offenders by gender"
       leadInText="Offenders were most likely to be male."
+      vizSize="wide"
     > 
         <StackedBar 
           counts={data.offender_gender_counts}

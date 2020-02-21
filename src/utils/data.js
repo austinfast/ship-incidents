@@ -48,9 +48,15 @@ class DataManager {
       this._data["victim_age_scale"] = this.getAgeScale(this._data.victims);
       this._data["victim_binned_ages"] = this.getAgeBins(this._data.victims, this._data.victim_age_scale);
 
+      // clean offenders
+      this._data["offenders"] = this.cleanOffenders(this._data["offenders"]);
+
       // offender age bins
       this._data["offender_age_scale"] = this.getAgeScale(this._data.offenders);
       this._data["offender_binned_ages"] = this.getAgeBins(this._data.offenders, this._data.offender_age_scale);
+
+      // offender sex
+      this._data["offender_gender_counts"] = this.countTypes(this._data.offenders, "sex");
     }
     return this._data;
   }
@@ -141,17 +147,27 @@ class DataManager {
     return date;
   }
 
-  countTypes(rawIncidents, countKey) {
+  countTypes(rawIncidents, countKey, nullKey = "Unknown") {
     let typeLookup = {};
     let typeArray = []
 
     rawIncidents.forEach(incident => {
+      // if the countKey value is a string count that string
       if (typeof incident[countKey] == "string") {
         if (typeLookup[incident[countKey]]) {
           typeLookup[incident[countKey]] += 1;
         } else {
           typeLookup[incident[countKey]] = 1;
         }
+      }
+      // if the countKey value is null, then use the nullKey to count
+      else if (incident[countKey] == null) {
+        if (typeLookup[nullKey]) {
+          typeLookup[nullKey] += 1;
+        } else {
+          typeLookup[nullKey] = 1;
+        }
+      // if the countKey value is an array, count for each item in array
       } else if (typeof incident[countKey] == "object") {
         incident[countKey].forEach(countCategory => {
           if (typeLookup[countCategory]) {
@@ -218,6 +234,17 @@ class DataManager {
     .value(d => d.age);
 
     return age_bins(people_with_ages);
+  }
+
+  cleanOffenders(raw_offenders) {
+    return raw_offenders.map(offender => {
+      let clean_offender = Object.assign({}, offender);
+      // replace empty and null sex fields with "Unknown"
+      if (clean_offender.sex == "" || clean_offender.sex == null) {
+        clean_offender.sex = "Unknown";
+      }
+      return clean_offender;
+    });
   }
 }
 

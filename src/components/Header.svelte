@@ -31,7 +31,7 @@
   }
 </style>
 <section class="section-header">
-  <header class="article-width">
+  <header class="article-width-small">
     <h1 class="page-headline">
       <span class="victim-number condensed">{victims}</span><br /> people killed in <br /><span class="incident-number condensed">{incidents}</span> mass killings by <br /><span class="offender-number condensed">{offenders}</span> offenders since 2006.
     </h1>
