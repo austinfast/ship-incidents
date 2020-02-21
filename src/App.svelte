@@ -11,6 +11,7 @@
   import GunType from "./components/charts/GunType.svelte";
   import RelationshipBars from "./components/charts/RelationshipBars.svelte";
   import AgeHistogram from "./components/charts/AgeHistogram.svelte";
+  import StackedBar from "./components/charts/StackedBar.svelte";
   import DataManager from "./utils/data.js";
   import { prettyNumber } from "./utils/text.js";
 
@@ -152,6 +153,17 @@
           binned_data={data.offender_binned_ages}
           age_scale={data.offender_age_scale}
           color="#416986"
+           />
+    </VizModule>
+
+     <!-- offender gender -->
+    <VizModule
+      subhead="Offenders by gender"
+      leadInText="Offenders were most likely to be male."
+    > 
+        <StackedBar 
+          counts={data.offender_gender_counts}
+          colors={["#d9501e", "#a61103", "#c1c1c1"]}
            />
     </VizModule>
   </section>
