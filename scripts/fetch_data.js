@@ -7,7 +7,7 @@ const projections = require("dirty-reprojectors/projections");
 
 
 // list of the final fields included in the victims data
-const victim_fields = ["relationshipcat",];
+const victim_fields = ["relationshipcat", "age"];
 
 
 // function to grab necessary environment variables

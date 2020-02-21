@@ -1,3 +1,5 @@
+import { scaleLinear, histogram, max } from "d3";
+
 class DataManager {
   constructor() {
     this._data = null;
@@ -41,6 +43,12 @@ class DataManager {
 
       // count victim relationships
       this._data["victim_relationship_counts"] = this.getRelationshipCounts(rawData.victims);
+
+      // victims age bins
+      this._data["victim_binned_ages"] = this.getAgeBins(this._data.victims);
+
+      // offender age bins
+      this._data["offender_binned_ages"] = this.getAgeBins(this._data.offenders);
     }
     return this._data;
   }
@@ -189,6 +197,21 @@ class DataManager {
       }
       return allCounts;
     }, {});
+  }
+
+  getAgeBins(people) {
+    // filter out null ages
+    let people_with_ages = people.filter(person => person.age !== null);
+    let age_scale = scaleLinear()
+    .domain([0, max(people_with_ages, d => d.age)])
+    .range([0,1]);
+
+    let age_bins = histogram()
+    .domain(age_scale.domain())
+    .thresholds(age_scale.ticks(20))
+    .value(d => d.age);
+
+    return age_bins(people_with_ages);
   }
 }
 
