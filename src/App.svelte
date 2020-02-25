@@ -115,7 +115,6 @@
     <VizModule
       subhead="Incidents by type"
       leadInText="In gravida eros nisi. Quisque in lectus condimentum, lobortis magna quis, rutrum nisi. Etiam a nulla pulvinar, dapibus tortor vel, egestas leo. Aliquam erat volutpat."
-      vizSize="wide"
       > 
         <IncidentTypeWaffleChart 
           incidents={data.incidents} />
@@ -134,7 +133,7 @@
       subhead="Weapons used"
       leadInText="Which types of weapons were used in the most incidents."
       theme="dark"
-      vizSize="wide"> 
+    >
         <GunType 
           gunTypes={data.gun_type_counts}
            />
@@ -182,7 +181,7 @@
     > 
         <StackedBar 
           counts={data.offender_gender_counts}
-          colors={["#d9501e", "#a61103", "#c1c1c1"]}
+          colors={["#416986", "#90a4b3", "#8c8c8c"]}
            />
     </VizModule>
   </section>

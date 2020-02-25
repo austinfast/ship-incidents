@@ -122,8 +122,8 @@ function getColor(type) {
 }
 
 $: if (width) {
-  squareSize = width < 600 ? 10 : 20;
-  squareMargin = width < 600 ? 1 : 1;
+  squareSize = width < 600 ? 10 : 19;
+  squareMargin = 1;
   labelPositions = computeLabelPositions();
 }
 
