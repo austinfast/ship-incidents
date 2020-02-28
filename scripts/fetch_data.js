@@ -9,6 +9,8 @@ const projections = require("dirty-reprojectors/projections");
 // list of the final fields included in the victims data
 const victim_fields = ["relationshipcat", "age"];
 
+// list of the final fields included in the offender data
+const offender_fields = ["sex", "age"];
 
 // function to grab necessary environment variables
 function get_auth() {
@@ -25,7 +27,7 @@ function get_auth() {
 }
 
 // function to categorize victims relationships in to clean categories
-function categorize_relationships(victims) {
+function format_victims(victims) {
   const family = ["Sibling", "Spouse", "Cousin", "Child (including step)", "Parent", "Niece/Nephew", "Other familial relationship", "Aunt/Uncle", "Relative in law", "Grandparent", "Grandchild", "Relative or in-law", "Child or stepchild", "Parent or stepparent", "Ex dating relationship", "Dating relationship", "Ex spouse", "Ex relative in law"];
   const acquaintance = ["Neighbor", "Coworker or employer", "Classmate", "Roommate", "Friend",  "Co-worker or employer", "Criminal associate", "Individual with some non-blood/marriage relationship to a known person", "Relative of a known person", "Other", "Acquaintence"];
   const first_responder = ["First responder"];
@@ -57,6 +59,16 @@ function categorize_relationships(victims) {
   });
 } 
 
+function format_offenders(offenders) {
+  return offenders.map((offender) => {
+    let clean_offender = {};
+    offender_fields.forEach(field => {
+      clean_offender[field] = offender[field]
+    });
+    return clean_offender;
+  });
+}
+
 // output data directory
 const output_dir = path.join(__dirname, "../src/static/data");
 const auth_credentials = get_auth();
@@ -85,7 +97,8 @@ axios.post(api_token_url, auth_credentials)
         year: incident.date ? incident.date.split("-")[0] : null
       });
     });
-    all_data.victims = categorize_relationships(all_data.victims);
+    all_data.victims = format_victims(all_data.victims);
+    all_data.offenders = format_offenders(all_data.offenders);
     all_data.incidents = incidents_w_year;
     return Promise.all([
       sander.writeFile(path.join(output_dir, "json", "all.json"), JSON.stringify(all_data)),
