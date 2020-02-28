@@ -2,6 +2,7 @@
 import { onMount } from "svelte";
 import * as d3 from "d3";
 import { smartResizeListener } from "../../utils/events.js";
+import { popupDetails } from "../../stores.js";
 
 // PROPS
 export let incidents;
@@ -72,7 +73,7 @@ function draw() {
       return `translate(0, ${i * maxRadius + 10})`
     })
   
-  yearGroups
+  let dataItems = yearGroups
     .selectAll(".data-circle")
     .data(d => {return incident_filter ? incident[d].filter(incident => incident.type == incident_filter) : incidents[d]})
     .enter()
@@ -110,6 +111,29 @@ function draw() {
     .attr("class", "timeline-chart-month-axis")
     .attr("transform", `translate(${margin},${(years.length - 1) * (maxRadius) + 10 + topMargin})`)
     .call(monthAxis)
+
+  dataItems.on("mouseenter", d => {
+    let e = d3.event;
+    onDetails(d, [e.pageX, e.pageY]);
+  });
+
+  dataItems.on("mouseleave", d => {
+    onDetails(null);
+  })
+}
+
+function onDetails(incident, position) {
+  if (incident) {
+    popupDetails.set({
+        incidentId: incident.id,
+        position: position
+      });
+  } else {
+    popupDetails.set({
+      incidentId: null,
+      position: null
+    });
+  }
 }
 
 // $: if (incidents && svgEl) {

@@ -13,6 +13,9 @@ class DataManager {
       let rawData = await response.json();
       this._data = rawData;
 
+      // incident lookup object
+      this._data.incidentLookup = {};
+
       // set parse and set a few additional variables for each incident
       this._data.incidents.forEach(incident => {
 
@@ -24,6 +27,7 @@ class DataManager {
 
         // an array of gun types rather than a string
         incident.gun_type_array = this.parseGunTypes(incident.gun_type);
+        this._data.incidentLookup[incident.id] = incident;
       });
 
       // format timeline data

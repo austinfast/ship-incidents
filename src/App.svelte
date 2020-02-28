@@ -1,6 +1,7 @@
 <script>
   import Header from "./components/Header.svelte";
   import VizModule from "./components/VizModule.svelte";
+  import Popup from "./components/Popup.svelte";
   import Loading from "./components/Loading.svelte";
   import Timeline from "./components/charts/Timeline.svelte";
   import YearlySummary from "./components/charts/YearlySummary.svelte";
@@ -13,6 +14,7 @@
   import AgeHistogram from "./components/charts/AgeHistogram.svelte";
   import StackedBar from "./components/charts/StackedBar.svelte";
   import DataManager from "./utils/data.js";
+  import { popupDetails } from "./stores.js";
   import { prettyNumber } from "./utils/text.js";
 
   let dataManager = new DataManager();
@@ -185,6 +187,9 @@
            />
     </VizModule>
   </section>
+  {#if ($popupDetails.incidentId || $popupDetails.customContent) && $popupDetails.position}
+    <Popup details={$popupDetails} incidentLookup={data.incidentLookup}/>
+  {/if}
   {:else}
     <Loading />
   {/if}

@@ -36,8 +36,6 @@
     
     axis = axisBottom(scale);
 
-    console.log(axis.tickSizeOuter())
-    
     let scaleGroup = select(scaleEl);
     
     scaleGroup
