@@ -60,7 +60,8 @@
         "baseplate-sharing": "^0.0.6",
         "baseplate-utag-analytics": "^0.0.3",
         "d3": "^5.15.0",
-        "mapbox-gl": "^1.6.1"
+        "mapbox-gl": "^1.6.1",
+        "regenerator-runtime": "^0.13.3"
     },
     "browserList": [
         ">1%",

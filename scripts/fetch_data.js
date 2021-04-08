@@ -72,8 +72,8 @@ function format_offenders(offenders) {
 // output data directory
 const output_dir = path.join(__dirname, "../src/static/data");
 const auth_credentials = get_auth();
-const api_token_url = "http://mka.ap.org/api/v1/tokens";
-const api_data_url = "http://mka.ap.org/api/v1/all";
+const api_token_url = "https://mka.ap.org/api/v1/tokens";
+const api_data_url = "https://mka.ap.org/api/v1/all";
 
 // first, generate a fresh API token
 // http://mka.ap.org/admin/api

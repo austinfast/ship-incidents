@@ -1,4 +1,7 @@
+// async polyfill
+import "regenerator-runtime/runtime";
 import { scaleLinear, histogram, max } from "d3";
+import { urlFor } from "./urls.js";
 
 class DataManager {
   constructor() {
@@ -72,8 +75,8 @@ class DataManager {
 
   getDataURL(filename) {
     // function to determine the correct URL path for data files. Currently only returns relative path.
-    let url = "static/data/json/" + filename;
-    return url;
+    let url = "data/json/" + filename;
+    return urlFor(url);
   }
 
   formatTimeline(rawIncidents) {
