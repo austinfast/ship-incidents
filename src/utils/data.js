@@ -52,6 +52,7 @@ class DataManager {
 			// victims age bins
 			this._data["victim_age_scale"] = this.getAgeScale(this._data.victims);
 			this._data["victim_binned_ages"] = this.getAgeBins(this._data.victims, this._data.victim_age_scale);
+			this._data["victim_gender_counts"] = this.countTypes(this._data.victims, "sex");
 
 			// clean offenders
 			this._data["offenders"] = this.cleanOffenders(this._data["offenders"]);

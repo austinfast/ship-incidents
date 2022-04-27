@@ -6,7 +6,7 @@ const reproject = require("dirty-reprojectors");
 const projections = require("dirty-reprojectors/projections");
 
 // list of the final fields included in the victims data
-const victim_fields = ["relationshipcat", "age"];
+const victim_fields = ["relationshipcat", "age", "sex"];
 
 // list of the final fields included in the offender data
 const offender_fields = ["sex", "age"];
@@ -28,41 +28,41 @@ function get_auth() {
 // function to categorize victims relationships in to clean categories
 function format_victims(victims) {
 	const family = [
-		"Sibling",
-		"Spouse",
-		"Cousin",
-		"Child (including step)",
-		"Parent",
-		"Niece/Nephew",
-		"Other familial relationship",
-		"Aunt/Uncle",
-		"Relative in law",
-		"Grandparent",
-		"Grandchild",
-		"Relative or in-law",
-		"Child or stepchild",
-		"Parent or stepparent",
-		"Ex dating relationship",
-		"Dating relationship",
-		"Ex spouse",
-		"Ex relative in law",
+		"sibling",
+		"spouse",
+		"cousin",
+		"child (including step)",
+		"parent",
+		"niece/nephew",
+		"other familial relationship",
+		"aunt/uncle",
+		"relative in law",
+		"grandparent",
+		"grandchild",
+		"relative or in-law",
+		"child or stepchild",
+		"parent or stepparent",
+		"ex dating relationship",
+		"dating relationship",
+		"ex spouse",
+		"ex relative in law",
 	];
 	const acquaintance = [
-		"Neighbor",
-		"Coworker or employer",
-		"Classmate",
-		"Roommate",
-		"Friend",
-		"Co-worker or employer",
-		"Criminal associate",
-		"Individual with some non-blood/marriage relationship to a known person",
-		"Relative of a known person",
-		"Other",
-		"Acquaintence",
+		"neighbor",
+		"coworker or employer",
+		"classmate",
+		"roommate",
+		"friend",
+		"co-worker or employer",
+		"criminal associate",
+		"individual with some non-blood/marriage relationship to a known person",
+		"relative of a known person",
+		"other",
+		"acquaintence",
 	];
-	const first_responder = ["First responder"];
-	const stranger = ["Random bystander/stranger"];
-	const unknown = ["Unknown"];
+	const first_responder = ["first responder"];
+	const stranger = ["random bystander/stranger"];
+	const unknown = ["unknown"];
 	return victims.map((victim) => {
 		let relationshipcat;
 		if (family.indexOf(victim.vorelationship) >= 0) {
