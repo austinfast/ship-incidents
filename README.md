@@ -30,8 +30,7 @@ A [seperate repo](https://github.com/USATODAY/mass-killings-data-updates) exists
 
 Style and art direction led by Veronica Bravo, and data viz work led by Mitchell Thorson. Medium-fidellity mockup of front-end can be seen here:
 
-https://gannett-my.sharepoint.com/:b:/p/mthorson/ESlrbK-MAjhFvtXHc8-WfcwBifZbLvU4Em6o_Dw8sC7ZhQ?e=icrl0J
-
+https://www.figma.com/file/CZJ286X4EyMSQG3fpQQTLu/mass_killings_mockup_2022?node-id=0%3A1
 
 ## Dependencies
 This project depends on NodeJS, and currently suppports version 10.13.0 and above. Install project dependencies with:
