@@ -7,10 +7,11 @@ From USA TODAY graphics:
 - Mitchell Thorson mthorson@usatoday.com
 - Shawn Sullivan sjsullivan@usatoday.com
 - Veronica Bravo vbravo@usatoday.com
+- Karina Zaiets kzaiets@usatoday.com
 
 From AP:
 - Seth Rasmussen srasmussen@ap.org
-- Meaghan Hoyer mhoyer@ap.org
+- Justin Myers jmyers@ap.org
 - Troy Thibodeaux tthibodeaux@ap.org
 - Josh Hoffner jhoffner@ap.org
 
@@ -22,6 +23,8 @@ From Northeastern:
 The data is managed with an application maintained by AP, located at: http://mka.ap.org/
 
 Login credentials can be obtained from Seth Rasmussen. API access is also available and is used to power this front end.
+
+A [seperate repo](https://github.com/USATODAY/mass-killings-data-updates) exists to manage pulling and updating data on the backend.
 
 ## Design
 

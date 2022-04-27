@@ -26,7 +26,7 @@
 
   $: if(counts) {
     let allCounts = [];
-    for (var key in counts) {
+    for (let key in counts) {
       allCounts.push(counts[key])
     }
     let bar_1_count = counts[bar_1[0][0]] + counts[bar_1[1][0]];

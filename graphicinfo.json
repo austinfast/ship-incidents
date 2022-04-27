@@ -1,0 +1,21 @@
+{
+	"title": "Mass killings data",
+	"author": "USA TODAY Graphics",
+	"description": "A graphic published by USA TODAY",
+	"date_published": "1/1/2022 10:00:00",
+	"date_updated": "1/1/2022 10:00:00",
+	"output": [
+		{
+			"filename": "index",
+			"ssr": false,
+			"ssr_contentfile": null,
+			"ssr_component": null
+		},
+		{
+			"filename": "timeline",
+			"ssr": true,
+			"ssr_contentfile": null,
+			"ssr_component": null
+		}
+	]
+}
