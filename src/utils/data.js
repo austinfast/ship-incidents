@@ -80,6 +80,7 @@ class DataManager {
 
 	formatTimeline(rawIncidents) {
 		// formats incidents in a timeline frindly way, grouping by year, and simplifies data associated with incidents.
+		// i'm pretty sure i can do without this and just use the raw incidents array for the timeline chart
 		let incidents_by_year = {};
 		for (var i = 0; i < rawIncidents.length; i += 1) {
 			let incident = rawIncidents[i];
