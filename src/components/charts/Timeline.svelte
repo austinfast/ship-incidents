@@ -19,7 +19,6 @@
 		.map((d) => yearFromStringDate(d.date))
 		.filter((value, index, self) => self.indexOf(value) === index)
 		.sort((a, b) => parseInt(a) - parseInt(b));
-	$: console.log(years);
 	$: margin = {
 		top: 20,
 		right: width < 600 ? 50 : 100,
@@ -39,7 +38,21 @@
 		.domain(years)
 		.range(years.map((year, i) => i * maxRadius + 10));
 	$: xScale = d3.scaleLinear().domain([0, 366]).range([0, chartWidth]);
-	$: console.log(yScale.range());
+	// @TODO not sure how I feel about reading these from the DOM. I like just defining them in 1 place but
+	// I worry it is going to get tedious over time pulling them in like this. Might be better to put them in a config
+	// file and set them as CSS properties once.
+	$: getColors = function () {
+		if (!wrapEl) return null;
+		const styles = getComputedStyle(wrapEl);
+		return {
+			orange: styles.getPropertyValue("--mk-color-orange"),
+			orange_light: styles.getPropertyValue("--mk-color-orange-light"),
+			orange_dark: styles.getPropertyValue("--mk-color-orange-dark"),
+			blue: styles.getPropertyValue("--mk-color-blue"),
+			blue_light: styles.getPropertyValue("--mk-color-blue-light"),
+		};
+	};
+	$: colors = getColors();
 
 	// fetch data
 	dataManager.getData().then((d) => {
@@ -60,91 +73,6 @@
 
 	// @todo i think i can replace a lot of the draw function with reactive statements and functions
 	function draw() {
-		svg.selectAll("g").remove();
-
-		// const colorScale = d3
-		// 	.scaleOrdinal()
-		// 	.domain(["Public", "Family", "Unsolved", "Other", "Felony"])
-		// 	.range(["#A61103", "#D9501E", "#416986", "#8C8C8C", "#590902"]);
-
-		let yearScales = new Map();
-		years.forEach((year) => {
-			yearScales.set(
-				year,
-				d3
-					.scaleTime()
-					.domain([new Date(parseInt(year), 0, 1), new Date(parseInt(year), 11, 31)])
-					.range([0, width - margin.left - margin.right])
-			);
-		});
-
-		const monthAxis = d3
-			.axisBottom(yearScales.get(years[0]))
-			.tickFormat(d3.timeFormat("%b"))
-			.ticks(d3.timeMonth.every(width < 600 ? 2 : 1));
-
-		const yearGroups = svg
-			.append("g")
-			.attr("class", "data-wrap")
-			.attr("transform", `translate(${margin.left}, ${margin.top})`)
-			.selectAll(".year-group")
-			.data(years)
-			.enter()
-			.append("g")
-			.attr("class", "year-group")
-			.attr("transform", (d, i) => {
-				return `translate(0, ${i * maxRadius + 10})`;
-			});
-
-		let dataItems = yearGroups
-			.selectAll(".data-circle")
-			.data((d) => {
-				return incident_filter
-					? incident[d].filter((incident) => incident.type == incident_filter)
-					: incidents[d];
-			})
-			.enter()
-			.append("path")
-			.attr("class", "data-circle")
-			.attr(
-				"transform",
-				(d, i) => `translate(${yearScales.get(d.year)(d.real_date)}, 0)`
-			)
-			.attr("d", (d) => {
-				return arc({
-					innerRadius: 0,
-					outerRadius: circleRadiusScale(d.victims),
-					startAngle: -Math.PI * 0.5,
-					endAngle: Math.PI * 0.5,
-				});
-			})
-			// .attr("fill", d => colorScale(d.type))
-			.attr("fill", "#d9501e")
-			.attr("stroke", "white")
-			.attr("opacity", 0.75);
-
-		yearGroups
-			.append("rect")
-			.attr("height", 1)
-			.attr("width", width - margin.left - margin.right + maxRadius)
-			.attr("fill", "#8C8C8C")
-			.attr("x", -(maxRadius / 2));
-
-		yearGroups
-			.append("text")
-			.text((d) => d)
-			.attr("x", -margin.left)
-			.attr("font-family", "Unify Sans")
-			.attr("class", "timeline-chart-year-label");
-
-		svg
-			.append("g")
-			.attr("class", "timeline-chart-month-axis")
-			.attr(
-				"transform",
-				`translate(${margin.left},${(years.length - 1) * maxRadius + 10 + margin.top})`
-			)
-			.call(monthAxis);
 
 		dataItems.on("mouseenter", (d) => {
 			let e = d3.event;
@@ -172,6 +100,10 @@
 </script>
 
 <style>
+	.timeline-year-label {
+		font-family: "Unify Sans", sans-serif;
+		font-size: 12px;
+	}
 	:global(.timeline-chart-month-axis .domain) {
 		display: none;
 		opacity: 0;
@@ -193,18 +125,38 @@
 <div class="timeline-wrapper" bind:this={wrapEl} bind:clientWidth={width}>
 	<svg class="timeline-svg" bind:this={svgEl} {width} {height}>
 		<g class="chart-inner" transform="translate({margin.left}, {margin.top})">
-			{#each incidents as incident}
-				<path
-					transform="translate({xScale(
-						getDaysIntoYear(incident.real_date)
-					)}, {yScale(incident.year)})"
-					d={arc({
-						innerRadius: 0,
-						outerRadius: circleRadiusScale(incident.victims),
-						startAngle: -Math.PI * 0.5,
-						endAngle: Math.PI * 0.5,
-					})} />
-			{/each}
+			<g class="timeline-yearinfo-group">
+				{#each years as year}
+					<g
+						class="timeline-year-group"
+						transform="translate({-margin.left}, {yScale(year)})">
+						<line
+							x1={margin.left}
+							x2={width - margin.right}
+							y1={0}
+							y2={0}
+							stroke="black" />
+						<text class="timeline-year-label">{year}</text>
+					</g>
+				{/each}
+			</g>
+			<g class="timeline-incident-group">
+				{#each incidents as incident}
+					<path
+						transform="translate({xScale(getDaysIntoYear(incident.real_date))}, {yScale(
+							incident.year
+						)})"
+						d={arc({
+							innerRadius: 0,
+							outerRadius: circleRadiusScale(incident.victims),
+							startAngle: -Math.PI * 0.5,
+							endAngle: Math.PI * 0.5,
+						})}
+						fill={colors.orange}
+						opacity="0.75"
+						stroke="#404040" />
+				{/each}
+			</g>
 		</g>
 	</svg>
 </div>
