@@ -179,6 +179,9 @@ module.exports = (env, argv) => {
 		optimization: {
 			minimize: minimize,
 			minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
+			splitChunks: {
+				chunks: 'all'
+			}
 		},
 	});
 	return config;
