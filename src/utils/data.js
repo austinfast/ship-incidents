@@ -31,9 +31,6 @@ class DataManager {
 				this._data.incidentLookup[incident.id] = incident;
 			});
 
-			// format timeline data
-			this._data["timeline"] = this.formatTimeline(rawData.incidents);
-
 			// format yearly summary data
 			this._data["yearly_summaries"] = this.formatYearlySummaries(rawData.incidents);
 
@@ -76,30 +73,6 @@ class DataManager {
 		// function to determine the correct URL path for data files. Currently only returns relative path.
 		let url = "data/json/" + filename;
 		return urlFor(url);
-	}
-
-	formatTimeline(rawIncidents) {
-		// formats incidents in a timeline frindly way, grouping by year, and simplifies data associated with incidents.
-		// i'm pretty sure i can do without this and just use the raw incidents array for the timeline chart
-		let incidents_by_year = {};
-		for (var i = 0; i < rawIncidents.length; i += 1) {
-			let incident = rawIncidents[i];
-			let timeline_incident = {
-				real_date: incident.real_date,
-				year: incident.year,
-				victims: incident.victims,
-				id: incident.id,
-				type: incident.type,
-				firstcod: incident.firstcod,
-			};
-			let year = incident.year;
-			if (incidents_by_year[year]) {
-				incidents_by_year[year].push(timeline_incident);
-			} else {
-				incidents_by_year[year] = [timeline_incident];
-			}
-		}
-		return incidents_by_year;
 	}
 
 	formatYearlySummaries(rawIncidents) {
