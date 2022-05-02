@@ -4,6 +4,8 @@
 	// import { smartResizeListener } from "../../utils/events.js";
 	import { yearFromStringDate } from "../../utils/text.js";
 	import { popupDetails } from "../../stores.js";
+	import months from "../../utils/months.js";
+	console.log(months);
 
 	// PROPS
 	export let dataManager;
@@ -73,7 +75,6 @@
 
 	// @todo i think i can replace a lot of the draw function with reactive statements and functions
 	function draw() {
-
 		dataItems.on("mouseenter", (d) => {
 			let e = d3.event;
 			onDetails(d, [e.pageX, e.pageY]);
@@ -131,8 +132,8 @@
 						class="timeline-year-group"
 						transform="translate({-margin.left}, {yScale(year)})">
 						<line
-							x1={margin.left}
-							x2={width - margin.right}
+							x1={margin.left - margin.left / 2}
+							x2={width - margin.right + margin.right / 2}
 							y1={0}
 							y2={0}
 							stroke="black" />
@@ -155,6 +156,16 @@
 						fill={colors.orange}
 						opacity="0.75"
 						stroke="#404040" />
+				{/each}
+			</g>
+			<g
+				class="timeline-month-labels"
+				transform="translate(0, {yScale(years[years.length - 1])})">
+				{#each months as month, idx}
+					<g class="timeline-month-label-group" transform="translate({(chartWidth / 12) * idx}, 12)">
+						<line x1="0" x2="0" y1="0" y2="-12" stroke="black"></line>
+						<text font-size="12" y="12" x="-8">{month.shortName}</text>
+					</g>
 				{/each}
 			</g>
 		</g>
