@@ -13,7 +13,13 @@
 		},
 		{
 			"filename": "timeline",
-			"ssr": true,
+			"ssr": false,
+			"ssr_contentfile": null,
+			"ssr_component": null
+		},
+		{
+			"filename": "incidents_by_category_area",
+			"ssr": false,
 			"ssr_contentfile": null,
 			"ssr_component": null
 		}

@@ -1,10 +1,11 @@
 <script>
-	import { onMount } from "svelte";
 	import * as d3 from "d3";
 	// import { smartResizeListener } from "../../utils/events.js";
 	import { yearFromStringDate } from "../../utils/text.js";
 	import { popupDetails } from "../../stores.js";
 	import months from "../../utils/months.js";
+
+	//@TODO add filtering 
 
 	// PROPS
 	export let dataManager;
