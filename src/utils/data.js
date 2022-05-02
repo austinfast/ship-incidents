@@ -2,6 +2,7 @@
 import "regenerator-runtime/runtime";
 import { scaleLinear, histogram, max } from "d3";
 import { urlFor } from "./urls.js";
+import { yearFromStringDate } from "./text.js";
 
 class DataManager {
 	constructor() {
@@ -24,10 +25,7 @@ class DataManager {
 				incident.real_date = this.parseDate(incident.date);
 
 				// a string version of just the year
-				incident.year = incident.date ? incident.date.split("-")[0] : null;
-
-				// an array of gun types rather than a string
-				incident.gun_type_array = this.parseGunTypes(incident.gun_type);
+				incident.year = incident.date ? yearFromStringDate(incident.date) : null;
 				this._data.incidentLookup[incident.id] = incident;
 			});
 
@@ -38,17 +36,28 @@ class DataManager {
 			this._data["incidents_geo"] = await (await this.getGeoData()).json();
 
 			// count location types
-			this._data["location_type_counts"] = this.countTypes(rawData.incidents, "location_type");
+			this._data["location_type_counts"] = this.countTypes(
+				rawData.incidents,
+				"location_type"
+			);
 
 			// count gun types
-			this._data["gun_type_counts"] = this.countTypes(rawData.incidents, "gun_type_array");
+			this._data["gun_type_counts"] = this.countTypes(
+				rawData.incidents,
+				"gun_type_array"
+			);
 
 			// count victim relationships
-			this._data["victim_relationship_counts"] = this.getRelationshipCounts(rawData.victims);
+			this._data["victim_relationship_counts"] = this.getRelationshipCounts(
+				rawData.victims
+			);
 
 			// victims age bins
 			this._data["victim_age_scale"] = this.getAgeScale(this._data.victims);
-			this._data["victim_binned_ages"] = this.getAgeBins(this._data.victims, this._data.victim_age_scale);
+			this._data["victim_binned_ages"] = this.getAgeBins(
+				this._data.victims,
+				this._data.victim_age_scale
+			);
 			this._data["victim_gender_counts"] = this.countTypes(this._data.victims, "sex");
 
 			// clean offenders
@@ -56,10 +65,16 @@ class DataManager {
 
 			// offender age bins
 			this._data["offender_age_scale"] = this.getAgeScale(this._data.offenders);
-			this._data["offender_binned_ages"] = this.getAgeBins(this._data.offenders, this._data.offender_age_scale);
+			this._data["offender_binned_ages"] = this.getAgeBins(
+				this._data.offenders,
+				this._data.offender_age_scale
+			);
 
 			// offender sex
-			this._data["offender_gender_counts"] = this.countTypes(this._data.offenders, "sex");
+			this._data["offender_gender_counts"] = this.countTypes(
+				this._data.offenders,
+				"sex"
+			);
 		}
 		return this._data;
 	}
@@ -75,33 +90,60 @@ class DataManager {
 		return urlFor(url);
 	}
 
+	getAllYears(rawIncidents) {
+		return rawIncidents
+			.map((d) => d.year)
+			.filter((value, index, self) => self.indexOf(value) === index)
+			.sort((a, b) => parseInt(a) - parseInt(b));
+	}
+
 	formatYearlySummaries(rawIncidents) {
 		let yearsData = [];
-		let years = Object.keys(this._data.timeline);
+		let years = Object.keys(this.getAllYears(rawIncidents));
 		years.forEach((year) => {
 			if (year == "null") {
 				return;
 			}
-			let incidents = this._data.timeline[year];
+			let incidents = rawIncidents.filter((d) => d.year == year);
 			let yearSummary = incidents.reduce(
 				(yearInfo, incident) => {
+					//TODO: eventually I would like to add a metaType field on the back end that categorizes the mass public shootings, mass shootings ahead of time so we dont need to do that here
 					return Object.assign(yearInfo, {
 						victims: yearInfo.victims + incident.victims,
 						mass_shooting_victims:
-							incident.firstcod == "Shooting" ? yearInfo.mass_shooting_victims + incident.victims : yearInfo.mass_shooting_victims,
+							incident.firstcod == "Shooting"
+								? yearInfo.mass_shooting_victims + incident.victims
+								: yearInfo.mass_shooting_victims,
 						mass_public_shooting_victims:
 							incident.firstcod == "Shooting" && incident.type == "Public"
 								? yearInfo.mass_public_shooting_victims + incident.victims
 								: yearInfo.mass_public_shooting_victims,
 						numinjured: yearInfo.numinjured + incident.numinjured,
 						incidents: yearInfo.incidents + 1,
-						incidents_family: incident.type == "Family" ? yearInfo.incidents_family + 1 : yearInfo.incidents_family,
-						incidents_public: incident.type == "Public" ? yearInfo.incidents_public + 1 : yearInfo.incidents_public,
-						incidents_felony: incident.type == "Felony" ? yearInfo.incidents_felony + 1 : yearInfo.incidents_felony,
-						incidents_other: incident.type == "Other" || incident.type == "Unsolved" ? yearInfo.incidents_other + 1 : yearInfo.incidents_other,
-						mass_shootings: incident.firstcod == "Shooting" ? yearInfo.mass_shootings + 1 : yearInfo.mass_shootings,
+						incidents_family:
+							incident.type == "Family"
+								? yearInfo.incidents_family + 1
+								: yearInfo.incidents_family,
+						incidents_public:
+							incident.type == "Public"
+								? yearInfo.incidents_public + 1
+								: yearInfo.incidents_public,
+						incidents_felony:
+							incident.type == "Felony"
+								? yearInfo.incidents_felony + 1
+								: yearInfo.incidents_felony,
+						incidents_other:
+							incident.type == "Other" || incident.type == "Unsolved"
+								? yearInfo.incidents_other + 1
+								: yearInfo.incidents_other,
+						mass_shootings:
+							incident.firstcod == "Shooting"
+								? yearInfo.mass_shootings + 1
+								: yearInfo.mass_shootings,
 						mass_public_shootings:
-							incident.firstcod == "Shooting" && incident.type == "Public" ? yearInfo.mass_public_shootings + 1 : yearInfo.mass_public_shootings,
+							incident.firstcod == "Shooting" && incident.type == "Public"
+								? yearInfo.mass_public_shootings + 1
+								: yearInfo.mass_public_shootings,
 					});
 				},
 				{

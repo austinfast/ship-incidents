@@ -1,11 +1,10 @@
 <script>
 	import * as d3 from "d3";
 	// import { smartResizeListener } from "../../utils/events.js";
-	import { yearFromStringDate } from "../../utils/text.js";
 	import { popupDetails } from "../../stores.js";
 	import months from "../../utils/months.js";
 
-	//@TODO add filtering 
+	//@TODO add filtering
 
 	// PROPS
 	export let dataManager;
@@ -19,7 +18,7 @@
 	const monthTickHeight = 10;
 
 	$: years = incidents
-		.map((d) => yearFromStringDate(d.date))
+		.map((d) => d.year)
 		.filter((value, index, self) => self.indexOf(value) === index)
 		.sort((a, b) => parseInt(a) - parseInt(b));
 	$: margin = {
@@ -173,7 +172,8 @@
 							class="timeline-month-label-group"
 							transform="translate({(chartWidth / 12) * idx}, {monthTickHeight})">
 							<line x1="0" x2="0" y1="0" y2={-monthTickHeight} stroke="black" />
-							<text font-size={monthTickHeight} y={monthTickHeight} x="-8">{month.shortName}</text>
+							<text font-size={monthTickHeight} y={monthTickHeight} x="-8"
+								>{month.shortName}</text>
 						</g>
 					{/if}
 				{/each}
