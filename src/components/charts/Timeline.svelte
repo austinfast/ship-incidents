@@ -5,7 +5,6 @@
 	import { yearFromStringDate } from "../../utils/text.js";
 	import { popupDetails } from "../../stores.js";
 	import months from "../../utils/months.js";
-	console.log(months);
 
 	// PROPS
 	export let dataManager;
@@ -15,7 +14,8 @@
 	let wrapEl;
 	let width = 900;
 	let category = "All";
-	let arc = d3.arc();
+	const arc = d3.arc();
+	const monthTickHeight = 10;
 
 	$: years = incidents
 		.map((d) => yearFromStringDate(d.date))
@@ -28,13 +28,14 @@
 		left: width < 600 ? 50 : 100,
 	};
 	$: chartWidth = width - margin.left - margin.right;
-	$: maxRadius = width < 600 ? 20 : 50;
+	$: maxRadius = width < 600 ? 30 : 50;
 	$: minRadius = width < 600 ? 5 : 10;
 	$: incident_filter = category == "All" ? null : category;
 	$: svg = d3.select(svgEl);
 	$: height = years.length * maxRadius + margin.top * 2;
 	$: extent = d3.extent(incidents, (d) => d.victims);
 	$: circleRadiusScale = d3.scaleSqrt().domain(extent).range([minRadius, maxRadius]);
+	$: monthsEvery = chartWidth > 600 ? 1 : 2;
 	$: yScale = d3
 		.scaleOrdinal()
 		.domain(years)
@@ -121,6 +122,10 @@
 			font-size: 16px;
 		}
 	}
+	.timeline-wrapper {
+		max-width: 900px;
+		margin: 0 auto;
+	}
 </style>
 
 <div class="timeline-wrapper" bind:this={wrapEl} bind:clientWidth={width}>
@@ -132,8 +137,8 @@
 						class="timeline-year-group"
 						transform="translate({-margin.left}, {yScale(year)})">
 						<line
-							x1={margin.left - margin.left / 2}
-							x2={width - margin.right + margin.right / 2}
+							x1={margin.left - 20}
+							x2={width - margin.right + 20}
 							y1={0}
 							y2={0}
 							stroke="black" />
@@ -162,10 +167,14 @@
 				class="timeline-month-labels"
 				transform="translate(0, {yScale(years[years.length - 1])})">
 				{#each months as month, idx}
-					<g class="timeline-month-label-group" transform="translate({(chartWidth / 12) * idx}, 12)">
-						<line x1="0" x2="0" y1="0" y2="-12" stroke="black"></line>
-						<text font-size="12" y="12" x="-8">{month.shortName}</text>
-					</g>
+					{#if idx % monthsEvery == 0}
+						<g
+							class="timeline-month-label-group"
+							transform="translate({(chartWidth / 12) * idx}, {monthTickHeight})">
+							<line x1="0" x2="0" y1="0" y2={-monthTickHeight} stroke="black" />
+							<text font-size={monthTickHeight} y={monthTickHeight} x="-8">{month.shortName}</text>
+						</g>
+					{/if}
 				{/each}
 			</g>
 		</g>
