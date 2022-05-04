@@ -200,7 +200,6 @@ class DataManager {
 			incidents_other: 0,
 		}
 		yearly_summaries.forEach(yearlyData => {
-			console.log(yearlyData);
 			summary.victims += yearlyData.victims;
 			summary.mass_shooting_victims += yearlyData.mass_shooting_victims;
 			summary.mass_public_shooting_victims += yearlyData.mass_public_shooting_victims;

@@ -18,6 +18,7 @@
 	--mk-color-orange-dark: #4E2B1F;
 	--mk-color-blue: #416986;
 	--mk-color-blue-light: #8DA2B5;
+	--mk-color-grey: #ABABAB;
 }
 
 html,
@@ -25,8 +26,8 @@ body {
 	margin: 0;
 	padding: 0;
 	font-size: 16px;
-	font-size: var(--font-size-medium);
-	color: var(--color-text);
+	font-size: var(--mk-font-size-medium);
+	color: var(--mk-color-text);
 }
 
 .usat-interactive-graphic div,
@@ -42,17 +43,17 @@ body {
 	margin: 0;
 	padding: 0;
 	font-size: 16px;
-	font-size: var(--font-size-medium);
-	color: var(--color-text);
+	font-size: var(--mk-font-size-medium);
+	color: var(--mk-color-text);
 }
 
 .usat-interactive-graphic {
-	font-family: var(--font-family-sans, sans-serif);
+	font-family: var(--mk-font-family-sans, sans-serif);
 	font-size: 16px;
-	font-size: var(--font-size-medium);
+	font-size: var(--mk-font-size-medium);
 	line-height: 22px;
-	line-height: var(--line-height-medium);
-	background-color: var(--color-background);
+	line-height: var(--mk-line-height-medium);
+	background-color: var(--mk-color-background);
 }
 
 .usat-interactive-graphic p {
@@ -67,7 +68,7 @@ body {
 .usat-interactive-graphic h4,
 .usat-interactive-graphic h5,
 .usat-interactive-graphic h6 {
-	font-family: var(--font-family-sans, sans-serif);
+	font-family: var(--mk-font-family-sans, sans-serif);
 	font-weight: 700;
 	font-size: 1rem;
 	margin: 0;
@@ -77,7 +78,11 @@ body {
 .usat-interactive-graphic h2 {
 	font-size: 32px;
 	line-height: 36px;
-	font-family: var(--font-family-serif, serif);
+	font-family: var(--mk-font-family-serif, serif);
 	font-weight: 700;
 	margin-bottom: 10px;
+}
+.chart-wrapper {
+	max-width: 900px;
+	margin: 0 auto;
 }

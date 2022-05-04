@@ -122,13 +122,9 @@
 			font-size: 16px;
 		}
 	}
-	.timeline-wrapper {
-		max-width: 900px;
-		margin: 0 auto;
-	}
 </style>
 
-<div class="timeline-wrapper" bind:this={wrapEl} bind:clientWidth={width}>
+<div class="chart-wrapper" bind:this={wrapEl} bind:clientWidth={width}>
 	<svg class="timeline-svg" bind:this={svgEl} {width} {height}>
 		<g class="chart-inner" transform="translate({margin.left}, {margin.top})">
 			<g class="timeline-yearinfo-group">
