@@ -21,7 +21,8 @@
         "deploy": "npm run build && ./scripts/deploy.sh --production --storytelling-embed",
         "deploy-staging": "npm run build-staging && ./scripts/deploy.sh --staging",
         "embed": "node scripts/embed.js",
-        "setup": "npm install && node scripts/configure.js && rm -rf .git && git init"
+        "setup": "npm install && node scripts/configure.js && rm -rf .git && git init",
+		"fetch-data": "curl https://www.gannett-cdn.com/experiments/usatoday/_data/mass-killings/incidents.json > src/static/data/incidents.json"
     },
     "devDependencies": {
         "@babel/core": "^7.16.12",

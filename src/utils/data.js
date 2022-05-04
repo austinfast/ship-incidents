@@ -31,10 +31,12 @@ class DataManager {
 				incident.year = incident.date ? yearFromStringDate(incident.date) : null;
 				this._data.incidentLookup[incident.id] = incident;
 			});
-			console.log(this._data);
 
 			// format yearly summary data
-			this._data["yearly_summaries"] = this.formatYearlySummaries(this._data.incidents);
+			this._data.yearly_summaries = this.formatYearlySummaries(this._data.incidents);
+
+			// format overall summary data
+			this._data.overall_summaries = this.formatOverallSummary(this._data.yearly_summaries);
 
 			// fetch geographic data seperately
 			// this._data["incidents_geo"] = await (await this.getGeoData()).json();
@@ -80,6 +82,7 @@ class DataManager {
 			// 	"sex"
 			// );
 		}
+		console.log(this._data);
 		return this._data;
 	}
 
@@ -96,7 +99,7 @@ class DataManager {
 
 	getDataURL(filename) {
 		// function to determine the correct URL path for data files. Currently only returns relative path.
-		let url = "data/json/" + filename;
+		let url = "data/" + filename;
 		return urlFor(url);
 	}
 
@@ -107,9 +110,12 @@ class DataManager {
 			.sort((a, b) => parseInt(a) - parseInt(b));
 	}
 
+	/*
+	 * Summarizes various high level statistics for each year of data
+	*/
 	formatYearlySummaries(rawIncidents) {
 		let yearsData = [];
-		let years = Object.keys(this.getAllYears(rawIncidents));
+		let years = this.getAllYears(rawIncidents);
 		years.forEach((year) => {
 			if (year == "null") {
 				return;
@@ -174,6 +180,40 @@ class DataManager {
 			yearsData.push(yearSummary);
 		});
 		return yearsData;
+	}
+	
+	/*
+	 * Summarizes various high level statistics across all years
+	*/
+	formatOverallSummary(yearly_summaries) {
+		const summary = {
+			victims: 0,
+			mass_shooting_victims: 0,
+			mass_public_shooting_victims: 0,
+			numinjured: 0,
+			incidents: 0,
+			mass_shootings: 0,
+			mass_public_shootings: 0,
+			incidents_family: 0,
+			incidents_public: 0,
+			incidents_felony: 0,
+			incidents_other: 0,
+		}
+		yearly_summaries.forEach(yearlyData => {
+			console.log(yearlyData);
+			summary.victims += yearlyData.victims;
+			summary.mass_shooting_victims += yearlyData.mass_shooting_victims;
+			summary.mass_public_shooting_victims += yearlyData.mass_public_shooting_victims;
+			summary.numinjured += yearlyData.numinjured;
+			summary.incidents += yearlyData.incidents;
+			summary.mass_shootings += yearlyData.mass_shootings;
+			summary.mass_public_shootings += yearlyData.mass_public_shootings;
+			summary.incidents_family += yearlyData.incidents_family;
+			summary.incidents_public += yearlyData.incidents_public;
+			summary.incidents_felony += yearlyData.incidents_felony;
+			summary.incidents_other += yearlyData.incidents_other;
+		});
+		return summary;
 	}
 
 	parseDate(dateStr) {
