@@ -12,9 +12,12 @@ class DataManager {
 		// this function returns all data, formatted and ready to go. Returns a cached version if data has been loaded already.
 		if (!this._data) {
 			// request data from JSON files
-			const response = await fetch(this.getDataURL("all.json"));
-			let rawData = await response.json();
-			this._data = rawData;
+			// const response = await fetch(this.getDataURL("all.json"));
+			// let rawData = await response.json();
+			// this._data = rawData;
+			this._data = {
+				incidents: await this.getIncidents(),
+			};
 
 			// incident lookup object
 			this._data.incidentLookup = {};
@@ -28,55 +31,62 @@ class DataManager {
 				incident.year = incident.date ? yearFromStringDate(incident.date) : null;
 				this._data.incidentLookup[incident.id] = incident;
 			});
+			console.log(this._data);
 
 			// format yearly summary data
-			this._data["yearly_summaries"] = this.formatYearlySummaries(rawData.incidents);
+			this._data["yearly_summaries"] = this.formatYearlySummaries(this._data.incidents);
 
 			// fetch geographic data seperately
-			this._data["incidents_geo"] = await (await this.getGeoData()).json();
+			// this._data["incidents_geo"] = await (await this.getGeoData()).json();
 
 			// count location types
-			this._data["location_type_counts"] = this.countTypes(
-				rawData.incidents,
-				"location_type"
-			);
+			// this._data["location_type_counts"] = this.countTypes(
+			// 	rawData.incidents,
+			// 	"location_type"
+			// );
 
 			// count gun types
-			this._data["gun_type_counts"] = this.countTypes(
-				rawData.incidents,
-				"gun_type_array"
-			);
+			// this._data["gun_type_counts"] = this.countTypes(
+			// 	rawData.incidents,
+			// 	"gun_type_array"
+			// );
 
 			// count victim relationships
-			this._data["victim_relationship_counts"] = this.getRelationshipCounts(
-				rawData.victims
-			);
+			// this._data["victim_relationship_counts"] = this.getRelationshipCounts(
+			// 	rawData.victims
+			// );
 
 			// victims age bins
-			this._data["victim_age_scale"] = this.getAgeScale(this._data.victims);
-			this._data["victim_binned_ages"] = this.getAgeBins(
-				this._data.victims,
-				this._data.victim_age_scale
-			);
-			this._data["victim_gender_counts"] = this.countTypes(this._data.victims, "sex");
+			// this._data["victim_age_scale"] = this.getAgeScale(this._data.victims);
+			// this._data["victim_binned_ages"] = this.getAgeBins(
+			// 	this._data.victims,
+			// 	this._data.victim_age_scale
+			// );
+			// this._data["victim_gender_counts"] = this.countTypes(this._data.victims, "sex");
 
 			// clean offenders
-			this._data["offenders"] = this.cleanOffenders(this._data["offenders"]);
+			// this._data["offenders"] = this.cleanOffenders(this._data["offenders"]);
 
 			// offender age bins
-			this._data["offender_age_scale"] = this.getAgeScale(this._data.offenders);
-			this._data["offender_binned_ages"] = this.getAgeBins(
-				this._data.offenders,
-				this._data.offender_age_scale
-			);
+			// this._data["offender_age_scale"] = this.getAgeScale(this._data.offenders);
+			// this._data["offender_binned_ages"] = this.getAgeBins(
+			// 	this._data.offenders,
+			// 	this._data.offender_age_scale
+			// );
 
 			// offender sex
-			this._data["offender_gender_counts"] = this.countTypes(
-				this._data.offenders,
-				"sex"
-			);
+			// this._data["offender_gender_counts"] = this.countTypes(
+			// 	this._data.offenders,
+			// 	"sex"
+			// );
 		}
 		return this._data;
+	}
+
+	async getIncidents() {
+		const response = await fetch(this.getDataURL("incidents.json"));
+		let rawData = await response.json();
+		return rawData;
 	}
 
 	async getGeoData() {
@@ -107,15 +117,14 @@ class DataManager {
 			let incidents = rawIncidents.filter((d) => d.year == year);
 			let yearSummary = incidents.reduce(
 				(yearInfo, incident) => {
-					//TODO: eventually I would like to add a metaType field on the back end that categorizes the mass public shootings, mass shootings ahead of time so we dont need to do that here
 					return Object.assign(yearInfo, {
 						victims: yearInfo.victims + incident.victims,
 						mass_shooting_victims:
-							incident.firstcod == "Shooting"
+							incident.metaType == "mass_shooting"
 								? yearInfo.mass_shooting_victims + incident.victims
 								: yearInfo.mass_shooting_victims,
 						mass_public_shooting_victims:
-							incident.firstcod == "Shooting" && incident.type == "Public"
+							incident.metaType == "mass_public_shooting"
 								? yearInfo.mass_public_shooting_victims + incident.victims
 								: yearInfo.mass_public_shooting_victims,
 						numinjured: yearInfo.numinjured + incident.numinjured,
@@ -137,11 +146,11 @@ class DataManager {
 								? yearInfo.incidents_other + 1
 								: yearInfo.incidents_other,
 						mass_shootings:
-							incident.firstcod == "Shooting"
+							incident.metaType == "mass_shooting"
 								? yearInfo.mass_shootings + 1
 								: yearInfo.mass_shootings,
 						mass_public_shootings:
-							incident.firstcod == "Shooting" && incident.type == "Public"
+							incident.metaType == "mass_public_shooting"
 								? yearInfo.mass_public_shootings + 1
 								: yearInfo.mass_public_shootings,
 					});
