@@ -15,14 +15,16 @@
     "scripts": {
         "start": "npm run dev",
         "dev": "webpack-dev-server --config ./webpack.config.js --mode development --open",
-        "build": "npm run build-production",
-        "build-staging": "DEPLOY_ENV=dev webpack --config ./webpack.config.js --mode production && DEPLOY_ENV=dev npm run embed",
-        "build-production": "DEPLOY_ENV=master webpack --config ./webpack.config.js --mode production && DEPLOY_ENV=master npm run embed",
+        "dev:remote-data": "MK_DATA_SRC=remote npm run dev",
+        "build": "npm run build:production",
+        "build:staging": "DEPLOY_ENV=dev webpack --config ./webpack.config.js --mode production && DEPLOY_ENV=dev npm run embed",
+        "build:production": "DEPLOY_ENV=master webpack --config ./webpack.config.js --mode production && DEPLOY_ENV=master npm run embed",
         "deploy": "npm run build && ./scripts/deploy.sh --production --storytelling-embed",
-        "deploy-staging": "npm run build-staging && ./scripts/deploy.sh --staging",
+        "deploy:staging": "npm run build:staging && ./scripts/deploy.sh --staging",
         "embed": "node scripts/embed.js",
         "setup": "npm install && node scripts/configure.js && rm -rf .git && git init",
-		"fetch-data": "curl https://www.gannett-cdn.com/experiments/usatoday/_data/mass-killings/incidents.json > src/static/data/incidents.json"
+		"fetch-data": "curl https://www.gannett-cdn.com/experiments/usatoday/_data/mass-killings/incidents.json > src/static/data/incidents.json",
+		"data:cache": "mkdir -p src/static/data/cache && gsutil rsync gs://experiments-www-gannett-cdn-com/experiments/usatoday/_data/mass-killings/ src/static/data/cache"
     },
     "devDependencies": {
         "@babel/core": "^7.16.12",

@@ -99,6 +99,9 @@ class DataManager {
 
 	getDataURL(filename) {
 		// function to determine the correct URL path for data files. Currently only returns relative path.
+		if (process.env.MK_DATA_ROOT) {
+			return `${process.env.MK_DATA_ROOT}/${filename}`;
+		}
 		let url = "data/" + filename;
 		return urlFor(url);
 	}

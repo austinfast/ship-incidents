@@ -4,6 +4,10 @@
 	"description": "A graphic published by USA TODAY",
 	"date_published": "1/1/2022 10:00:00",
 	"date_updated": "1/1/2022 10:00:00",
+	"dataSources": {
+		"local": "static/data/cache",
+		"production": "https://www.gannett-cdn.com/experiments/usatoday/_data/mass-killings"
+	},
 	"output": [
 		{
 			"filename": "index",

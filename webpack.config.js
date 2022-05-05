@@ -53,6 +53,7 @@ function getEntries(outputs, production) {
 
 module.exports = (env, argv) => {
 	const production = argv.mode == "production";
+	const dataRoot = process.env.MK_DATA_SRC == "remote" || production ? helper.graphic_info.dataSources.production : helper.graphic_info.dataSources.local;
 	const ASSET_PATH = production
 		? helper.app_package.config.asset_path.replace("$BRANCH", DEPLOY_ENV)
 		: "/";
@@ -67,6 +68,7 @@ module.exports = (env, argv) => {
 			"process.env.ASSET_PATH": production ? JSON.stringify(ASSET_PATH) : null,
 			"process.env.PRODUCTION": production,
 			"process.env.APP_NAME": helper.app_package.config.graphic_slug,
+			"process.env.MK_DATA_ROOT": JSON.stringify(dataRoot),
 		}),
 	]);
 	let babelRule = {
