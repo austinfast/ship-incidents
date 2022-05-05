@@ -26,7 +26,7 @@ const categories = [
 ];
 
 let chart = new CategoryAreaChart({
-	target: document.getElementById("main"),
+	target: document.getElementById("MK-incidents_by_category_area-embed"),
 	props: {
 		dataManager,
 		categories,

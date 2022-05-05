@@ -12,14 +12,15 @@ const build_path = path.resolve(__dirname, "./public");
 const DEPLOY_ENV = process.env.DEPLOY_ENV || "dev";
 
 function getHtmlPlugins(outputs, production) {
-	return outputs.map((output) => {
+	const iframeOutputs = outputs.map((output) => {
 		return new HtmlWebpackPlugin({
 			inject: true,
-			template: `./src/${output.filename}.html`,
+			template: `./src/iframe.html`,
 			filename: `${output.filename}.html`,
 			chunks: [output.filename],
 			templateParameters: {
 				title: output.title ? output.title : helper.graphic_info.title,
+				domId: `MK-${output.filename}-embed`,
 				description: output.description
 					? output.description
 					: helper.graphic_info.description,
@@ -38,6 +39,38 @@ function getHtmlPlugins(outputs, production) {
 			},
 		});
 	});
+	if (!production) {
+		return iframeOutputs;
+	} else {
+		const storytellingOutputs = outputs.map((output) => {
+			return new HtmlWebpackPlugin({
+				inject: false,
+				template: `./src/s2embed.html`,
+				filename: `${output.filename}_embed.html`,
+				chunks: [output.filename],
+				templateParameters: {
+					title: output.title ? output.title : helper.graphic_info.title,
+					domId: `MK-${output.filename}-embed`,
+					description: output.description
+						? output.description
+						: helper.graphic_info.description,
+				},
+				minify: {
+					removeComments: production,
+					collapseWhitespace: false,
+					removeRedundantAttributes: true,
+					useShortDoctype: true,
+					removeEmptyAttributes: true,
+					removeStyleLinkTypeAttributes: true,
+					keepClosingSlash: true,
+					minifyJS: production,
+					minifyCSS: production,
+					minifyURLs: production,
+				},
+			});
+		});
+		return iframeOutputs.concat(storytellingOutputs);
+	}
 }
 
 function getEntries(outputs, production) {

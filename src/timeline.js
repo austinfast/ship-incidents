@@ -11,7 +11,7 @@ if (!window.dataManager) {
 }
 
 let timeline = new Timeline({
-	target: document.getElementById("main"),
+	target: document.getElementById("MK-timeline-embed"),
 	props: {
 		dataManager
 	}
