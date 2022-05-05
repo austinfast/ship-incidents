@@ -5,7 +5,20 @@
 	export let dataManager;
 	let summaryStatistics;
 	let width = 900;
-	const categories = ["mass_killings", "mass_shootings", "mass_public_shootings"];
+	export let categories = [
+		{
+			field: "incidents",
+			label: "All mass killings",
+		},
+		{
+			field: "mass_shootings",
+			label: "Mass shootings",
+		},
+		{
+			field: "mass_public_shootings",
+			label: "Mass public shootings",
+		},
+	];
 
 	dataManager.getData().then((d) => {
 		summaryStatistics = d.overall_summaries;
@@ -21,12 +34,12 @@
 
 	$: colorScale = d3
 		.scaleOrdinal()
-		.domain(["mass_killings", "mass_shootings", "mass_public_shootings"])
+		.domain(categories.map((c) => c.field))
 		.range([colors["orange-light"], colors["orange"], colors["orange-dark"]]);
 
 	$: sizeScale = d3
 		.scaleSqrt()
-		.domain([0, summaryStatistics ? summaryStatistics.incidents : 1])
+		.domain([0, summaryStatistics ? summaryStatistics[categories[0].field] : 1])
 		.range([0, boxSize]);
 </script>
 
@@ -40,41 +53,26 @@
 </style>
 
 <div class="chart-wrapper" bind:clientWidth={width}>
-	<h2>Category area chart</h2>
 	{#if summaryStatistics}
 		<svg {width} height={width}>
 			<g class="chart-group" transform="translate({margin.left}, {margin.top})">
-				<rect
-					y={boxSize - sizeScale(summaryStatistics["incidents"])}
-					width={sizeScale(summaryStatistics["incidents"])}
-					height={sizeScale(summaryStatistics["incidents"])}
-					fill={colorScale("mass_killings")} />
-				<rect
-					y={boxSize - sizeScale(summaryStatistics["mass_shootings"])}
-					width={sizeScale(summaryStatistics["mass_shootings"])}
-					height={sizeScale(summaryStatistics["mass_shootings"])}
-					fill={colorScale("mass_shootings")} />
-				<rect
-					y={boxSize - sizeScale(summaryStatistics["mass_public_shootings"])}
-					width={sizeScale(summaryStatistics["mass_public_shootings"])}
-					height={sizeScale(summaryStatistics["mass_public_shootings"])}
-					fill={colorScale("mass_public_shootings")} />
+				{#each categories as category}
+					<rect
+						y={boxSize - sizeScale(summaryStatistics[category.field])}
+						width={sizeScale(summaryStatistics[category.field])}
+						height={sizeScale(summaryStatistics[category.field])}
+						fill={colorScale(category.field)} />
+				{/each}
 			</g>
 			<g class="label-group">
-				<text x={margin.left} text-anchor="end" class="chart-label"
-					>All mass killings</text>
-				<text
-					x={margin.left}
-					text-anchor="end"
-					class="chart-label"
-					y={boxSize - sizeScale(summaryStatistics["mass_shootings"])}
-					>Mass shootings</text>
-				<text
-					x={margin.left}
-					text-anchor="end"
-					class="chart-label"
-					y={boxSize - sizeScale(summaryStatistics["mass_public_shootings"])}
-					>Mass public shootings</text>
+				{#each categories as category}
+					<text
+						x={margin.left}
+						text-anchor="end"
+						class="chart-label"
+						y={boxSize - sizeScale(summaryStatistics[category.field])}
+						>{category.label}</text>
+				{/each}
 			</g>
 		</svg>
 	{/if}
