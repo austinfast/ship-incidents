@@ -17,7 +17,7 @@ function getHtmlPlugins(outputs, production) {
 			inject: true,
 			template: `./src/iframe.html`,
 			filename: `${output.filename}.html`,
-			chunks: [output.filename],
+			chunks: ["shared", output.filename],
 			templateParameters: {
 				title: output.title ? output.title : helper.graphic_info.title,
 				domId: `MK-${output.filename}-embed`,
@@ -47,7 +47,7 @@ function getHtmlPlugins(outputs, production) {
 				inject: false,
 				template: `./src/s2embed.html`,
 				filename: `${output.filename}_embed.html`,
-				chunks: [output.filename],
+				chunks: ["shared", output.filename],
 				templateParameters: {
 					title: output.title ? output.title : helper.graphic_info.title,
 					domId: `MK-${output.filename}-embed`,
@@ -74,19 +74,37 @@ function getHtmlPlugins(outputs, production) {
 }
 
 function getEntries(outputs, production) {
-	let entries = {};
+	let entries = {
+		shared: [
+			"d3",
+			"svelte",
+			"./src/style/index.css",
+			"./src/style/fonts.css",
+			"./src/utils/data.js",
+			"./src/colors.json",
+		],
+	};
 	outputs.forEach((output) => {
 		const jsFile = `./src/${output.filename}.js`;
 		entries[output.filename] = production
-			? ["@webcomponents/custom-elements", jsFile]
-			: [jsFile];
+			? {
+					import: ["@webcomponents/custom-elements", jsFile],
+					dependOn: "shared",
+			  }
+			: {
+					import: [jsFile],
+					dependOn: "shared",
+			  };
 	});
 	return entries;
 }
 
 module.exports = (env, argv) => {
 	const production = argv.mode == "production";
-	const dataRoot = process.env.MK_DATA_SRC == "remote" || production ? helper.graphic_info.dataSources.production : helper.graphic_info.dataSources.local;
+	const dataRoot =
+		process.env.MK_DATA_SRC == "remote" || production
+			? helper.graphic_info.dataSources.production
+			: helper.graphic_info.dataSources.local;
 	const ASSET_PATH = production
 		? helper.app_package.config.asset_path.replace("$BRANCH", DEPLOY_ENV)
 		: "/";
@@ -214,11 +232,10 @@ module.exports = (env, argv) => {
 		optimization: {
 			minimize: minimize,
 			minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
-			splitChunks: {
-				chunks: 'all'
-			}
+			// splitChunks: {
+			// 	chunks: 'all'
+			// }
 		},
 	});
 	return config;
 };
-
