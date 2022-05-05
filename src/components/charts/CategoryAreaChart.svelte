@@ -5,21 +5,7 @@
 	export let dataManager;
 	let summaryStatistics;
 	let width = 900;
-	export let categories = [
-		{
-			field: "incidents",
-			label: "All mass killings",
-		},
-		{
-			field: "mass_shootings",
-			label: "Mass shootings",
-		},
-		{
-			field: "mass_public_shootings",
-			label: "Mass public shootings",
-		},
-	];
-
+	export let categories; 
 	dataManager.getData().then((d) => {
 		summaryStatistics = d.overall_summaries;
 	});

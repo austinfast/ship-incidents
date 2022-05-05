@@ -12,16 +12,16 @@ if (!window.dataManager) {
 
 const categories = [
 	{
-		field: "incidents",
-		label: "All mass killings",
+		field: "victims",
+		label: "Victims of mass killings",
 	},
 	{
-		field: "mass_shootings",
-		label: "Mass shootings",
+		field: "mass_shooting_victims",
+		label: "Victims of mass shootings",
 	},
 	{
-		field: "mass_public_shootings",
-		label: "Mass public shootings",
+		field: "mass_public_shooting_victims",
+		label: "Victims of mass public shootings",
 	},
 ];
 
