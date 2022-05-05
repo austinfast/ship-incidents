@@ -6,8 +6,8 @@ import CategoryAreaChart from "./components/charts/CategoryAreaChart.svelte";
 let dataManager;
 let incidents = [];
 
-if (!window.dataManager) {
-	dataManager = window.dataManager = new DataManager();
+if (!window.mkDataManager) {
+	dataManager = window.mkDataManager = new DataManager();
 }
 
 const categories = [

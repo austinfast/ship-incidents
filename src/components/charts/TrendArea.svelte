@@ -137,8 +137,8 @@
 	}
 
 	onMount(() => {
-		draw();
-		smartResizeListener(draw);
+		// draw();
+		// smartResizeListener(draw);
 	});
 </script>
 

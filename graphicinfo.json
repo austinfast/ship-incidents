@@ -32,6 +32,12 @@
 			"ssr": false,
 			"ssr_contentfile": null,
 			"ssr_component": null
+		},
+		{
+			"filename": "incident_trends",
+			"ssr": false,
+			"ssr_contentfile": null,
+			"ssr_component": null
 		}
 	]
 }
