@@ -1,16 +1,76 @@
 <script>
-	import { onMount } from "svelte";
 	import * as d3 from "d3";
-	import { smartResizeListener } from "../../utils/events.js";
+	import colors from "../../colors.json";
 
 	// PROPS
-	export let yearlyData;
-	export let yearlyVariables;
+	export let dataManager;
+	export let yearlyData = [];
+	export let yearlyVariables = [];
 
-	let svgEl;
+	dataManager.getData().then((d) => {
+		yearlyData = d.yearly_summaries;
+	});
+
 	let wrapEl;
 	let width;
 	let height = 300;
+	let defaultDate = new Date();
+
+	$: margin = {
+		top: 20,
+		right: 20,
+		bottom: 20,
+		left: 30,
+	};
+	$: chartWidth = width - margin.left - margin.right;
+	$: chartHeight = height - margin.top - margin.bottom;
+	$: colorScale = d3
+		.scaleOrdinal()
+		.domain(yearlyVariables.map((c) => c.field))
+		.range([colors["orange-light"], colors["orange"], colors["orange-dark"]]);
+	$: scaleX = d3
+		.scaleTime()
+		.domain([
+			yearlyData.length > 0 ? yearlyData[0].year_date : defaultDate,
+			yearlyData.length > 0 ? yearlyData[yearlyData.length - 1].year_date : defaultDate,
+		])
+		.range([0, chartWidth]);
+
+	$: scaleY = d3
+		.scaleLinear()
+		.domain([
+			0,
+			d3.max(
+				yearlyData.reduce((values, yearData) => {
+					yearlyVariables.forEach((yearlyVariable) => {
+						values.push(yearData[yearlyVariable.field]);
+					});
+					return values;
+				}, [])
+			),
+		])
+		.range([chartHeight, 0]);
+
+	$: dotRadius = width < 600 ? 3 : 4;
+	$: getLine = (yearlyVariable) =>
+		d3
+			.line()
+			.x((d) => scaleX(d.year_date))
+			.y((d) => scaleY(d[yearlyVariable.field]));
+
+	$: getArea = (yearlyVariable) =>
+		d3
+			.area()
+			.x((d) => scaleX(d.year_date))
+			.y0((d, i) => {
+				if (yearlyVariables.indexOf(yearlyVariable) < yearlyVariables.length - 1) {
+					return scaleY(
+						d[yearlyVariables[yearlyVariables.indexOf(yearlyVariable) + 1].field]
+					);
+				}
+				return chartHeight;
+			})
+			.y1((d) => scaleY(d[yearlyVariable.field]));
 
 	function hexToRGB(hex, alpha) {
 		var r = parseInt(hex.slice(1, 3), 16),
@@ -25,38 +85,6 @@
 	}
 
 	function draw() {
-		width = wrapEl.offsetWidth;
-		let margin = {
-			top: 20,
-			right: 20,
-			bottom: 20,
-			left: 30,
-		};
-		let chartWidth = width - margin.left - margin.right;
-		let chartHeight = height - margin.top - margin.bottom;
-
-		let dotRadius = width < 600 ? 3 : 4;
-
-		let scaleX = d3
-			.scaleTime()
-			.domain([yearlyData[0].year_date, yearlyData[yearlyData.length - 1].year_date])
-			.range([0, chartWidth]);
-
-		let scaleY = d3
-			.scaleLinear()
-			.domain([
-				0,
-				d3.max(
-					yearlyData.reduce((values, yearData) => {
-						yearlyVariables.forEach((yearlyVariable) => {
-							values.push(yearData[yearlyVariable[0]]);
-						});
-						return values;
-					}, [])
-				),
-			])
-			.range([chartHeight, 0]);
-
 		// let axisY = d3.axisLeft(scaleY).tickSize(-chartWidth);
 		let axisY = d3.axisLeft(scaleY);
 		// let axisX = d3.axisBottom(scaleX).tickSize(-chartHeight);
@@ -67,9 +95,15 @@
 		// start with a clean slate
 		svg.selectAll("g").remove();
 
-		let chartG = svg.append("g").attr("class", "chart-g").attr("transform", `translate(${margin.left}, ${margin.right})`);
+		let chartG = svg
+			.append("g")
+			.attr("class", "chart-g")
+			.attr("transform", `translate(${margin.left}, ${margin.right})`);
 
-		let xAxisG = chartG.append("g").attr("class", "x-axis-g").attr("transform", `translate(0, ${chartHeight})`);
+		let xAxisG = chartG
+			.append("g")
+			.attr("class", "x-axis-g")
+			.attr("transform", `translate(0, ${chartHeight})`);
 
 		let yAxisG = chartG.append("g").attr("class", "y-axis-g");
 
@@ -83,63 +117,7 @@
 
 			g.select(".domain").remove();
 		});
-
-		yearlyVariables.forEach((yearlyVariable, yearIdx) => {
-			let lineG = chartG.append("g");
-			let dotG = chartG.append("g");
-			let line = d3
-				.line()
-				.x((d) => scaleX(d.year_date))
-				.y((d) => scaleY(d[yearlyVariable[0]]));
-
-			let area = d3
-				.area()
-				.x((d) => scaleX(d.year_date))
-				.y0((d, i) => {
-					if (yearlyVariables.indexOf(yearlyVariable) < yearlyVariables.length - 1) {
-						return scaleY(d[yearlyVariables[yearIdx + 1][0]]);
-					}
-					return chartHeight;
-				})
-				.y1((d) => scaleY(d[yearlyVariable[0]]));
-
-			lineG
-				.append("path")
-				.datum(yearlyData.slice(0, -1))
-				.attr("fill", hexToRGB(yearlyVariable[1], 1))
-				// .attr("stroke", yearlyVariable[1])
-				// .attr("stroke-width", 2)
-				// .attr("stroke-linejoin", "round")
-				// .attr("stroke-linecap", "round")
-				.attr("d", area);
-
-			lineG
-				.append("path")
-				.datum(yearlyData.slice(0, -1))
-				.attr("fill", "none")
-				.attr("stroke", yearlyVariable[1])
-				.attr("stroke-width", 2)
-				.attr("stroke-linejoin", "round")
-				.attr("stroke-linecap", "round")
-				.attr("d", line);
-
-			dotG
-				.selectAll(".year-dot")
-				.data(yearlyData.slice(0, -1))
-				.enter()
-				.append("circle")
-				.attr("class", "year-dot")
-				.attr("cy", (d) => scaleY(d[yearlyVariable[0]]))
-				.attr("cx", (d) => scaleX(d.year_date))
-				.attr("r", dotRadius)
-				.attr("fill", yearlyVariable[1]);
-		});
 	}
-
-	onMount(() => {
-		// draw();
-		// smartResizeListener(draw);
-	});
 </script>
 
 <style>
@@ -173,14 +151,40 @@
 	}
 </style>
 
-<div class="trend-line-wrap" bind:this={wrapEl}>
+<div class="trend-line-wrap chart-wrapper" bind:this={wrapEl} bind:clientWidth={width}>
 	<div class="key-wrapper">
 		{#each yearlyVariables as yearlyVariable}
 			<div class="key-item">
-				<div class="key-item-swatch" style={"background-color: " + yearlyVariable[1]} />
-				<p class="key-item-label">{yearlyVariable[2]}</p>
+				<div
+					class="key-item-swatch"
+					style={"background-color: " + colorScale(yearlyVariable.field)} />
+				<p class="key-item-label">{yearlyVariable.label}</p>
 			</div>
 		{/each}
 	</div>
-	<svg bind:this={svgEl} {width} {height} />
+	<svg {width} {height}>
+		<g class="chart-g" transform="translate({margin.left}, {margin.top})">
+			{#each yearlyVariables as yearlyVariable}
+				<path
+					d={getArea(yearlyVariable)(yearlyData)}
+					fill={colorScale(yearlyVariable.field)}
+					opacity="0.75" />
+				<path
+					d={getLine(yearlyVariable)(yearlyData)}
+					stroke={colorScale(yearlyVariable.field)}
+					stroke-width="2"
+					fill="none"
+					stroke-linejoin="round"
+					stroke-linecap="round" />
+				{#each yearlyData as year}
+					<circle
+						fill={colorScale(yearlyVariable.field)}
+						r={dotRadius}
+						cx={scaleX(year.year_date)}
+						cy={scaleY(year[yearlyVariable.field])} />
+						class="year-dot"
+				{/each}
+			{/each}
+		</g>
+	</svg>
 </div>
