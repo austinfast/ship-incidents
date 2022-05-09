@@ -8,6 +8,8 @@ let incidents = [];
 
 if (!window.mkDataManager) {
 	dataManager = window.mkDataManager = new DataManager();
+} else {
+	dataManager = window.mkDataManager;
 }
 
 let timeline = new Timeline({

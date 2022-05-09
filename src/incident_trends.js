@@ -21,6 +21,8 @@ const yearlyVariables = [
 
 if (!window.mkDataManager) {
 	dataManager = window.mkDataManager = new DataManager();
+} else {
+	dataManager = window.mkDataManager;
 }
 
 let trendArea = new TrendArea({
