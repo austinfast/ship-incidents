@@ -193,6 +193,9 @@ module.exports = (env, argv) => {
 					{
 						from: path.resolve("./src/static"),
 						to: path.resolve(build_path, "static"),
+						globOptions: {
+							gitignore: true
+						},
 						noErrorOnMissing: true,
 					},
 				],
