@@ -5,6 +5,7 @@ import CategoryAreaChart from "./components/charts/CategoryAreaChart.svelte";
 
 let dataManager;
 let incidents = [];
+const mainEl = document.getElementById("MK-victims_by_category_area-embed");
 
 if (!window.mkDataManager) {
 	dataManager = window.mkDataManager = new DataManager();
@@ -28,9 +29,14 @@ const categories = [
 ];
 
 let chart = new CategoryAreaChart({
-	target: document.getElementById("MK-victims_by_category_area-embed"),
+	target: mainEl,
 	props: {
 		dataManager,
 		categories,
 	},
 });
+// Set up height resizer for embeds
+if (window.IframeResizer) {
+	const myResizer = new window.IframeResizer(mainEl, 3000);
+	myResizer.watch();
+}

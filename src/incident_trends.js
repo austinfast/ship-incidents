@@ -4,6 +4,7 @@ import DataManager from "./utils/data.js";
 import TrendArea from "./components/charts/TrendArea.svelte";
 
 let dataManager;
+const mainEl = document.getElementById("MK-incident_trends-embed");
 const yearlyVariables = [
 	{
 		field: "incidents",
@@ -26,9 +27,15 @@ if (!window.mkDataManager) {
 }
 
 let trendArea = new TrendArea({
-	target: document.getElementById("MK-incident_trends-embed"),
+	target: mainEl,
 	props: {
 		dataManager,
 		yearlyVariables,
 	},
 });
+
+// Set up height resizer for embeds
+if (window.IframeResizer) {
+	const myResizer = new window.IframeResizer(mainEl, 3000);
+	myResizer.watch();
+}

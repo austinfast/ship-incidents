@@ -1,10 +1,11 @@
-import  "./style/fonts.css"
-import "./style/index.css"
+import "./style/fonts.css";
+import "./style/index.css";
 import DataManager from "./utils/data.js";
 import Timeline from "./components/charts/Timeline.svelte";
 
 let dataManager;
 let incidents = [];
+const mainEl = document.getElementById("MK-timeline-embed");
 
 if (!window.mkDataManager) {
 	dataManager = window.mkDataManager = new DataManager();
@@ -13,8 +14,14 @@ if (!window.mkDataManager) {
 }
 
 let timeline = new Timeline({
-	target: document.getElementById("MK-timeline-embed"),
+	target: mainEl,
 	props: {
-		dataManager
-	}
+		dataManager,
+	},
 });
+
+// Set up height resizer for embeds
+if (window.IframeResizer) {
+	const myResizer = new window.IframeResizer(mainEl, 3000);
+	myResizer.watch();
+}
