@@ -129,7 +129,7 @@ class DataManager {
 					return Object.assign(yearInfo, {
 						victims: yearInfo.victims + incident.victims,
 						mass_shooting_victims:
-							incident.metaType == "mass_shooting"
+							incident.metaType == "mass_shooting" || incident.metaType == "mass_public_shooting"
 								? yearInfo.mass_shooting_victims + incident.victims
 								: yearInfo.mass_shooting_victims,
 						mass_public_shooting_victims:
@@ -155,7 +155,7 @@ class DataManager {
 								? yearInfo.incidents_other + 1
 								: yearInfo.incidents_other,
 						mass_shootings:
-							incident.metaType == "mass_shooting"
+							incident.metaType == "mass_shooting" || incident.metaType == "mass_public_shooting"
 								? yearInfo.mass_shootings + 1
 								: yearInfo.mass_shootings,
 						mass_public_shootings:
