@@ -15,7 +15,7 @@
 	let xAxisEl;
 	let yAxisEl;
 	let width;
-	let height = 300;
+	let height = 400;
 	let defaultDate = new Date();
 
 	$: margin = {
@@ -158,7 +158,7 @@
 					<path
 						d={getArea(yearlyVariable)(yearlyData)}
 						fill={colorScale(yearlyVariable.field)}
-						opacity="0.75" />
+						opacity="0.90" />
 					<path
 						d={getLine(yearlyVariable)(yearlyData)}
 						stroke={colorScale(yearlyVariable.field)}
