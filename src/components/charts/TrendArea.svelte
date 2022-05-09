@@ -105,39 +105,6 @@
 			return "rgb(" + r + ", " + g + ", " + b + ")";
 		}
 	}
-
-	function draw() {
-		// let axisY = d3.axisLeft(scaleY).tickSize(-chartWidth);
-		// let axisX = d3.axisBottom(scaleX).tickSize(-chartHeight);
-
-		let svg = d3.select(svgEl);
-
-		// start with a clean slate
-		svg.selectAll("g").remove();
-
-		let chartG = svg
-			.append("g")
-			.attr("class", "chart-g")
-			.attr("transform", `translate(${margin.left}, ${margin.right})`);
-
-		let xAxisG = chartG
-			.append("g")
-			.attr("class", "x-axis-g")
-			.attr("transform", `translate(0, ${chartHeight})`);
-
-		let yAxisG = chartG.append("g").attr("class", "y-axis-g");
-
-		xAxisG.call(axisX).call((g) => {
-			g.selectAll("line").attr("stroke", "#DEDEDE");
-			g.selectAll(".domain").attr("stroke", "#DEDEDE");
-		});
-		yAxisG.call(axisY).call((g) => {
-			g.selectAll("line").attr("stroke", "#DEDEDE");
-			g.selectAll(".domain").attr("stroke", "#DEDEDE");
-
-			g.select(".domain").remove();
-		});
-	}
 </script>
 
 <style>
