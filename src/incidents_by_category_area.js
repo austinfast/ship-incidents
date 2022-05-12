@@ -8,8 +8,10 @@ let incidents = [];
 let mainEl = document.getElementById("MK-incidents_by_category_area-embed");
 
 if (!window.mkDataManager) {
+	console.log("global dataManager NOT found by incidents by category")
 	dataManager = window.mkDataManager = new DataManager();
 } else {
+	console.log("global dataManager found by incidents by category")
 	dataManager = window.mkDataManager;
 }
 
@@ -28,6 +30,7 @@ const categories = [
 	},
 ];
 
+console.log("Rendering area chart");
 let chart = new CategoryAreaChart({
 	target: mainEl,
 	props: {

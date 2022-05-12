@@ -21,11 +21,14 @@ const yearlyVariables = [
 ];
 
 if (!window.mkDataManager) {
+	console.log("global dataManager NOT found by incident trends")
 	dataManager = window.mkDataManager = new DataManager();
 } else {
+	console.log("global dataManager found by incident trends")
 	dataManager = window.mkDataManager;
 }
 
+console.log("Rendering trend chart");
 let trendArea = new TrendArea({
 	target: mainEl,
 	props: {

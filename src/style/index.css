@@ -82,7 +82,7 @@ body {
 	font-weight: 700;
 	margin-bottom: 10px;
 }
-.chart-wrapper {
+.usat-interactive-graphic .chart-wrapper {
 	max-width: 900px;
 	margin: 0 auto;
 }

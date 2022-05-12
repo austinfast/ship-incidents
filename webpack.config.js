@@ -47,7 +47,9 @@ function getHtmlPlugins(outputs, production) {
 				inject: false,
 				template: `./src/s2embed.html`,
 				filename: `${output.filename}_embed.html`,
-				chunks: ["shared", output.filename],
+				// only include shared module 1 time in the embed files
+				// right now this is hard-coded to timeline, but should probably be on whatever embed gets loaded first
+				chunks: output.filename == "timeline" ? ["shared", output.filename] : [output.filename],
 				templateParameters: {
 					title: output.title ? output.title : helper.graphic_info.title,
 					domId: `MK-${output.filename}-embed`,
@@ -148,7 +150,7 @@ module.exports = (env, argv) => {
 					emitCss: true,
 					hotReload: true,
 					compilerOptions: {
-						hydratable: true,
+						hydratable: false,
 					},
 				},
 			},

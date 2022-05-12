@@ -6,38 +6,21 @@ import { yearFromStringDate } from "./text.js";
 
 class DataManager {
 	constructor() {
+		console.log("DATA MANAGER: instantiating new data manager");
 		this._data = null;
+		this._fetching = false;
 	}
 	async getData() {
 		// this function returns all data, formatted and ready to go. Returns a cached version if data has been loaded already.
-		if (!this._data) {
-			// request data from JSON files
-			// const response = await fetch(this.getDataURL("all.json"));
-			// let rawData = await response.json();
-			// this._data = rawData;
-			this._data = {
-				incidents: await this.getIncidents(),
-			};
-
-			// incident lookup object
-			this._data.incidentLookup = {};
-
-			// set parse and set a few additional variables for each incident
-			this._data.incidents.forEach((incident) => {
-				// a real JS date
-				incident.real_date = this.parseDate(incident.date);
-
-				// a string version of just the year
-				incident.year = incident.date ? yearFromStringDate(incident.date) : null;
-				this._data.incidentLookup[incident.id] = incident;
+		if (!this._data && !this._fetching) {
+			console.log("DATA MANAGER: Fetching fresh data");
+			this._fetching = true;
+			this._pendingFetch = this.fetchNewData().then((d) => {
+				this._data = d;
+				this._fetching = false;
+				return this._data;
 			});
-
-			// format yearly summary data
-			this._data.yearly_summaries = this.formatYearlySummaries(this._data.incidents);
-
-			// format overall summary data
-			this._data.overall_summaries = this.formatOverallSummary(this._data.yearly_summaries);
-
+			return this._pendingFetch;
 			// fetch geographic data seperately
 			// this._data["incidents_geo"] = await (await this.getGeoData()).json();
 
@@ -81,15 +64,46 @@ class DataManager {
 			// 	this._data.offenders,
 			// 	"sex"
 			// );
+		} else if (this._fetching) {
+			console.log("fetch is already pending, await completion");
+			// if fetching is already in process, wait for promise to resolve and then return the data;
+			return this._pendingFetch.then((d) => {
+				console.log("DATA MANAGER: pending fetch resolved");
+				return this._data;
+			})
 		}
-		console.log(this._data);
+		console.log("DATA MANAGER: using cached data");
 		return this._data;
 	}
 
-	async getIncidents() {
+	async fetchNewData() {
+		console.log("DATA MANAGER: fetching new data from server")
 		const response = await fetch(this.getDataURL("incidents.json"));
-		let rawData = await response.json();
-		return rawData;
+		let rawIncidents = await response.json();
+		// incident lookup object
+		let incidentLookup = {};
+
+		// set parse and set a few additional variables for each incident
+		rawIncidents.forEach((incident) => {
+			// a real JS date
+			incident.real_date = this.parseDate(incident.date);
+
+			// a string version of just the year
+			incident.year = incident.date ? yearFromStringDate(incident.date) : null;
+			incidentLookup[incident.id] = incident;
+		});
+		// format yearly summary data
+		const yearlySummaries = this.formatYearlySummaries(rawIncidents);
+
+		// format overall summary data
+		const overallSummary = this.formatOverallSummary(yearlySummaries);
+
+		return {
+			incidents: rawIncidents,
+			incidentLookup,
+			yearlySummaries,
+			overallSummary
+		}
 	}
 
 	async getGeoData() {

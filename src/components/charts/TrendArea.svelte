@@ -8,7 +8,7 @@
 	export let yearlyVariables = [];
 
 	dataManager.getData().then((d) => {
-		yearlyData = d.yearly_summaries;
+		yearlyData = d.yearlySummaries;
 	});
 
 	let wrapEl;

@@ -7,7 +7,7 @@
 	let width = 900;
 	export let categories; 
 	dataManager.getData().then((d) => {
-		summaryStatistics = d.overall_summaries;
+		summaryStatistics = d.overallSummary;
 	});
 	$: margin = {
 		top: 0,
