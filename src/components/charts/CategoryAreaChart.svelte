@@ -4,7 +4,7 @@
 
 	export let dataManager;
 	let summaryStatistics;
-	let width = 900;
+	let width = 800;
 	export let categories; 
 	dataManager.getData().then((d) => {
 		summaryStatistics = d.overallSummary;
