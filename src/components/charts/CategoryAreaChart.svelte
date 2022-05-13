@@ -40,7 +40,7 @@
 
 <div class="chart-wrapper" bind:clientWidth={width}>
 	{#if summaryStatistics}
-		<svg {width} height={width}>
+		<svg {width} height={boxSize}>
 			<g class="chart-group" transform="translate({margin.left}, {margin.top})">
 				{#each categories as category}
 					<rect
