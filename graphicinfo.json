@@ -50,6 +50,12 @@
 			"ssr": false,
 			"ssr_contentfile": null,
 			"ssr_component": null
+		},
+		{
+			"filename": "location_types",
+			"ssr": false,
+			"ssr_contentfile": null,
+			"ssr_component": null
 		}
 	]
 }

@@ -23,13 +23,6 @@ class DataManager {
 			return this._pendingFetch;
 			// fetch geographic data seperately
 			// this._data["incidents_geo"] = await (await this.getGeoData()).json();
-
-			// count location types
-			// this._data["location_type_counts"] = this.countTypes(
-			// 	rawData.incidents,
-			// 	"location_type"
-			// );
-
 			// count gun types
 			// this._data["gun_type_counts"] = this.countTypes(
 			// 	rawData.incidents,
@@ -98,11 +91,18 @@ class DataManager {
 		// format overall summary data
 		const overallSummary = this.formatOverallSummary(yearlySummaries);
 
+		// count location types
+		const locationTypes = this.countTypes(
+			rawIncidents,
+			"location_type"
+		);
+
 		return {
 			incidents: rawIncidents,
 			incidentLookup,
 			yearlySummaries,
-			overallSummary
+			overallSummary,
+			locationTypes
 		}
 	}
 
