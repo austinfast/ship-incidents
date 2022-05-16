@@ -29,11 +29,6 @@ class DataManager {
 			// 	"gun_type_array"
 			// );
 
-			// count victim relationships
-			// this._data["victim_relationship_counts"] = this.getRelationshipCounts(
-			// 	rawData.victims
-			// );
-
 			// victims age bins
 			// this._data["victim_age_scale"] = this.getAgeScale(this._data.victims);
 			// this._data["victim_binned_ages"] = this.getAgeBins(
@@ -71,8 +66,8 @@ class DataManager {
 
 	async fetchNewData() {
 		console.log("DATA MANAGER: fetching new data from server")
-		const response = await fetch(this.getDataURL("incidents.json"));
-		let rawIncidents = await response.json();
+		const incidentResponse = await fetch(this.getDataURL("incidents.json"));
+		let rawIncidents = await incidentResponse.json();
 		// incident lookup object
 		let incidentLookup = {};
 
@@ -97,12 +92,21 @@ class DataManager {
 			"location_type"
 		);
 
+		const victimsResponse = await fetch(this.getDataURL("victims.json"));
+		let rawVictims = await victimsResponse.json();
+
+		// count victim relationships
+		const victimRelationships = this.getRelationshipCounts(
+			rawVictims
+		);
+
 		return {
 			incidents: rawIncidents,
 			incidentLookup,
 			yearlySummaries,
 			overallSummary,
-			locationTypes
+			locationTypes,
+			victimRelationships
 		}
 	}
 

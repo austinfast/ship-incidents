@@ -56,6 +56,12 @@
 			"ssr": false,
 			"ssr_contentfile": null,
 			"ssr_component": null
+		},
+		{
+			"filename": "relationship_types",
+			"ssr": false,
+			"ssr_contentfile": null,
+			"ssr_component": null
 		}
 	]
 }
