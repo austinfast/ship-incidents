@@ -76,7 +76,7 @@
 	}
 </style>
 
-<div class="relationship-bar-wrapper chart-wrapper" bind:clientWidth={width}>
+<div class="relationship-bar-wrapper chart-wrapper in-depth-article-width" bind:clientWidth={width}>
 	<div class="key-wrap">
 		{#each bar_1 as keyItem}
 			<div class="key-item">
