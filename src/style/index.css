@@ -87,3 +87,19 @@ body {
 	margin: 0 auto;
 	width: 100%;
 }
+
+.usat-interactive-graphic .in-depth-article-width {
+	padding: 0 20px;
+	width: 100%;
+}
+
+@media (min-width: 768px) {
+	.usat-interactive-graphic .in-depth-article-width {
+		padding: 0 18vw;
+	}
+}
+@media (min-width: 1024px) {
+	.usat-interactive-graphic .in-depth-article-width {
+		padding: 0 26vw;
+	}
+}
