@@ -46,6 +46,14 @@ Once the project has been initialized, to run it locally, run:
 npm start
 ```
 
+The app will attempt to load locally cached versions of the data. To sync the latest data from the server to your local development enviroment, first run: 
+
+```
+npm run data:cache
+```
+
+This will sync the data to the `src/static/data/cache` folder. This folder is ignored by git, so needs to be kept up to date manually. Re-running the command will grab any updates from the server.
+
 ## Deploying
 To deploy to USA TODAY's CDN, run
 ```
