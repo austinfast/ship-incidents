@@ -36,7 +36,7 @@
 		.chart-wrap-double-group {
 			display: flex;
 			justify-content: space-around;
-			max-width: 1200pxk;
+			max-width: 1200px;
 		}
 	}
 </style>
