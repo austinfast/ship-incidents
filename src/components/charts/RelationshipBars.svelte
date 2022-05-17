@@ -1,5 +1,4 @@
 <script>
-	import { onMount } from "svelte";
 	import { scaleLinear, max } from "d3";
 
 	// Props
