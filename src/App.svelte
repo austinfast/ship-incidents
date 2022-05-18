@@ -15,7 +15,7 @@
 	import AgeHistogram from "./components/charts/AgeHistogram.svelte";
 	import StackedBar from "./components/charts/StackedBar.svelte";
 	import DataManager from "./utils/data.js";
-	import { popupDetails } from "./stores.js";
+	import { popupDetails } from "./stores/popup.js";
 	import { prettyNumber } from "./utils/text.js";
 
 	let dataManager = new DataManager();

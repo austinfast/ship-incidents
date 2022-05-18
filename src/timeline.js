@@ -22,6 +22,7 @@ let timeline = new Timeline({
 	target: mainEl,
 	props: {
 		dataManager,
+		popupSlot: "incident-timeline"
 	},
 });
 // Set up height resizer for embeds

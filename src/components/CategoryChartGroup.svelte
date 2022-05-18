@@ -35,8 +35,9 @@
 	@media (min-width: 768px) {
 		.chart-wrap-double-group {
 			display: flex;
-			justify-content: space-around;
+			justify-content: center;
 			max-width: 1200px;
+			margin: 0 auto;
 		}
 	}
 </style>

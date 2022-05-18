@@ -4,6 +4,8 @@ import { scaleLinear, histogram, max } from "d3";
 import { urlFor } from "./urls.js";
 import { yearFromStringDate } from "./text.js";
 
+
+// @TODO should this whole thing be refactored to be a svelte store?
 class DataManager {
 	constructor() {
 		console.log("DATA MANAGER: instantiating new data manager");

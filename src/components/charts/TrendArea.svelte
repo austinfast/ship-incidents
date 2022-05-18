@@ -1,6 +1,7 @@
 <script>
 	import * as d3 from "d3";
 	import colors from "../../colors.json";
+	import { storyStore } from "../../stores/story.js";
 
 	// PROPS
 	export let dataManager;

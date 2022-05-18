@@ -84,6 +84,8 @@ function getEntries(outputs, production) {
 			"./src/style/fonts.css",
 			"./src/utils/data.js",
 			"./src/colors.json",
+			"./src/stores/story.js",
+			"./src/stores/popup.js",
 		],
 	};
 	outputs.forEach((output) => {

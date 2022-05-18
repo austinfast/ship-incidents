@@ -1,7 +1,8 @@
 <script>
 	import * as d3 from "d3";
-	// import { smartResizeListener } from "../../utils/events.js";
-	import { popupDetails } from "../../stores.js";
+	import Popup from "../Popup.svelte";
+	import { popupDetails } from "../../stores/popup.js";
+	import colors from "../../colors.json";
 	import months from "../../utils/months.js";
 
 	//@TODO add filtering
@@ -41,21 +42,6 @@
 		.domain(years)
 		.range(years.map((year, i) => i * maxRadius + 10));
 	$: xScale = d3.scaleLinear().domain([0, 366]).range([0, chartWidth]);
-	// @TODO not sure how I feel about reading these from the DOM. I like just defining them in 1 place but
-	// I worry it is going to get tedious over time pulling them in like this. Might be better to put them in a config
-	// file and set them as CSS properties once.
-	$: getColors = function () {
-		if (!wrapEl) return null;
-		const styles = getComputedStyle(wrapEl);
-		return {
-			orange: styles.getPropertyValue("--mk-color-orange"),
-			orange_light: styles.getPropertyValue("--mk-color-orange-light"),
-			orange_dark: styles.getPropertyValue("--mk-color-orange-dark"),
-			blue: styles.getPropertyValue("--mk-color-blue"),
-			blue_light: styles.getPropertyValue("--mk-color-blue-light"),
-		};
-	};
-	$: colors = getColors();
 
 	// fetch data
 	dataManager.getData().then((d) => {
@@ -87,6 +73,7 @@
 	}
 
 	function onDetails(incident, position) {
+		console.log(position)
 		if (incident) {
 			popupDetails.set({
 				incidentId: incident.id,
@@ -156,7 +143,9 @@
 						})}
 						fill={colors.orange}
 						opacity="0.75"
-						stroke="#404040" />
+						stroke="#404040" 
+						on:mouseenter={(e) => onDetails(incident, [e.clientX, e.clientY])}
+						/>
 				{/each}
 			</g>
 			<g
@@ -177,3 +166,8 @@
 		</g>
 	</svg>
 </div>
+<!-- @todo need to figure out how to manage data/state in the popup component. right now things are too split up between parent components, stores, and data manager. -->
+<!-- really need to streamline this before it will work well. -->
+{#if ($popupDetails.incidentId || $popupDetails.customContent) && $popupDetails.position}
+	<!-- <Popup details={$popupDetails} incidentLookup={data.incidentLookup} /> -->
+{/if}
