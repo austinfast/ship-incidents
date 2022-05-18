@@ -12,44 +12,21 @@ const build_path = path.resolve(__dirname, "./public");
 const DEPLOY_ENV = process.env.DEPLOY_ENV || "dev";
 
 function getHtmlPlugins(outputs, production) {
-	const iframeOutputs = outputs.map((output) => {
-		return new HtmlWebpackPlugin({
-			inject: true,
-			template: `./src/iframe.html`,
-			filename: `${output.filename}.html`,
-			chunks: ["shared", output.filename],
-			templateParameters: {
-				title: output.title ? output.title : helper.graphic_info.title,
-				domId: `MK-${output.filename}-embed`,
-				description: output.description
-					? output.description
-					: helper.graphic_info.description,
-			},
-			minify: {
-				removeComments: production,
-				collapseWhitespace: false,
-				removeRedundantAttributes: true,
-				useShortDoctype: true,
-				removeEmptyAttributes: true,
-				removeStyleLinkTypeAttributes: true,
-				keepClosingSlash: true,
-				minifyJS: production,
-				minifyCSS: production,
-				minifyURLs: production,
-			},
-		});
-	});
-	if (!production) {
-		return iframeOutputs;
-	} else {
-		const storytellingOutputs = outputs.map((output) => {
+	const iframeOutputs = outputs
+		.filter((output) => (production ? !output.local_only : true))
+		.map((output) => {
+			if (output.filename == "index") {
+				return new HtmlWebpackPlugin({
+					inject: true,
+					template: './src/localtest.html',
+					filename: 'index.html',
+				})
+			}
 			return new HtmlWebpackPlugin({
-				inject: false,
-				template: `./src/s2embed.html`,
-				filename: `${output.filename}_embed.html`,
-				// only include shared module 1 time in the embed files
-				// right now this is hard-coded to timeline, but should probably be on whatever embed gets loaded first
-				chunks: output.filename == "timeline" ? ["shared", output.filename] : [output.filename],
+				inject: true,
+				template: `./src/iframe.html`,
+				filename: `${output.filename}.html`,
+				chunks: ["shared", output.filename],
 				templateParameters: {
 					title: output.title ? output.title : helper.graphic_info.title,
 					domId: `MK-${output.filename}-embed`,
@@ -71,6 +48,43 @@ function getHtmlPlugins(outputs, production) {
 				},
 			});
 		});
+	if (!production) {
+		return iframeOutputs;
+	} else {
+		const storytellingOutputs = outputs
+			.filter((output) => !output.local_only)
+			.map((output) => {
+				return new HtmlWebpackPlugin({
+					inject: false,
+					template: `./src/s2embed.html`,
+					filename: `${output.filename}_embed.html`,
+					// only include shared module 1 time in the embed files
+					// right now this is hard-coded to timeline, but should probably be on whatever embed gets loaded first
+					chunks:
+						output.filename == "timeline"
+							? ["shared", output.filename]
+							: [output.filename],
+					templateParameters: {
+						title: output.title ? output.title : helper.graphic_info.title,
+						domId: `MK-${output.filename}-embed`,
+						description: output.description
+							? output.description
+							: helper.graphic_info.description,
+					},
+					minify: {
+						removeComments: production,
+						collapseWhitespace: false,
+						removeRedundantAttributes: true,
+						useShortDoctype: true,
+						removeEmptyAttributes: true,
+						removeStyleLinkTypeAttributes: true,
+						keepClosingSlash: true,
+						minifyJS: production,
+						minifyCSS: production,
+						minifyURLs: production,
+					},
+				});
+			});
 		return iframeOutputs.concat(storytellingOutputs);
 	}
 }
@@ -89,6 +103,9 @@ function getEntries(outputs, production) {
 		],
 	};
 	outputs.forEach((output) => {
+		if (production && output.local_only) {
+			return;
+		}
 		const jsFile = `./src/${output.filename}.js`;
 		entries[output.filename] = production
 			? {
@@ -198,7 +215,7 @@ module.exports = (env, argv) => {
 						from: path.resolve("./src/static"),
 						to: path.resolve(build_path, "static"),
 						globOptions: {
-							gitignore: true
+							gitignore: true,
 						},
 						noErrorOnMissing: true,
 					},

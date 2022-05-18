@@ -12,23 +12,12 @@
 		{
 			"filename": "index",
 			"ssr": false,
+			"local_only": true,
 			"ssr_contentfile": null,
 			"ssr_component": null
 		},
 		{
 			"filename": "timeline",
-			"ssr": false,
-			"ssr_contentfile": null,
-			"ssr_component": null
-		},
-		{
-			"filename": "incidents_by_category_area",
-			"ssr": false,
-			"ssr_contentfile": null,
-			"ssr_component": null
-		},
-		{
-			"filename": "victims_by_category_area",
 			"ssr": false,
 			"ssr_contentfile": null,
 			"ssr_component": null

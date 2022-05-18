@@ -1,16 +1,22 @@
 <script>
 	import * as d3 from "d3";
 	import colors from "../../colors.json";
-	import { storyStore } from "../../stores/story.js";
+	import {getIncidentData, incidentData} from "../../stores/data.js";
 
 	// PROPS
-	export let dataManager;
 	export let yearlyData = [];
 	export let yearlyVariables = [];
 
-	dataManager.getData().then((d) => {
-		yearlyData = d.yearlySummaries;
-	});
+	// data
+	$: if (!$incidentData) {
+		console.log("no data yet, asking for more")
+		getIncidentData();
+	} else {
+		console.log("data already exists, awaiting");
+		$incidentData.then((d) => {
+			yearlyData = d.yearlySummaries;
+		})
+	}
 
 	let wrapEl;
 	let xAxisEl;

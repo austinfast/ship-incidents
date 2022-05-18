@@ -1,6 +1,5 @@
 <script>
 	import CategoryAreaChart from "./charts/CategoryAreaChart.svelte";
-	export let dataManager;
 	const incidentCategories = [
 		{
 			field: "incidents",
@@ -43,6 +42,6 @@
 </style>
 
 <div class="chart-wrap-double-group">
-	<CategoryAreaChart {dataManager} categories={incidentCategories} />
-	<CategoryAreaChart {dataManager} categories={victimCategories} />
+	<CategoryAreaChart categories={incidentCategories} />
+	<CategoryAreaChart categories={victimCategories} />
 </div>

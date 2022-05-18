@@ -9,9 +9,3 @@ export function prettyDate(d) {
 	return f(d);
 }
 
-export function yearFromStringDate(stringDate) {
-	if (!stringDate) {
-		return null;
-	}
-	return stringDate.split("-")[0];
-}

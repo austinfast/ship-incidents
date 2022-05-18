@@ -1,6 +1,5 @@
 import "./style/fonts.css";
 import "./style/index.css";
-import dataManager from "./utils/data.js";
 import TrendArea from "./components/charts/TrendArea.svelte";
 
 const mainEl = document.getElementById("MK-incident_trends-embed");
@@ -23,7 +22,6 @@ console.log("Rendering trend chart");
 let trendArea = new TrendArea({
 	target: mainEl,
 	props: {
-		dataManager,
 		yearlyVariables,
 	},
 });

@@ -1,14 +1,21 @@
 <script>
 	import * as d3 from "d3";
 	import colors from "../../colors.json";
+	import {getIncidentData, incidentData} from "../../stores/data.js";
 
-	export let dataManager;
 	let summaryStatistics;
 	let width = 800;
 	export let categories; 
-	dataManager.getData().then((d) => {
-		summaryStatistics = d.overallSummary;
-	});
+	// data
+	$: if (!$incidentData) {
+		console.log("no data yet, asking for more")
+		getIncidentData();
+	} else {
+		console.log("data already exists, awaiting");
+		$incidentData.then((d) => {
+			summaryStatistics = d.overallSummary;
+		})
+	}
 	$: margin = {
 		top: 0,
 		right: 0,

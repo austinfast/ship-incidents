@@ -4,12 +4,13 @@
 	import { popupDetails } from "../../stores/popup.js";
 	import colors from "../../colors.json";
 	import months from "../../utils/months.js";
+	import {getIncidentData, incidentData} from "../../stores/data.js";
 
 	//@TODO add filtering
 
 	// PROPS
-	export let dataManager;
 	export let popupSlot;
+
 
 	let svgEl;
 	let incidents = [];
@@ -45,11 +46,21 @@
 		.range(years.map((year, i) => i * maxRadius + 10));
 	$: xScale = d3.scaleLinear().domain([0, 366]).range([0, chartWidth]);
 
+	// data
+	$: if (!$incidentData) {
+		console.log("no data yet, asking for more")
+		getIncidentData();
+	} else {
+		console.log("data already exists, awaiting");
+		$incidentData.then((d) => {
+			incidents = d.incidents;
+		})
+	}
 	// fetch data
-	dataManager.getData().then((d) => {
-		incidents = d.incidents;
-		incidentLookup = d.incidentLookup;
-	});
+	// dataManager.getData().then((d) => {
+	// 	incidents = d.incidents;
+	// 	incidentLookup = d.incidentLookup;
+	// });
 
 	// function that takes a Date object and returns the number of days into the given year
 	// January 1, 2022 would return 0
