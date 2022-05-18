@@ -1,17 +1,10 @@
 import "./style/fonts.css";
 import "./style/index.css";
-import DataManager from "./utils/data.js";
+import dataManager from "./utils/data.js";
 import CategoryAreaChart from "./components/charts/CategoryAreaChart.svelte";
 
-let dataManager;
 let incidents = [];
 const mainEl = document.getElementById("MK-victims_by_category_area-embed");
-
-if (!window.mkDataManager) {
-	dataManager = window.mkDataManager = new DataManager();
-} else {
-	dataManager = window.mkDataManager;
-}
 
 const categories = [
 	{

@@ -352,4 +352,4 @@ class DataManager {
 	}
 }
 
-export default DataManager;
+export default new DataManager();

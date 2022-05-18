@@ -6,9 +6,7 @@
 
 	let incident = null;
 
-	$: console.log(details);
 	$: if (details.incidentId) {
-		console.log(incidentLookup);
 		incident = incidentLookup[details.incidentId];
 	} else {
 		incident = null;

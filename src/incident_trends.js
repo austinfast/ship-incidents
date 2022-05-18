@@ -1,9 +1,8 @@
 import "./style/fonts.css";
 import "./style/index.css";
-import DataManager from "./utils/data.js";
+import dataManager from "./utils/data.js";
 import TrendArea from "./components/charts/TrendArea.svelte";
 
-let dataManager;
 const mainEl = document.getElementById("MK-incident_trends-embed");
 const yearlyVariables = [
 	{
@@ -19,14 +18,6 @@ const yearlyVariables = [
 		label: "Mass public shootings",
 	},
 ];
-
-if (!window.mkDataManager) {
-	console.log("global dataManager NOT found by incident trends")
-	dataManager = window.mkDataManager = new DataManager();
-} else {
-	console.log("global dataManager found by incident trends")
-	dataManager = window.mkDataManager;
-}
 
 console.log("Rendering trend chart");
 let trendArea = new TrendArea({

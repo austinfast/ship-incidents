@@ -9,9 +9,11 @@
 
 	// PROPS
 	export let dataManager;
+	export let popupSlot;
 
 	let svgEl;
 	let incidents = [];
+	let incidentLookup;
 	let wrapEl;
 	let width = 900;
 	let category = "All";
@@ -46,6 +48,7 @@
 	// fetch data
 	dataManager.getData().then((d) => {
 		incidents = d.incidents;
+		incidentLookup = d.incidentLookup;
 	});
 
 	// function that takes a Date object and returns the number of days into the given year
@@ -73,11 +76,11 @@
 	}
 
 	function onDetails(incident, position) {
-		console.log(position)
 		if (incident) {
 			popupDetails.set({
 				incidentId: incident.id,
 				position: position,
+				slot: popupSlot,
 			});
 		} else {
 			popupDetails.set({
@@ -143,9 +146,10 @@
 						})}
 						fill={colors.orange}
 						opacity="0.75"
-						stroke="#404040" 
+						stroke="#404040"
 						on:mouseenter={(e) => onDetails(incident, [e.clientX, e.clientY])}
-						/>
+						on:mousemove={(e) => onDetails(incident, [e.clientX, e.clientY])}
+						on:mouseleave={(e) => onDetails()} />
 				{/each}
 			</g>
 			<g
@@ -168,6 +172,6 @@
 </div>
 <!-- @todo need to figure out how to manage data/state in the popup component. right now things are too split up between parent components, stores, and data manager. -->
 <!-- really need to streamline this before it will work well. -->
-{#if ($popupDetails.incidentId || $popupDetails.customContent) && $popupDetails.position}
-	<!-- <Popup details={$popupDetails} incidentLookup={data.incidentLookup} /> -->
+{#if ($popupDetails.incidentId || $popupDetails.customContent) && $popupDetails.position && $popupDetails.slot == popupSlot}
+	<Popup details={$popupDetails} {incidentLookup} />
 {/if}

@@ -1,9 +1,8 @@
 import "./style/fonts.css";
 import "./style/index.css";
-import DataManager from "./utils/data.js";
+import dataManager from "./utils/data.js";
 import TrendArea from "./components/charts/TrendArea.svelte";
 
-let dataManager;
 const mainEl = document.getElementById("MK-victim_trends-embed");
 
 const yearlyVariables = [
@@ -20,12 +19,6 @@ const yearlyVariables = [
 		label: "Mass public shooting victims",
 	},
 ];
-
-if (!window.mkDataManager) {
-	dataManager = window.mkDataManager = new DataManager();
-} else {
-	dataManager = window.mkDataManager;
-}
 
 let trendArea = new TrendArea({
 	target: mainEl,

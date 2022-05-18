@@ -4,5 +4,5 @@ export const popupDetails = writable({
 	incidentId: null,
 	customContent: null,
 	position: null,
-	component: null,
+	slot: null,
 });
