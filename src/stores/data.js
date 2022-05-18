@@ -7,8 +7,8 @@ export const incidentData = writable(null);
 export const victimData = writable(null);
 
 export async function getIncidentData() {
-	console.log("fetch incident data");
-	incidentData.set(new Promise(() =>{}));
+	console.log("get incident data");
+	incidentData.set(new Promise(() => {}));
 	const dataURL = getDataURL("incidents.json");
 	const rawIncidents = await getDataFromURL(dataURL);
 	// incident lookup object
@@ -30,30 +30,32 @@ export async function getIncidentData() {
 	const overallSummary = formatOverallSummary(yearlySummaries);
 
 	// count location types
-	const locationTypes = countTypes(
-		rawIncidents,
-		"location_type"
+	const locationTypes = countTypes(rawIncidents, "location_type");
+	incidentData.set(
+		Promise.resolve({
+			incidents: rawIncidents,
+			incidentLookup,
+			yearlySummaries,
+			overallSummary,
+			locationTypes,
+		})
 	);
-	incidentData.set(Promise.resolve({
-		incidents: rawIncidents,
-		incidentLookup,
-		yearlySummaries,
-		overallSummary,
-		locationTypes,
-	}));
+	return incidentData;
 }
 
-function getVictimData() {
-	victimData.set(new Promise(() =>{}));
+export async function getVictimData() {
+	console.log("get victim data");
+	victimData.set(new Promise(() => {}));
 	const dataURL = getDataURL("victims.json");
-	const rawData = getDataFromURL(dataURL);
+	const rawData = await getDataFromURL(dataURL);
 	// count victim relationships
-	const victimRelationships = this.getRelationshipCounts(
-		rawData
+	const victimRelationships = getRelationshipCounts(rawData);
+	victimData.set(
+		Promise.resolve({
+			victimRelationships,
+		})
 	);
-	victimData.set(Promise.resolve({
-		victimRelationships
-	}));
+	return victimData;
 }
 
 function getDataURL(filename) {
@@ -79,7 +81,7 @@ async function getDataFromURL(url) {
 }
 /*
  * Summarizes various high level statistics for each year of data
-*/
+ */
 function formatYearlySummaries(rawIncidents) {
 	let yearsData = [];
 	let years = getAllYears(rawIncidents);
@@ -93,7 +95,8 @@ function formatYearlySummaries(rawIncidents) {
 				return Object.assign(yearInfo, {
 					victims: yearInfo.victims + incident.victims,
 					mass_shooting_victims:
-						incident.metaType == "mass_shooting" || incident.metaType == "mass_public_shooting"
+						incident.metaType == "mass_shooting" ||
+						incident.metaType == "mass_public_shooting"
 							? yearInfo.mass_shooting_victims + incident.victims
 							: yearInfo.mass_shooting_victims,
 					mass_public_shooting_victims:
@@ -119,7 +122,8 @@ function formatYearlySummaries(rawIncidents) {
 							? yearInfo.incidents_other + 1
 							: yearInfo.incidents_other,
 					mass_shootings:
-						incident.metaType == "mass_shooting" || incident.metaType == "mass_public_shooting"
+						incident.metaType == "mass_shooting" ||
+						incident.metaType == "mass_public_shooting"
 							? yearInfo.mass_shootings + 1
 							: yearInfo.mass_shootings,
 					mass_public_shootings:
@@ -157,7 +161,7 @@ function getAllYears(rawIncidents) {
 }
 /*
  * Summarizes various high level statistics across all years
-*/
+ */
 function formatOverallSummary(yearly_summaries) {
 	const summary = {
 		victims: 0,
@@ -171,8 +175,8 @@ function formatOverallSummary(yearly_summaries) {
 		incidents_public: 0,
 		incidents_felony: 0,
 		incidents_other: 0,
-	}
-	yearly_summaries.forEach(yearlyData => {
+	};
+	yearly_summaries.forEach((yearlyData) => {
 		summary.victims += yearlyData.victims;
 		summary.mass_shooting_victims += yearlyData.mass_shooting_victims;
 		summary.mass_public_shooting_victims += yearlyData.mass_public_shooting_victims;
@@ -227,4 +231,15 @@ function countTypes(rawIncidents, countKey, nullKey = "Unknown") {
 	}
 
 	return typeArray.sort((a, b) => b.count - a.count);
+}
+
+function getRelationshipCounts(victims) {
+	return victims.reduce((allCounts, victim) => {
+		if (allCounts[victim.relationshipcat]) {
+			allCounts[victim.relationshipcat] += 1;
+		} else {
+			allCounts[victim.relationshipcat] = 1;
+		}
+		return allCounts;
+	}, {});
 }

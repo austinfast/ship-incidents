@@ -4,13 +4,12 @@
 	import { popupDetails } from "../../stores/popup.js";
 	import colors from "../../colors.json";
 	import months from "../../utils/months.js";
-	import {getIncidentData, incidentData} from "../../stores/data.js";
+	import { getIncidentData, incidentData } from "../../stores/data.js";
 
 	//@TODO add filtering
 
 	// PROPS
 	export let popupSlot;
-
 
 	let svgEl;
 	let incidents = [];
@@ -48,20 +47,14 @@
 
 	// data
 	$: if (!$incidentData) {
-		console.log("no data yet, asking for more")
+		console.log("no data yet, asking for more");
 		getIncidentData();
 	} else {
 		console.log("data already exists, awaiting");
 		$incidentData.then((d) => {
 			incidents = d.incidents;
-		})
+		});
 	}
-	// fetch data
-	// dataManager.getData().then((d) => {
-	// 	incidents = d.incidents;
-	// 	incidentLookup = d.incidentLookup;
-	// });
-
 	// function that takes a Date object and returns the number of days into the given year
 	// January 1, 2022 would return 0
 	function getDaysIntoYear(d) {
@@ -72,18 +65,6 @@
 		const diff =
 			d - start + (start.getTimezoneOffset() - d.getTimezoneOffset()) * 60 * 1000;
 		return Math.floor(diff / msDay);
-	}
-
-	// @todo i think i can replace a lot of the draw function with reactive statements and functions
-	function draw() {
-		dataItems.on("mouseenter", (d) => {
-			let e = d3.event;
-			onDetails(d, [e.pageX, e.pageY]);
-		});
-
-		dataItems.on("mouseleave", (d) => {
-			onDetails(null);
-		});
 	}
 
 	function onDetails(incident, position) {

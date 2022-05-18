@@ -1,9 +1,7 @@
 import "./style/fonts.css";
 import "./style/index.css";
-import { incidentData, fetchIncidentData } from "./stores/data.js";
 import Timeline from "./components/charts/Timeline.svelte";
 
-let incidents = [];
 const mainEl = document.getElementById("MK-timeline-embed");
 console.log("Rendering timeline");
 let timeline = new Timeline({

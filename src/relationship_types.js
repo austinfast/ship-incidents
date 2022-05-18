@@ -1,6 +1,5 @@
 import "./style/fonts.css";
 import "./style/index.css";
-import dataManager from "./utils/data.js";
 import Bars from "./components/charts/RelationshipBars.svelte";
 
 const mainEl = document.getElementById("MK-relationship_types-embed");
@@ -8,9 +7,6 @@ const mainEl = document.getElementById("MK-relationship_types-embed");
 console.log("Rendering relatiolnship chart");
 let bars = new Bars({
 	target: mainEl,
-	props: {
-		dataManager,
-	},
 });
 
 // Set up height resizer for embeds

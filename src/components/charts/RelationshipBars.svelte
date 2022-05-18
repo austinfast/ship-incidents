@@ -1,8 +1,6 @@
 <script>
+	import { getVictimData, victimData } from "../../stores/data.js";
 	import { scaleLinear, max } from "d3";
-
-	// Props
-	export let dataManager;
 
 	let svgEl;
 	let counts = [];
@@ -37,10 +35,16 @@
 		allCounts.push(bar_1_count);
 		heightScale = heightScale.domain([0, max(allCounts)]);
 	}
-	dataManager.getData().then((d) => {
-		counts = d.victimRelationships;
-		console.log(counts);
-	});
+	// data
+	$: if (!$victimData) {
+		console.log("no data yet, asking for more");
+		getVictimData();
+	} else {
+		console.log("data already exists, awaiting");
+		$victimData.then((d) => {
+				counts = d.victimRelationships;
+		});
+	}
 </script>
 
 <style>
