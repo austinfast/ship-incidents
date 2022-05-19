@@ -1,5 +1,6 @@
 import { writable } from "svelte/store";
 import { urlFor } from "../utils/urls.js";
+import { scaleLinear, max, histogram } from "d3";
 import { parseDate, yearFromStringDate } from "../utils/dates.js";
 
 const cache = new Map();
@@ -48,11 +49,22 @@ export async function getVictimData() {
 	victimData.set(new Promise(() => {}));
 	const dataURL = getDataURL("victims.json");
 	const rawData = await getDataFromURL(dataURL);
+
 	// count victim relationships
 	const victimRelationships = getRelationshipCounts(rawData);
+
+	const victimAgeScale = getAgeScale(rawData);
+	const victimAges = getAgeBins(
+		rawData,
+		victimAgeScale
+	);
+	const victimGenderCounts = countTypes(rawData, "sex");
 	victimData.set(
 		Promise.resolve({
 			victimRelationships,
+			victimAges,
+			victimAgeScale,
+			victimGenderCounts
 		})
 	);
 	return victimData;
@@ -242,4 +254,18 @@ function getRelationshipCounts(victims) {
 		}
 		return allCounts;
 	}, {});
+}
+
+function getAgeScale(people) {
+	return scaleLinear()
+		.domain([0, max(people.filter((person) => person.age !== null), (d) => d.age)])
+		.range([0, 1]);
+}
+
+function getAgeBins(people, ageScale) {
+	let ageBins = histogram()
+		.domain(ageScale.domain())
+		.thresholds(ageScale.ticks(20))
+		.value((d) => d.age);
+	return ageBins(people.filter((person) => person.age !== null));
 }

@@ -51,6 +51,12 @@
 			"ssr": false,
 			"ssr_contentfile": null,
 			"ssr_component": null
+		},
+		{
+			"filename": "victims_by_age",
+			"ssr": false,
+			"ssr_contentfile": null,
+			"ssr_component": null
 		}
 	]
 }
