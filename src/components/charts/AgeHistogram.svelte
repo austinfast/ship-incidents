@@ -1,8 +1,8 @@
 <script>
 	import * as d3 from "d3";
-	import { victimData, getVictimData } from "../../stores/data.js";
 
 	export let color = "#e3e3e3";
+	export let sourceData;
 
 	let width = 300;
 	let binnedData;
@@ -10,10 +10,8 @@
 	let xAxisEl;
 	let yAxisEl;
 
-	$: if (!$victimData) {
-		getVictimData();
-	} else {
-		$victimData.then((d) => {
+	$: if (sourceData) {
+		sourceData.then((d) => {
 			binnedData = d.victimAges;
 			ageScale = d.victimAgeScale;
 		});
@@ -56,38 +54,17 @@
 				g.select(".domain").remove();
 			});
 	}
-
-	function draw() {
-		svg
-			.append("g")
-			.attr("transform", `translate(${margin.left}, ${height - margin.bottom})`)
-			.call(xAxis)
-			.call((g) => {
-				g.selectAll("line").attr("stroke", "#DEDEDE");
-				g.selectAll(".domain").attr("stroke", "#DEDEDE");
-			});
-
-		svg
-			.append("g")
-			.attr("transform", `translate(${margin.left}, ${margin.top})`)
-			.call(yAxis)
-			.call((g) => {
-				g.selectAll("line").attr("stroke", "#DEDEDE");
-				g.selectAll(".domain").attr("stroke", "#DEDEDE");
-				g.select(".domain").remove();
-			});
-	}
 </script>
 
 <div class="age-histogram-wrap chart-wrapper" bind:clientWidth={width}>
 	{#if binnedData}
 		<svg class="age-histogram-svg" {width} {height}>
-			<!-- @TODO call axis on these axis <g> elements -->
 			<g
 				class="x-axis-group"
 				bind:this={xAxisEl}
 				transform="translate({margin.left}, {height - margin.bottom})" />
-			<g class="y-axis-group" 
+			<g
+				class="y-axis-group"
 				bind:this={yAxisEl}
 				transform="translate({margin.left}, {margin.top})" />
 			<g class="chart-group" transform="translate({margin.left}, {margin.top})">
