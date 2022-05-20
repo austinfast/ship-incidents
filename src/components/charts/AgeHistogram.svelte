@@ -4,11 +4,11 @@
 
 	export let color = "#e3e3e3";
 
-	let wrapEl;
-	let svgEl;
 	let width = 300;
 	let binnedData;
 	let ageScale;
+	let xAxisEl;
+	let yAxisEl;
 
 	$: if (!$victimData) {
 		getVictimData();
@@ -39,14 +39,29 @@
 		.nice()
 		.range([chartHeight, 0]);
 	$: yAxis = d3.axisLeft(yScale).ticks(6).tickSize(-chartWidth);
+	$: if (xAxisEl) {
+		d3.select(xAxisEl)
+			.call(xAxis)
+			.call((g) => {
+				g.selectAll("line").attr("stroke", "#DEDEDE");
+				g.selectAll(".domain").attr("stroke", "#DEDEDE");
+			});
+	}
+	$: if (yAxisEl) {
+		d3.select(yAxisEl)
+			.call(yAxis)
+			.call((g) => {
+				g.selectAll("line").attr("stroke", "#DEDEDE");
+				g.selectAll(".domain").attr("stroke", "#DEDEDE");
+				g.select(".domain").remove();
+			});
+	}
 
 	function draw() {
-
-
 		svg
 			.append("g")
 			.attr("transform", `translate(${margin.left}, ${height - margin.bottom})`)
-			.call(x_axis)
+			.call(xAxis)
 			.call((g) => {
 				g.selectAll("line").attr("stroke", "#DEDEDE");
 				g.selectAll(".domain").attr("stroke", "#DEDEDE");
@@ -55,35 +70,36 @@
 		svg
 			.append("g")
 			.attr("transform", `translate(${margin.left}, ${margin.top})`)
-			.call(y_axis)
+			.call(yAxis)
 			.call((g) => {
 				g.selectAll("line").attr("stroke", "#DEDEDE");
 				g.selectAll(".domain").attr("stroke", "#DEDEDE");
 				g.select(".domain").remove();
 			});
-
 	}
 </script>
 
-<div class="age-histogram-wrap" bind:this={wrapEl} bind:clientWidth={width}>
+<div class="age-histogram-wrap chart-wrapper" bind:clientWidth={width}>
 	{#if binnedData}
-	<svg class="age-histogram-svg" bind:this={svgEl} {width} {height} >
-		<!-- @TODO call axis on these axis <g> elements -->
-		<g class="x-axis-group" transform="translate({margin.left}, {height - margin.bottom})">
-		</g>
-		<g class="y-axis-group" transform="translate({margin.left}, {margin.top})">
-		</g>
-		<g class="chart-group" transform="translate({margin.left}, {margin.top})">
-			{#each binnedData as bin}
-				<rect 
-					x={ageScale(bin.x0)}
-					y={yScale(bin.length)}
-					width={Math.max(0, ageScale(bin.x1) - ageScale(bin.x0) - barmargin)}
-					height={ yScale(0) - yScale(bin.length)}
-					fill={color}
-				></rect>
-			{/each}
-		</g>
-	</svg>
+		<svg class="age-histogram-svg" {width} {height}>
+			<!-- @TODO call axis on these axis <g> elements -->
+			<g
+				class="x-axis-group"
+				bind:this={xAxisEl}
+				transform="translate({margin.left}, {height - margin.bottom})" />
+			<g class="y-axis-group" 
+				bind:this={yAxisEl}
+				transform="translate({margin.left}, {margin.top})" />
+			<g class="chart-group" transform="translate({margin.left}, {margin.top})">
+				{#each binnedData as bin}
+					<rect
+						x={ageScale(bin.x0)}
+						y={yScale(bin.length)}
+						width={Math.max(0, ageScale(bin.x1) - ageScale(bin.x0) - barmargin)}
+						height={yScale(0) - yScale(bin.length)}
+						fill={color} />
+				{/each}
+			</g>
+		</svg>
 	{/if}
 </div>
