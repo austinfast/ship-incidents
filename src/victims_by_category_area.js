@@ -1,6 +1,6 @@
 import "./style/fonts.css";
 import "./style/index.css";
-import dataManager from "./utils/data.js";
+import dataManager from "./lib/data.js";
 import CategoryAreaChart from "./components/charts/CategoryAreaChart.svelte";
 
 let incidents = [];

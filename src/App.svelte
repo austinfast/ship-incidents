@@ -14,9 +14,9 @@
 	import RelationshipBars from "./components/charts/RelationshipBars.svelte";
 	import AgeHistogram from "./components/charts/AgeHistogram.svelte";
 	import StackedBar from "./components/charts/StackedBar.svelte";
-	import DataManager from "./utils/data.js";
+	import DataManager from "./lib/data.js";
 	import { popupDetails } from "./stores/popup.js";
-	import { prettyNumber } from "./utils/text.js";
+	import { prettyNumber } from "./lib/text.js";
 
 	let dataManager = new DataManager();
 	let data = null;

@@ -96,9 +96,9 @@ function getEntries(outputs, production) {
 			"svelte",
 			"./src/style/index.css",
 			"./src/style/fonts.css",
-			"./src/utils/data.js",
+			"./src/lib/data.js",
 			"./src/colors.json",
-			"./src/stores/story.js",
+			"./src/stores/data.js",
 			"./src/stores/popup.js",
 		],
 	};

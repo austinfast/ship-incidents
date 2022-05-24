@@ -1,14 +1,19 @@
-import { writable } from "svelte/store";
-import { urlFor } from "../utils/urls.js";
+import { urlFor } from "../lib/urls.js";
 import { scaleLinear, max, histogram } from "d3";
-import { parseDate, yearFromStringDate } from "../utils/dates.js";
+import { parseDate, yearFromStringDate } from "../lib/dates.js";
+
+// @TODO should perhaps split out the utility functions into utils/ and seperate the incidentData store 
+// from the victimData store, and eventually the offender and gun stores as well, so that I can include 
+// each of them seperately in the iframe embed outputs
 
 // Map to store cached data
 const cache = new Map();
 
 // Svelte stores that are Promises that resolve to fetched data;
-export const incidentData = writable(getIncidentData());
-export const victimData = writable(getVictimData());
+// what is the point of these being stores at this stage? i'm unable to do anything reactive
+// since I'm using Promises anyways....
+export const incidentData = getIncidentData();
+export const victimData = getVictimData();
 
 export async function getIncidentData() {
 	console.log("get incident data");
@@ -34,15 +39,7 @@ export async function getIncidentData() {
 
 	// count location types
 	const locationTypes = countTypes(rawIncidents, "location_type");
-	// incidentData.set(
-	// 	Promise.resolve({
-	// 		incidents: rawIncidents,
-	// 		incidentLookup,
-	// 		yearlySummaries,
-	// 		overallSummary,
-	// 		locationTypes,
-	// 	})
-	// );
+
 	return {
 		incidents: rawIncidents,
 		incidentLookup,

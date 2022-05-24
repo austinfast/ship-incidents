@@ -1,9 +1,7 @@
 import "./style/fonts.css";
 import "./style/index.css";
-import dataManager from "./utils/data.js";
 import CategoryAreaChart from "./components/charts/CategoryAreaChart.svelte";
 
-let incidents = [];
 let mainEl = document.getElementById("MK-incidents_by_category_area-embed");
 
 const categories = [
@@ -25,7 +23,6 @@ console.log("Rendering area chart");
 let chart = new CategoryAreaChart({
 	target: mainEl,
 	props: {
-		dataManager,
 		categories,
 	},
 });

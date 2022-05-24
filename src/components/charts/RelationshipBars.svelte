@@ -1,5 +1,5 @@
 <script>
-	import { getVictimData, victimData } from "../../stores/data.js";
+	import { victimData } from "../../stores/data.js";
 	import { scaleLinear, max } from "d3";
 
 	let svgEl;
@@ -36,15 +36,9 @@
 		heightScale = heightScale.domain([0, max(allCounts)]);
 	}
 	// data
-	$: if (!$victimData) {
-		console.log("no data yet, asking for more");
-		getVictimData();
-	} else {
-		console.log("data already exists, awaiting");
-		$victimData.then((d) => {
-				counts = d.victimRelationships;
-		});
-	}
+	victimData.then((d) => {
+			counts = d.victimRelationships;
+	});
 </script>
 
 <style>

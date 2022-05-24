@@ -1,7 +1,6 @@
 <script>
 	import { scaleLinear, max } from "d3";
-
-	export let dataManager;
+	import { incidentData } from "../../stores/data.js";
 
 	let svgEl;
 	let items = [];
@@ -23,7 +22,7 @@
 		.domain([0, max(items, (item) => item.count)])
 		.range([0, chartWidth < 600 ? chartWidth : 600]);
 
-	dataManager.getData().then((d) => {
+	incidentData.then((d) => {
 		items = d.locationTypes;
 	});
 </script>

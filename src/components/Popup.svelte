@@ -1,13 +1,13 @@
 <script>
-	import { prettyDate } from "../utils/text.js";
-	import { incidentData, fetchIncidentData } from "../stores/data.js";
+	import { prettyDate } from "../lib/text.js";
+	import { incidentData } from "../stores/data.js";
 
 	export let details;
 
 	let incident = null;
 
 	$: if (details.incidentId) {
-		$incidentData.then((d) => {
+		incidentData.then((d) => {
 			incident = d.incidentLookup[details.incidentId];
 		})
 	} else {

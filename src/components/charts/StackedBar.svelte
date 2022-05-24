@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { scaleLinear, axisBottom, max, sum, select } from "d3";
-  import { smartResizeListener } from "../../utils/events.js";
+  import { smartResizeListener } from "../../lib/events.js";
 
   export let counts = [];
   export let colors = [];

@@ -10,12 +10,10 @@
 	let xAxisEl;
 	let yAxisEl;
 
-	$: if (sourceData) {
-		sourceData.then((d) => {
-			binnedData = d.victimAges;
-			ageScale = d.victimAgeScale;
-		});
-	}
+	sourceData.then((d) => {
+		binnedData = d.victimAges;
+		ageScale = d.victimAgeScale;
+	});
 
 	$: height = width < 600 ? width / 1.5 : width / 2;
 	$: margin = {

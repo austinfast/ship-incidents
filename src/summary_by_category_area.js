@@ -2,7 +2,6 @@ import "./style/fonts.css";
 import "./style/index.css";
 import CategoryChartGroup from "./components/CategoryChartGroup.svelte";
 
-let incidents = [];
 let mainEl = document.getElementById("MK-summary_by_category_area-embed");
 
 let chart = new CategoryChartGroup({
