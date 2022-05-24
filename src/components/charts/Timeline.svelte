@@ -4,7 +4,7 @@
 	import { popupDetails } from "../../stores/popup.js";
 	import colors from "../../colors.json";
 	import months from "../../utils/months.js";
-	import { getIncidentData, incidentData } from "../../stores/data.js";
+	import { incidentData } from "../../stores/data.js";
 
 	//@TODO add filtering
 
@@ -46,15 +46,12 @@
 	$: xScale = d3.scaleLinear().domain([0, 366]).range([0, chartWidth]);
 
 	// data
-	$: if (!$incidentData) {
-		console.log("no data yet, asking for more");
-		getIncidentData();
-	} else {
-		console.log("data already exists, awaiting");
-		$incidentData.then((d) => {
-			incidents = d.incidents;
-		});
-	}
+	console.log($incidentData)
+	$incidentData.then((d) => {
+		console.log('resolve')
+		console.log(d);
+		incidents = d.incidents;
+	});
 	// function that takes a Date object and returns the number of days into the given year
 	// January 1, 2022 would return 0
 	function getDaysIntoYear(d) {

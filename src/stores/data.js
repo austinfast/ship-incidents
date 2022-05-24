@@ -3,13 +3,15 @@ import { urlFor } from "../utils/urls.js";
 import { scaleLinear, max, histogram } from "d3";
 import { parseDate, yearFromStringDate } from "../utils/dates.js";
 
+// Map to store cached data
 const cache = new Map();
-export const incidentData = writable(null);
-export const victimData = writable(null);
+
+// Svelte stores that are Promises that resolve to fetched data;
+export const incidentData = writable(getIncidentData());
+export const victimData = writable(getVictimData());
 
 export async function getIncidentData() {
 	console.log("get incident data");
-	incidentData.set(new Promise(() => {}));
 	const dataURL = getDataURL("incidents.json");
 	const rawIncidents = await getDataFromURL(dataURL);
 	// incident lookup object
@@ -32,21 +34,26 @@ export async function getIncidentData() {
 
 	// count location types
 	const locationTypes = countTypes(rawIncidents, "location_type");
-	incidentData.set(
-		Promise.resolve({
-			incidents: rawIncidents,
-			incidentLookup,
-			yearlySummaries,
-			overallSummary,
-			locationTypes,
-		})
-	);
-	return incidentData;
+	// incidentData.set(
+	// 	Promise.resolve({
+	// 		incidents: rawIncidents,
+	// 		incidentLookup,
+	// 		yearlySummaries,
+	// 		overallSummary,
+	// 		locationTypes,
+	// 	})
+	// );
+	return {
+		incidents: rawIncidents,
+		incidentLookup,
+		yearlySummaries,
+		overallSummary,
+		locationTypes,
+	};
 }
 
 export async function getVictimData() {
 	console.log("get victim data");
-	victimData.set(new Promise(() => {}));
 	const dataURL = getDataURL("victims.json");
 	const rawData = await getDataFromURL(dataURL);
 
@@ -54,20 +61,14 @@ export async function getVictimData() {
 	const victimRelationships = getRelationshipCounts(rawData);
 
 	const victimAgeScale = getAgeScale(rawData);
-	const victimAges = getAgeBins(
-		rawData,
-		victimAgeScale
-	);
+	const victimAges = getAgeBins(rawData, victimAgeScale);
 	const victimGenderCounts = countTypes(rawData, "sex");
-	victimData.set(
-		Promise.resolve({
-			victimRelationships,
-			victimAges,
-			victimAgeScale,
-			victimGenderCounts
-		})
-	);
-	return victimData;
+	return {
+		victimRelationships,
+		victimAges,
+		victimAgeScale,
+		victimGenderCounts,
+	};
 }
 
 function getDataURL(filename) {
@@ -79,17 +80,15 @@ function getDataURL(filename) {
 	return urlFor(url);
 }
 
-// function that returns data for a corresponding URL, either from cache or fetch()
-async function getDataFromURL(url) {
-	if (cache.has(url)) {
-		console.log("data cached for " + url);
-		return cache.get(url);
+// function that returns a Promise that resolves to data for a corresponding URL, either from cache or fetch()
+function getDataFromURL(url) {
+	if (!cache.has(url)) {
+		console.log("fetching fresh from server " + url);
+		// fetch url and store a Promise that resolves to the data
+		const data = fetch(url).then((resp) => resp.json());
+		cache.set(url, data);
 	}
-	console.log("fetching fresh from server " + url);
-	const resp = await fetch(url);
-	const data = await resp.json();
-	cache.set(url, data);
-	return data;
+	return cache.get(url);
 }
 /*
  * Summarizes various high level statistics for each year of data
@@ -258,7 +257,13 @@ function getRelationshipCounts(victims) {
 
 function getAgeScale(people) {
 	return scaleLinear()
-		.domain([0, max(people.filter((person) => person.age !== null), (d) => d.age)])
+		.domain([
+			0,
+			max(
+				people.filter((person) => person.age !== null),
+				(d) => d.age
+			),
+		])
 		.range([0, 1]);
 }
 
