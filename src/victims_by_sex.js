@@ -10,7 +10,7 @@ console.log("make bars");
 let bars = new Bars({
 	target: mainEl,
 	props: {
-		color: colors.orange,
+		colors: [colors.orange, colors["orange-light"], colors.grey],
 		sourceData: victimData,
 	}
 });

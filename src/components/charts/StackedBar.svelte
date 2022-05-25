@@ -1,125 +1,119 @@
 <script>
-  import { onMount } from "svelte";
-  import { scaleLinear, axisBottom, max, sum, select } from "d3";
-  import { smartResizeListener } from "../../lib/events.js";
+	import { onMount } from "svelte";
+	import { scaleLinear, axisBottom, max, sum, select } from "d3";
+	import { smartResizeListener } from "../../lib/events.js";
 
-  export let counts = [];
-  export let colors = [];
+	export let colors = [];
+	export let sourceData;
 
-  let width;
-  let height = 200;
-  let wrapEl;
-  let svgEl;
-  let allValues = [];
-  let scale;
-  let barSize = 50;
-  let barMargin = 0;
-  let countSum;
-  let axis;
-  let scaleEl;
-  let margin = {
-    top: 10,
-    right: 5,
-    bottom: 10,
-    left: 5
-  };
+	let width;
+	let dataCounts = [];
+	let allValues = [];
+	let barSize = 50;
+	let barMargin = 0;
+	let countSum;
+	let scaleEl;
+	let margin = {
+		top: 10,
+		right: 5,
+		bottom: 10,
+		left: 5,
+	};
+	$: chartWidth = width - margin.left - margin.right;
+	$: height = barSize + margin.top + margin.bottom + barMargin;
+	$: countSum = sum(dataCounts, (count) => count.count);
+	$: scale = scaleLinear().domain([0, countSum]).range([0, chartWidth]);
+	$: axis = axisBottom(scale);
 
-  function draw() {
-    width = wrapEl.offsetWidth;
-    let chartWidth = width - margin.left - margin.right;
-    height = barSize + margin.top + margin.bottom + barMargin;
-    scale = scaleLinear()
-      .domain([0, sum(counts, d => d.count)])
-      .range([0, chartWidth]);
-    
-    countSum = sum(counts, count => count.count);
-    
-    axis = axisBottom(scale);
+	$: if (scaleEl) {
+		select(scaleEl)
+			.call(axis)
+			.call((g) => {
+				g.selectAll("line").attr("stroke", "#DEDEDE");
+				g.selectAll(".domain").attr("stroke", "#DEDEDE");
+			});
+	}
 
-    let scaleGroup = select(scaleEl);
-    
-    scaleGroup
-      .call(axis)
-      .call(g => {
-        g.selectAll("line")
-          .attr("stroke", "#DEDEDE")
-        g.selectAll(".domain")
-          .attr("stroke", "#DEDEDE");
-      });
-  }
+	sourceData.then((d) => {
+		dataCounts = d.victimGenderCounts;
+		console.log(dataCounts);
+	});
 
-  function getXPosition(i) {
-    let pos = 0;
-    while(i > 0) {
-      i -= 1;
-      pos += scale(counts[i].count)
-    }
-    return pos;
-  }
+	$: getXPosition = function (i) {
+		let pos = 0;
+		while (i > 0) {
+			i -= 1;
+			pos += scale(dataCounts[i].count);
+		}
+		return pos;
+	};
 
-  $: if(scale) {
-    counts = counts.map((count, i) => {
-      count.x = getXPosition(i);
-      count.width = scale(count.count);
-      return count;
-    });
-  } else {
-    counts = counts.map((count, i) => {
-      count.x = 0;
-      count.width = 0;
-      return count;
-    });
-  }
-
-  onMount(() => {
-    draw();
-    smartResizeListener(draw);
-  })
-
+	//
+	// $: if (scale) {
+	// 	counts = counts.map((count, i) => {
+	// 		count.x = getXPosition(i);
+	// 		count.width = scale(count.count);
+	// 		return count;
+	// 	});
+	// } else {
+	// 	counts = counts.map((count, i) => {
+	// 		count.x = 0;
+	// 		count.width = 0;
+	// 		return count;
+	// 	});
+	// }
 </script>
-<style>
-  .key-item-pallette {
-    width: 10px;
-    height: 10px;
-  }
 
-  .key-wrap {
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-  }
-
-  .key-item {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin-bottom: 8px;
-    margin-right: 8px;
-  }
-
-  .key-item-label {
-    font-size: var(--font-size-small);
-    line-height: var(--line-height-small);
-    margin-left: 5px;
-    margin-bottom: 0;
-  }
-</style>
-<div class="stacked-bar-wrap" bind:this={wrapEl}>
-  <div class="key-wrap article-text-width">
-  {#each counts as keyItem, i}
-      <div class="key-item">
-        <div class="key-item-pallette" style={`background: ${colors[i]};`}></div>
-        <p class="key-item-label">{keyItem.label}</p>
-      </div>
-  {/each}
-  </div>
-  <svg class="stacked-bar" bind:this={svgEl} width={width} height={height}>
-    <g class="scale-g" bind:this={scaleEl} transform={`translate(${margin.left}, ${(barSize + barMargin)})`}></g>
-    <g>
-      {#each counts as count, i}
-        <rect height={barSize} width={count.width} fill={colors[i]} x={(margin.left + count.x)}></rect>
-
-      {/each}
-    </g>
-  </svg>
+<div class="stacked-bar-wrap chart-wrapper" bind:clientWidth={width}>
+	<div class="key-wrap article-text-width">
+		{#each dataCounts as keyItem, i}
+			<div class="key-item">
+				<div class="key-item-pallette" style={`background: ${colors[i]};`} />
+				<p class="key-item-label">{keyItem.label}</p>
+			</div>
+		{/each}
+	</div>
+	<svg class="stacked-bar" {width} {height}>
+		<g
+			class="scale-g"
+			bind:this={scaleEl}
+			transform={`translate(${margin.left}, ${barSize + barMargin})`} />
+		<g>
+			{#each dataCounts as count, i}
+				<rect
+					height={barSize}
+					width={scale(count.count)}
+					fill={colors[i]}
+					x={margin.left + getXPosition(i)} />
+			{/each}
+		</g>
+	</svg>
 </div>
+
+<style>
+	.key-item-pallette {
+		width: 10px;
+		height: 10px;
+	}
+
+	.key-wrap {
+		display: flex;
+		flex-wrap: wrap;
+		margin-bottom: 20px;
+	}
+
+	.key-item {
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		margin-bottom: 8px;
+		margin-right: 8px;
+	}
+
+	.key-item-label {
+		font-size: var(--font-size-small);
+		line-height: var(--line-height-small);
+		margin-left: 5px;
+		margin-bottom: 0;
+	}
+</style>

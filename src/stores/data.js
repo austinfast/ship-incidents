@@ -199,29 +199,29 @@ function formatOverallSummary(yearly_summaries) {
 	});
 	return summary;
 }
-function countTypes(rawIncidents, countKey, nullKey = "Unknown") {
+function countTypes(rawEntries, countKey, nullKey = "Unknown") {
 	let typeLookup = {};
 	let typeArray = [];
 
-	rawIncidents.forEach((incident) => {
+	rawEntries.forEach((entry) => {
 		// if the countKey value is a string count that string
-		if (typeof incident[countKey] == "string") {
-			if (typeLookup[incident[countKey]]) {
-				typeLookup[incident[countKey]] += 1;
+		if (typeof entry[countKey] == "string" && entry[countKey].length > 0) {
+			if (typeLookup[entry[countKey]]) {
+				typeLookup[entry[countKey]] += 1;
 			} else {
-				typeLookup[incident[countKey]] = 1;
+				typeLookup[entry[countKey]] = 1;
 			}
 		}
 		// if the countKey value is null, then use the nullKey to count
-		else if (incident[countKey] == null) {
+		else if (entry[countKey] == null || entry[countKey] == "" || !entry[countKey]) {
 			if (typeLookup[nullKey]) {
 				typeLookup[nullKey] += 1;
 			} else {
 				typeLookup[nullKey] = 1;
 			}
 			// if the countKey value is an array, count for each item in array
-		} else if (typeof incident[countKey] == "object") {
-			incident[countKey].forEach((countCategory) => {
+		} else if (typeof entry[countKey] == "object") {
+			entry[countKey].forEach((countCategory) => {
 				if (typeLookup[countCategory]) {
 					typeLookup[countCategory] += 1;
 				} else {
