@@ -15,6 +15,8 @@ let ageHistogram = new AgeHistogram({
 	props: {
 		color: colors.orange,
 		sourceData: victimData,
+		ageBinKey: "victimAges",
+		ageScaleKey: "victimAgeScale",
 	}
 });
 

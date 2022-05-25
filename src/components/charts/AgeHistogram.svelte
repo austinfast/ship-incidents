@@ -3,6 +3,8 @@
 
 	export let color = "#e3e3e3";
 	export let sourceData;
+	export let ageBinKey;
+	export let ageScaleKey;
 
 	let width = 300;
 	let binnedData;
@@ -11,8 +13,8 @@
 	let yAxisEl;
 
 	sourceData.then((d) => {
-		binnedData = d.victimAges;
-		ageScale = d.victimAgeScale;
+		binnedData = d[ageBinKey];
+		ageScale = d[ageScaleKey];
 	});
 
 	$: height = width < 600 ? width / 1.5 : width / 2;

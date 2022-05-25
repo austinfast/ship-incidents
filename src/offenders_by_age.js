@@ -2,18 +2,19 @@ import "./style/fonts.css";
 import "./style/index.css";
 import AgeHistogram from "./components/charts/AgeHistogram.svelte";
 // TODO should be fetching offenders, oncee that data exists here
-import { victimData } from "./stores/data.js";
+import { offenderData } from "./stores/data.js";
 import colors from "./colors.json";
 
 const mainEl = document.getElementById("MK-offenders_by_age-embed");
 
-// @TODO switch this to offenders
 console.log("render offenders by age");
 let ageHistogram = new AgeHistogram({
 	target: mainEl,
 	props: {
 		color: colors.blue,
-		sourceData: victimData,
+		sourceData: offenderData,
+		ageBinKey: "offenderAges",
+		ageScaleKey: "offenderAgeScale",
 	}
 });
 

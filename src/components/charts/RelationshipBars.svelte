@@ -9,8 +9,6 @@
 	let maxHeight = 350;
 	let barMargin = 30;
 
-	let numBars = 3;
-
 	const bar_1 = [
 		["family", "#d9501e", "Family"],
 		["acquaintance", "#f08c67", "Acquaintance"],
@@ -20,8 +18,8 @@
 		["first_responder", "#90a4b3", "First responder"],
 	];
 	const bar_3 = [["unknown", "#8c8c8c", "Unknown"]];
-
 	const bars = [bar_1, bar_2, bar_3];
+
 	$: maxCount = max(bars.map((bar) => sum(bar.map((barItem) => counts[barItem[0]]))));
 	$: heightScale = scaleLinear().domain([0, maxCount]).range([0, maxHeight]);
 

@@ -2,8 +2,8 @@ import { urlFor } from "../lib/urls.js";
 import { scaleLinear, max, histogram } from "d3";
 import { parseDate, yearFromStringDate } from "../lib/dates.js";
 
-// @TODO should perhaps split out the utility functions into utils/ and seperate the incidentData store 
-// from the victimData store, and eventually the offender and gun stores as well, so that I can include 
+// @TODO should perhaps split out the utility functions into utils/ and seperate the incidentData store
+// from the victimData store, and eventually the offender and gun stores as well, so that I can include
 // each of them seperately in the iframe embed outputs
 
 // Map to store cached data
@@ -14,6 +14,7 @@ const cache = new Map();
 // since I'm using Promises anyways....
 export const incidentData = getIncidentData();
 export const victimData = getVictimData();
+export const offenderData = getOffenderData();
 
 export async function getIncidentData() {
 	console.log("get incident data");
@@ -66,6 +67,27 @@ export async function getVictimData() {
 		victimAgeScale,
 		victimGenderCounts,
 	};
+}
+
+async function getOffenderData() {
+	console.log("get offender data");
+	const dataURL = getDataURL("offenders.json");
+	const rawData = await getDataFromURL(dataURL);
+	// clean offenders
+	const cleanedOffenders = cleanOffenders(rawData);
+
+	// offender age bins
+	const offenderAgeScale = getAgeScale(cleanedOffenders);
+	const offenderAges = getAgeBins(cleanedOffenders, offenderAgeScale);
+
+	// offender sex
+	const offenderGenderCounts = countTypes(cleanedOffenders, "sex");
+	return {
+		offenders: cleanedOffenders,
+		offenderAgeScale,
+		offenderAges,
+		offenderGenderCounts
+	}
 }
 
 function getDataURL(filename) {
@@ -270,4 +292,15 @@ function getAgeBins(people, ageScale) {
 		.thresholds(ageScale.ticks(20))
 		.value((d) => d.age);
 	return ageBins(people.filter((person) => person.age !== null));
+}
+
+function cleanOffenders(rawOffenders) {
+	return rawOffenders.map((offender) => {
+		let cleanOffender = Object.assign({}, offender);
+		// replace empty and null sex fields with "Unknown"
+		if (cleanOffender.sex == "" || cleanOffender.sex == null) {
+			cleanOffender.sex = "Unknown";
+		}
+		return cleanOffender;
+	});
 }
