@@ -15,6 +15,7 @@ const cache = new Map();
 export const incidentData = getIncidentData();
 export const victimData = getVictimData();
 export const offenderData = getOffenderData();
+export const weaponData = getWeaponData();
 
 export async function getIncidentData() {
 	console.log("get incident data");
@@ -89,6 +90,16 @@ async function getOffenderData() {
 		offenderGenderCounts
 	}
 }
+
+async function getWeaponData() {
+	console.log("get weapon data");
+	const dataURL = getDataURL("weapons.json");
+	const rawData = await getDataFromURL(dataURL);
+	return {
+		weapons: rawData
+	}
+}
+
 
 function getDataURL(filename) {
 	// function to determine the correct URL path for data files. Currently only returns relative path.
