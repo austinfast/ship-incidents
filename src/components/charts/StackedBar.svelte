@@ -3,6 +3,7 @@
 
 	export let colors = [];
 	export let sourceData;
+	export let countKey;
 
 	let width;
 	let dataCounts = [];
@@ -33,7 +34,7 @@
 	}
 
 	sourceData.then((d) => {
-		dataCounts = d.victimGenderCounts;
+		dataCounts = d[countKey];
 	});
 
 	$: getXPosition = function (i) {

@@ -2,18 +2,18 @@ import "./style/fonts.css";
 import "./style/index.css";
 import Bars from "./components/charts/StackedBar.svelte";
 import colors from "./colors.json";
-import { victimData } from "./stores/data.js";
+import { offenderData } from "./stores/data.js";
 
-const mainEl = document.getElementById("MK-victims_by_sex-embed");
+const mainEl = document.getElementById("MK-offenders_by_sex-embed");
 
-console.log("make victim sex bars");
+console.log("make offenders sex bars");
 let bars = new Bars({
 	target: mainEl,
 	props: {
-		colors: [colors.orange, colors["orange-light"], colors.grey],
-		sourceData: victimData,
-		countKey: "victimGenderCounts",
-	},
+		colors: [colors.blue, colors["blue-light"], colors.grey],
+		sourceData: offenderData,
+		countKey: "offenderGenderCounts",
+	}
 });
 
 // Set up height resizer for embeds
