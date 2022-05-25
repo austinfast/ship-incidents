@@ -4,7 +4,7 @@ import Bars from "./components/charts/RelationshipBars.svelte";
 
 const mainEl = document.getElementById("MK-relationship_types-embed");
 
-console.log("Rendering relatiolnship chart");
+console.log("Rendering relationship chart");
 let bars = new Bars({
 	target: mainEl,
 });

@@ -1,7 +1,5 @@
 <script>
-	import { onMount } from "svelte";
-	import { scaleLinear, axisBottom, max, sum, select } from "d3";
-	import { smartResizeListener } from "../../lib/events.js";
+	import { scaleLinear, axisBottom, sum, select } from "d3";
 
 	export let colors = [];
 	export let sourceData;
@@ -36,7 +34,6 @@
 
 	sourceData.then((d) => {
 		dataCounts = d.victimGenderCounts;
-		console.log(dataCounts);
 	});
 
 	$: getXPosition = function (i) {
@@ -47,21 +44,6 @@
 		}
 		return pos;
 	};
-
-	//
-	// $: if (scale) {
-	// 	counts = counts.map((count, i) => {
-	// 		count.x = getXPosition(i);
-	// 		count.width = scale(count.count);
-	// 		return count;
-	// 	});
-	// } else {
-	// 	counts = counts.map((count, i) => {
-	// 		count.x = 0;
-	// 		count.width = 0;
-	// 		return count;
-	// 	});
-	// }
 </script>
 
 <div class="stacked-bar-wrap chart-wrapper" bind:clientWidth={width}>

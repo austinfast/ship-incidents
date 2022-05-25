@@ -8,6 +8,7 @@ import colors from "./colors.json";
 const mainEl = document.getElementById("MK-offenders_by_age-embed");
 
 // @TODO switch this to offenders
+console.log("render offenders by age");
 let ageHistogram = new AgeHistogram({
 	target: mainEl,
 	props: {
