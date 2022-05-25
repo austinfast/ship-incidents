@@ -6,6 +6,6 @@
 	"singleQuote": false,
 	"trailingComma": "es5",
 	"useTabs": true,
-	"svelteSortOrder": "scripts-styles-options-markup",
+	"svelteSortOrder": "scripts-options-markup-styles",
 	"svelteBracketNewLine": false
 }
