@@ -1,8 +1,18 @@
 import { getDataURL, getDataFromURL, countTypes, getAgeBins, getAgeScale} from "./index.js";
 
-export const offenderData = getOffenderData();
+let offenderData = null;
 
-async function getOffenderData() {
+export function getOffenderData() {
+	if (!offenderData) {
+		console.log("offender data doesn't exist, generating");
+		offenderData = generateOffenderData();
+	} else {
+		console.log("offender data already exists, using copy");
+	}
+	return offenderData;
+}
+
+async function generateOffenderData() {
 	console.log("get offender data");
 	const dataURL = getDataURL("offenders.json");
 	const rawData = await getDataFromURL(dataURL);
