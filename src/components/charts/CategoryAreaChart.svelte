@@ -1,7 +1,7 @@
 <script>
 	import * as d3 from "d3";
-	import colors from "../../colors.json";
-	import { incidentData } from "../../stores/data.js";
+	import colors from "../../lib/colors.js";
+	import { incidentData } from "../../lib/data/incidents.js";
 
 	let summaryStatistics;
 	let width = 800;

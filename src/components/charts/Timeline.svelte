@@ -2,9 +2,9 @@
 	import * as d3 from "d3";
 	import Popup from "../Popup.svelte";
 	import { popupDetails } from "../../stores/popup.js";
-	import colors from "../../colors.json";
+	import colors from "../../lib/colors.js";
 	import months from "../../lib/months.js";
-	import { incidentData } from "../../stores/data.js";
+	import { incidentData } from "../../lib/data/incidents.js";
 
 	// @TODO add filtering
 

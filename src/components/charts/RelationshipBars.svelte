@@ -1,5 +1,5 @@
 <script>
-	import { victimData } from "../../stores/data.js";
+	import { victimData } from "../../lib/data/victims.js";
 	import { scaleLinear, max, sum } from "d3";
 
 	let svgEl;
@@ -92,7 +92,8 @@
 									  20
 								: maxHeight - heightScale(counts[barCategory[0]]) + 20}
 							x={22}
-							fill={barIndex == 1 && i == 1 ? "#404040" : "#ffffff"}>{counts[barCategory[0]]}</text>
+							fill={barIndex == 1 && i == 1 ? "#404040" : "#ffffff"}
+							>{counts[barCategory[0]]}</text>
 					{/each}
 				</g>
 			{/each}

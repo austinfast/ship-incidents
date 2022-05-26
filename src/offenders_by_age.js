@@ -2,8 +2,8 @@ import "./style/fonts.css";
 import "./style/index.css";
 import AgeHistogram from "./components/charts/AgeHistogram.svelte";
 // TODO should be fetching offenders, oncee that data exists here
-import { offenderData } from "./stores/data.js";
-import colors from "./colors.json";
+import { offenderData } from "./lib/data/offenders.js";
+import colors from "./lib/colors.js";
 
 const mainEl = document.getElementById("MK-offenders_by_age-embed");
 

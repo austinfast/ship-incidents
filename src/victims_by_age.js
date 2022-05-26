@@ -1,8 +1,8 @@
 import "./style/fonts.css";
 import "./style/index.css";
 import AgeHistogram from "./components/charts/AgeHistogram.svelte";
-import colors from "./colors.json";
-import { victimData } from "./stores/data.js";
+import colors from "./lib/colors.js";
+import { victimData } from "./lib/data/victims.js";
 
 const mainEl = document.getElementById("MK-victims_by_age-embed");
 

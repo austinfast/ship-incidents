@@ -1,4 +1,4 @@
-{
+export default {
 	"background": "#ffffff",
 	"text": "#404040",
 	"orange": "#C96743",

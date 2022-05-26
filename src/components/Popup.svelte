@@ -1,6 +1,6 @@
 <script>
 	import { prettyDate } from "../lib/text.js";
-	import { incidentData } from "../stores/data.js";
+	import { incidentData } from "../lib/data/incidents.js";
 
 	export let details;
 

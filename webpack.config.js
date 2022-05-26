@@ -11,6 +11,10 @@ const helper = require("./scripts/helper");
 const build_path = path.resolve(__dirname, "./public");
 const DEPLOY_ENV = process.env.DEPLOY_ENV || "dev";
 
+// TODO: may need to think even more about splitting out chunks for the 
+// iframe embeds when it comes to data loading modules
+// right now it is working well for the shared page, but at the cost of the individual embeds
+// which will load ALL of the data when they require the shared chunk
 function getHtmlPlugins(outputs, production) {
 	const iframeOutputs = outputs
 		.filter((output) => (production ? !output.local_only : true))
@@ -96,9 +100,11 @@ function getEntries(outputs, production) {
 			"svelte",
 			"./src/style/index.css",
 			"./src/style/fonts.css",
-			"./src/lib/data.js",
-			"./src/colors.json",
-			"./src/stores/data.js",
+			"./src/lib/colors.js",
+			"./src/lib/data/incidents.js",
+			"./src/lib/data/victims.js",
+			"./src/lib/data/offenders.js",
+			"./src/lib/data/weapons.js",
 			"./src/stores/popup.js",
 		],
 	};

@@ -1,8 +1,8 @@
 import "./style/fonts.css";
 import "./style/index.css";
 import Bars from "./components/charts/StackedBar.svelte";
-import colors from "./colors.json";
-import { offenderData } from "./stores/data.js";
+import colors from "./lib/colors.js";
+import { offenderData } from "./lib/data/offenders.js";
 
 const mainEl = document.getElementById("MK-offenders_by_sex-embed");
 
