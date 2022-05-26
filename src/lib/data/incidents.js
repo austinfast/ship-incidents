@@ -9,7 +9,7 @@ export function getIncidentData() {
 		console.log("incident data doesn't exist, generating");
 		incidentData = generateIncidentData();
 	} else {
-		console.log("incident data already exists, using copy")
+		console.log("incident data already exists, using copy");
 	}
 	return incidentData;
 }

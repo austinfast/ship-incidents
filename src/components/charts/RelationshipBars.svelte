@@ -1,6 +1,7 @@
 <script>
-	import { victimData } from "../../lib/data/victims.js";
 	import { scaleLinear, max, sum } from "d3";
+
+	export let victimData;
 
 	let svgEl;
 	let counts = [];

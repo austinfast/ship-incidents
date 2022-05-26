@@ -1,8 +1,24 @@
-import { getDataURL, getDataFromURL, countTypes, getAgeBins, getAgeScale } from "./index.js";
+import {
+	getDataURL,
+	getDataFromURL,
+	countTypes,
+	getAgeBins,
+	getAgeScale,
+} from "./index.js";
 
-export const victimData = getVictimData();
+export let victimData = null;
 
-async function getVictimData() {
+export function getVictimData() {
+	if (!victimData) {
+		console.log("victim data doesn't exist, generating");
+		victimData = generateVictimData();
+	} else {
+		console.log("victim data already exists, using copy");
+	}
+	return victimData;
+}
+
+async function generateVictimData() {
 	console.log("get victim data");
 	const dataURL = getDataURL("victims.json");
 	const rawData = await getDataFromURL(dataURL);

@@ -2,7 +2,7 @@ import "./style/fonts.css";
 import "./style/index.css";
 import AgeHistogram from "./components/charts/AgeHistogram.svelte";
 import colors from "./lib/colors.js";
-import { victimData } from "./lib/data/victims.js";
+import { getVictimData } from "./lib/data/victims.js";
 
 const mainEl = document.getElementById("MK-victims_by_age-embed");
 
@@ -13,8 +13,8 @@ console.log("render victims by age");
 let ageHistogram = new AgeHistogram({
 	target: mainEl,
 	props: {
+		sourceData: getVictimData(),
 		color: colors.orange,
-		sourceData: victimData,
 		ageBinKey: "victimAges",
 		ageScaleKey: "victimAgeScale",
 	}
