@@ -1,5 +1,9 @@
 <script>
 	import CategoryAreaChart from "./charts/CategoryAreaChart.svelte";
+	
+	export let incidentData;
+	console.log(incidentData);
+
 	const incidentCategories = [
 		{
 			field: "incidents",
@@ -42,6 +46,6 @@
 </style>
 
 <div class="chart-wrap-double-group">
-	<CategoryAreaChart categories={incidentCategories} />
-	<CategoryAreaChart categories={victimCategories} />
+	<CategoryAreaChart categories={incidentCategories} {incidentData}/>
+	<CategoryAreaChart categories={victimCategories} {incidentData}/>
 </div>

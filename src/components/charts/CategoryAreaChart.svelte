@@ -1,11 +1,13 @@
 <script>
 	import * as d3 from "d3";
 	import colors from "../../lib/colors.js";
-	import { incidentData } from "../../lib/data/incidents.js";
 
+	export let categories; 
+	export let incidentData;
+	console.log(incidentData);
 	let summaryStatistics;
 	let width = 800;
-	export let categories; 
+
 	// data
 	incidentData.then((d) => {
 		summaryStatistics = d.overallSummary;

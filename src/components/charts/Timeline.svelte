@@ -4,12 +4,12 @@
 	import { popupDetails } from "../../stores/popup.js";
 	import colors from "../../lib/colors.js";
 	import months from "../../lib/months.js";
-	import { incidentData } from "../../lib/data/incidents.js";
 
 	// @TODO add filtering
 
 	// PROPS
 	export let popupSlot;
+	export let incidentData;
 
 	let svgEl;
 	let incidents = [];

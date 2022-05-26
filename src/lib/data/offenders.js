@@ -1,4 +1,4 @@
-import { getDataURL, getDataFromURL, countTypes, getAgeBins, getAgeScale } from "./index.js";
+import { getDataURL, getDataFromURL, countTypes, getAgeBins, getAgeScale} from "./index.js";
 
 export const offenderData = getOffenderData();
 

@@ -1,6 +1,7 @@
 <script>
 	import { scaleLinear, max } from "d3";
-	import { incidentData } from "../../lib/data/incidents.js";
+
+	export let incidentData;
 
 	let svgEl;
 	let items = [];

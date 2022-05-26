@@ -1,11 +1,11 @@
 <script>
 	import * as d3 from "d3";
 	import colors from "../../lib/colors.js";
-	import { incidentData } from "../../lib/data/incidents.js";
 
 	// PROPS
 	export let yearlyData = [];
 	export let yearlyVariables = [];
+	export let incidentData;
 
 	// data
 	incidentData.then((d) => {

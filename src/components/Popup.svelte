@@ -1,10 +1,11 @@
 <script>
 	import { prettyDate } from "../lib/text.js";
-	import { incidentData } from "../lib/data/incidents.js";
+	import { getIncidentData } from "../lib/data/incidents.js";
 
 	export let details;
 
 	let incident = null;
+	const incidentData = getIncidentData();
 
 	$: if (details.incidentId) {
 		incidentData.then((d) => {

@@ -1,9 +1,20 @@
 import { getDataURL, getDataFromURL, countTypes } from "./index.js";
 import { parseDate, yearFromStringDate } from "../dates.js";
 
-export const incidentData = getIncidentData();
+// export const incidentData = getIncidentData();
+let incidentData = null;
 
-export async function getIncidentData() {
+export function getIncidentData() {
+	if (!incidentData) {
+		console.log("incident data doesn't exist, generating");
+		incidentData = generateIncidentData();
+	} else {
+		console.log("incident data already exists, using copy")
+	}
+	return incidentData;
+}
+
+async function generateIncidentData() {
 	console.log("get incident data");
 	const dataURL = getDataURL("incidents.json");
 	const rawIncidents = await getDataFromURL(dataURL);

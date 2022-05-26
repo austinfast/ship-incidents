@@ -1,6 +1,7 @@
 import "./style/fonts.css";
 import "./style/index.css";
 import TrendArea from "./components/charts/TrendArea.svelte";
+import { getIncidentData } from "./lib/data/incidents";
 
 const mainEl = document.getElementById("MK-victim_trends-embed");
 
@@ -23,6 +24,7 @@ let trendArea = new TrendArea({
 	target: mainEl,
 	props: {
 		yearlyVariables,
+		incidentData: getIncidentData()
 	},
 });
 
