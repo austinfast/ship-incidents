@@ -2,6 +2,7 @@
 	import { scaleLinear, max } from "d3";
 
 	export let incidentData;
+	export let color;
 
 	let svgEl;
 	let items = [];
@@ -63,7 +64,7 @@
 					<rect
 						height={barHeight}
 						width={barScale(item.count)}
-						fill={i == 0 ? "#D9501E" : "#CCCCCC"}
+						fill={color}
 						transform={"translate(0, " + barMargin + ")"} />
 					<text
 						transform="translate({barScale(item.count) + barMargin}, {labelSize / 2 +

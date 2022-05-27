@@ -75,6 +75,18 @@
 			"ssr": false,
 			"ssr_contentfile": null,
 			"ssr_component": null
+		},
+		{
+			"filename": "weapon_types",
+			"ssr": false,
+			"ssr_contentfile": null,
+			"ssr_component": null
+		},
+		{
+			"filename": "gun_types",
+			"ssr": false,
+			"ssr_contentfile": null,
+			"ssr_component": null
 		}
 	]
 }
