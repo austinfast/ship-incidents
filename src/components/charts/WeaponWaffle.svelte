@@ -3,7 +3,9 @@
 
 	export let weaponData;
 	export let splitBy;
-	export let chartColor = "green";
+	export let chartColor = "#cecece";
+	export let dataFilter;
+	export let labels = {};
 
 	let weapons = [];
 	let boxSize = 10;
@@ -11,7 +13,11 @@
 	let width = 300;
 
 	weaponData.then((d) => {
-		weapons = d.weapons;
+		if (dataFilter) {
+			weapons = d.weapons.filter(d => dataFilter[1].indexOf(d[dataFilter[0]]) > -1);
+		} else {
+			weapons = d.weapons;
+		}
 	});
 
 	// chart sizing
@@ -73,6 +79,14 @@
 			waffleMargin.top
 		);
 	};
+	$: getLabel = function (rawStr) {
+		if (labels) {
+			if (labels[rawStr]) {
+					return labels[rawStr];
+				}
+		}
+		return rawStr;
+	}
 
 	// takes an array of objects, and a string valueKey
 	// returns an array of possible values at valueKey, ranked by number of occurences in items.
@@ -117,7 +131,7 @@
 								font-size={waffleLabelSize}
 								transform="translate(0, {getWaffleRowHeight(chartRow) -
 									waffleMargin.bottom +
-									waffleLabelSize})">{chartData[0][splitBy]}</text>
+									waffleLabelSize})">{getLabel(chartData[0][splitBy])}</text>
 						</g>
 					{/each}
 				</g>
@@ -125,12 +139,3 @@
 		</svg>
 	{/if}
 </div>
-
-<style>
-	.debug-info {
-		font-size: 12px;
-		font-family: monospace;
-		padding: 5px;
-		background: #cecece;
-	}
-</style>
