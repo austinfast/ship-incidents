@@ -1,41 +1,78 @@
 <script>
-	import * as d3 from "d3";
 	import colors from "../../lib/colors";
 
 	export let weaponData;
+	export let splitBy;
+	export let chartColor = "green";
+
 	let weapons = [];
 	let boxSize = 10;
 	let boxMargin = 1;
 	let width = 300;
-	let chartColors = [
-		colors["orange-dark"],
-		colors["orange"],
-		colors["orange-light"],
-		colors["blue-dark"],
-		colors["blue"],
-		colors["blue-light"],
-		colors["grey"],
-		colors["grey-dark"],
-		colors["grey"],
-		colors["grey-dark"],
-	];
 
 	weaponData.then((d) => {
 		weapons = d.weapons;
 	});
-	$: weaponTypes = getRankedTypes(weapons, "weapon_type");
-	// $: colorScale = d3.scaleOrdinal().domain(weaponTypes).range(d3.schemeSet3);
-	$: colorScale = d3.scaleOrdinal().domain(weaponTypes).range(chartColors);
+
+	// chart sizing
+	$: waffleMargin = {
+		top: 10,
+		right: 10,
+		bottom: 20,
+		left: 10,
+	};
+	$: wafflesPerRow = width < 500 ? 2 : width < 768 ? 3 : 4;
+	$: waffleLabelSize = 13;
+	$: waffleWidth = Math.floor(width / wafflesPerRow);
+	$: waffleInnerWidth = waffleWidth - waffleMargin.left - waffleMargin.right;
+	$: boxesPerRow = Math.floor(waffleInnerWidth / (boxSize + boxMargin));
+
+	$: weaponTypes = getRankedTypes(weapons, splitBy);
 	$: sortWeapons = function (_weapons) {
 		return _weapons.sort(
 			(a, b) => weaponTypes.indexOf(a.weapon_type) - weaponTypes.indexOf(b.weapon_type)
 		);
 	};
+	$: chartsData = getChartRows(
+		weaponTypes.map((d) => weapons.filter((w) => w[splitBy] == d))
+	);
 	$: sortedWeapons = sortWeapons(weapons);
-	$: console.log(sortedWeapons);
-	$: boxesPerRow = Math.floor(width / (boxSize + boxMargin));
-	// $: boxesPerRow = 100;
-	$: height = Math.ceil(weapons.length / boxesPerRow) * (boxSize + boxMargin);
+	$: height = chartsData.reduce((prev, curr) => prev + getWaffleRowHeight(curr), 0) + waffleMargin.bottom;
+	$: getWaffleXPosition = function (chartIdx) {
+		return (
+			(boxesPerRow * (boxSize + boxMargin) + waffleMargin.right + waffleMargin.left) *
+				(chartIdx % wafflesPerRow) +
+			waffleMargin.left
+		);
+	};
+	$: getWaffleYPosition = function (rowIdx) {
+		let y = 0;
+		for (var i = rowIdx - 1; i >= 0; i -= 1) {
+			const rowHeight = getWaffleRowHeight(chartsData[i]);
+			y += rowHeight;
+		}
+		return y + waffleMargin.top;
+	};
+	$: getChartRows = function (d) {
+		const rows = [];
+		for (const [i, cd] of d.entries()) {
+			let rowIdx = Math.floor(i / wafflesPerRow);
+			if (rows[rowIdx]) {
+				rows[rowIdx].push(cd);
+			} else {
+				rows[rowIdx] = [cd];
+			}
+		}
+		return rows;
+	};
+
+	$: getWaffleRowHeight = function (rowData) {
+		return (
+			Math.ceil(rowData[0].length / boxesPerRow) * (boxSize + boxMargin) +
+			waffleMargin.bottom +
+			waffleMargin.top
+		);
+	};
 
 	// takes an array of objects, and a string valueKey
 	// returns an array of possible values at valueKey, ranked by number of occurences in items.
@@ -57,22 +94,38 @@
 </script>
 
 <div class="chart-wrapper weapon-waffle" bind:clientWidth={width}>
-	{#if sortedWeapons.length > 0}
+	{#if chartsData.length > 0}
 		<p class="debug-info">
 			width: {width} boxes per row: {boxesPerRow} total boxes: {weapons.length}
 			{sortedWeapons.length}
 		</p>
 		<svg {width} {height}>
-			<g>
-				{#each sortedWeapons as weapon, i}
-					<rect
-						width={boxSize}
-						height={boxSize}
-						x={(i % boxesPerRow) * (boxSize + boxMargin)}
-						y={Math.floor(i / boxesPerRow) * (boxSize + boxMargin)}
-						fill={colorScale(weapon.weapon_type)} />
-				{/each}
-			</g>
+			{#each chartsData as chartRow, rowIdx}
+				<g transform="translate(0, {getWaffleYPosition(rowIdx)})" class="chart-row">
+					{#each chartRow as chartData, chartIdx}
+						<g
+							transform="translate({getWaffleXPosition(chartIdx)}, 0)"
+							class="chart-item">
+							{#each chartData as weapon, i}
+								<rect
+									width={boxSize}
+									height={boxSize}
+									x={(i % boxesPerRow) * (boxSize + boxMargin)}
+									y={getWaffleRowHeight(chartRow) -
+										waffleMargin.bottom -
+										waffleMargin.top -
+										Math.floor(i / boxesPerRow) * (boxSize + boxMargin)}
+									fill={chartColor} />
+							{/each}
+							<text
+								font-size={waffleLabelSize}
+								transform="translate(0, {getWaffleRowHeight(chartRow) -
+									waffleMargin.bottom +
+									waffleLabelSize})">{chartData[0][splitBy]}</text>
+						</g>
+					{/each}
+				</g>
+			{/each}
 		</svg>
 	{/if}
 </div>
@@ -85,6 +138,6 @@
 		background: #cecece;
 	}
 	.chart-wrapper.weapon-waffle {
-		max-width: 500px;
+		/* max-width: 500px; */
 	}
 </style>
