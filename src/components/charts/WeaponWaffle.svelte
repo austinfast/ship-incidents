@@ -95,10 +95,6 @@
 
 <div class="chart-wrapper weapon-waffle" bind:clientWidth={width}>
 	{#if chartsData.length > 0}
-		<p class="debug-info">
-			width: {width} boxes per row: {boxesPerRow} total boxes: {weapons.length}
-			{sortedWeapons.length}
-		</p>
 		<svg {width} {height}>
 			{#each chartsData as chartRow, rowIdx}
 				<g transform="translate(0, {getWaffleYPosition(rowIdx)})" class="chart-row">
@@ -136,8 +132,5 @@
 		font-family: monospace;
 		padding: 5px;
 		background: #cecece;
-	}
-	.chart-wrapper.weapon-waffle {
-		/* max-width: 500px; */
 	}
 </style>
