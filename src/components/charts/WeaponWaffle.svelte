@@ -1,6 +1,4 @@
 <script>
-	import colors from "../../lib/colors";
-
 	export let weaponData;
 	export let splitBy;
 	export let chartColor = "#cecece";
