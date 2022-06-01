@@ -1,7 +1,7 @@
 import "./style/fonts.css";
 import "./style/index.css";
 import Bars from "./components/charts/RelationshipBars.svelte";
-import { getVictimData } from "./lib/data/victims";
+import { getVictimData } from "./lib/data/victims.js";
 
 const mainEl = document.getElementById("MK-relationship_types-embed");
 

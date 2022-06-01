@@ -6,11 +6,8 @@ import { getVictimData } from "./lib/data/victims.js";
 
 const mainEl = document.getElementById("MK-victims_by_age-embed");
 
-// @TODO i wonder if this is a better pattern for fetching data than doing inside the components.
-// on one hand you lose the store magic, on the other its easier to pass different data to the same component when reusing charts
-// nah this is not working well, its rendering a 2nd chart when the promise fullfils
 console.log("render victims by age");
-let ageHistogram = new AgeHistogram({
+new AgeHistogram({
 	target: mainEl,
 	props: {
 		sourceData: getVictimData(),

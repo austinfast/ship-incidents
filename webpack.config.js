@@ -98,14 +98,21 @@ function getEntries(outputs, production) {
 		shared: [
 			"d3",
 			"svelte",
-			"./src/style/index.css",
-			"./src/style/fonts.css",
 			"./src/lib/colors.js",
+			"./src/lib/dates.js",
+			"./src/lib/events.js",
+			"./src/lib/months.js",
+			"./src/lib/text.js",
+			"./src/lib/utils.js",
+			"./src/lib/urls.js",
+			"./src/lib/data/index.js",
 			"./src/lib/data/incidents.js",
 			"./src/lib/data/victims.js",
 			"./src/lib/data/offenders.js",
 			"./src/lib/data/weapons.js",
 			"./src/stores/popup.js",
+			"./src/style/index.css",
+			"./src/style/fonts.css",
 		],
 	};
 	outputs.forEach((output) => {

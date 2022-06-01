@@ -1,7 +1,7 @@
 import "./style/fonts.css";
 import "./style/index.css";
 import TrendArea from "./components/charts/TrendArea.svelte";
-import { getIncidentData } from "./lib/data/incidents";
+import { getIncidentData } from "./lib/data/incidents.js";
 
 const mainEl = document.getElementById("MK-victim_trends-embed");
 

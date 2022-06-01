@@ -2,7 +2,7 @@ import "./style/fonts.css";
 import "./style/index.css";
 import Bars from "./components/charts/RankedBar.svelte";
 import { getIncidentData } from "./lib/data/incidents.js";
-import colors from "./lib/colors";
+import colors from "./lib/colors.js";
 
 const mainEl = document.getElementById("MK-location_types-embed");
 

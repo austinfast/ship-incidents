@@ -2,7 +2,7 @@ import "./style/fonts.css";
 import "./style/index.css";
 import WeaponWaffle from "./components/charts/WeaponWaffle.svelte";
 import { getWeaponData } from "./lib/data/weapons.js";
-import colors from "./lib/colors";
+import colors from "./lib/colors.js";
 
 const mainEl = document.getElementById("MK-gun_types-embed");
 const splitBy = "gun_class";

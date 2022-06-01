@@ -1,7 +1,6 @@
 import "./style/fonts.css";
 import "./style/index.css";
 import AgeHistogram from "./components/charts/AgeHistogram.svelte";
-// TODO should be fetching offenders, oncee that data exists here
 import { getOffenderData } from "./lib/data/offenders.js";
 import colors from "./lib/colors.js";
 
