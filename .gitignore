@@ -13,4 +13,5 @@ npm-debug.log
 yarn-error.log
 /public
 /src/static/data/cache
+/src/static/states_topo.json
 output_data

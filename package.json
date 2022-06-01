@@ -23,8 +23,9 @@
         "deploy:staging": "npm run build:staging && ./scripts/deploy.sh --staging",
         "embed": "node scripts/embed.js",
         "setup": "npm install && node scripts/configure.js && rm -rf .git && git init",
-		"fetch-data": "curl https://www.gannett-cdn.com/experiments/usatoday/_data/mass-killings/incidents.json > src/static/data/incidents.json",
-		"data:cache": "mkdir -p src/static/data/cache && gsutil rsync gs://experiments-www-gannett-cdn-com/experiments/usatoday/_data/mass-killings/ src/static/data/cache"
+        "fetch-data": "curl https://www.gannett-cdn.com/experiments/usatoday/_data/mass-killings/incidents.json > src/static/data/incidents.json",
+        "data:cache": "mkdir -p src/static/data/cache && gsutil rsync gs://experiments-www-gannett-cdn-com/experiments/usatoday/_data/mass-killings/ src/static/data/cache",
+		"postinstall": "make"
     },
     "devDependencies": {
         "@babel/core": "^7.16.12",
@@ -43,6 +44,7 @@
         "esm": "^3.2.25",
         "html-webpack-plugin": "^5.5.0",
         "inquirer": "^8.2.0",
+        "mapshaper": "^0.6.2",
         "mini-css-extract-plugin": "^2.5.2",
         "postcss": "^8.4.5",
         "postcss-flexbugs-fixes": "^5.0.2",
