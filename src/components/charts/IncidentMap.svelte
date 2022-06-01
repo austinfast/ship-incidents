@@ -25,6 +25,9 @@
 	$: path = d3.geoPath().projection(projection);
 	$: incidentFeatures = incidents.map((d) => {
 		const position = projection([d.longitude, d.latitude]);
+		if (!position) {
+			console.log(d);
+		}
 		return {
 			...d,
 			position,
@@ -46,12 +49,11 @@
 		<g>
 			{#each incidentFeatures as incidentFeature}
 				{#if incidentFeature.position}
-					<circle 
-						cx={incidentFeature.position[0]} 
-						cy={incidentFeature.position[1]} 
+					<circle
+						cx={incidentFeature.position[0]}
+						cy={incidentFeature.position[1]}
 						fill="coral"
-						r="5"
-					/>
+						r="5" />
 				{/if}
 			{/each}
 		</g>
