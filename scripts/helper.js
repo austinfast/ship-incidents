@@ -1,4 +1,6 @@
 const path = require("path");
+const fs = require("fs");
+const yaml = require("js-yaml");
 
 const PROJECT_DIR = path.join(__dirname, "..");
 
@@ -7,7 +9,8 @@ const get_package = () => {
 };
 
 const get_info = () => {
-	return require(path.join(PROJECT_DIR, "graphicinfo.json"));
+	const rawInfoFile = fs.readFileSync(path.join(PROJECT_DIR, "graphicinfo.json"), "utf-8");
+	return yaml.load(rawInfoFile);
 };
 
 module.exports = {
