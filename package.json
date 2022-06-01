@@ -25,7 +25,7 @@
         "setup": "npm install && node scripts/configure.js && rm -rf .git && git init",
         "fetch-data": "curl https://www.gannett-cdn.com/experiments/usatoday/_data/mass-killings/incidents.json > src/static/data/incidents.json",
         "data:cache": "mkdir -p src/static/data/cache && gsutil rsync gs://experiments-www-gannett-cdn-com/experiments/usatoday/_data/mass-killings/ src/static/data/cache",
-		"postinstall": "make"
+		"postinstall": "make && npm run data:cache"
     },
     "devDependencies": {
         "@babel/core": "^7.16.12",
