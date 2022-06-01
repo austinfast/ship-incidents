@@ -10,53 +10,27 @@ output:
   - filename: index
     ssr: false
     local_only: true
-    ssr_contentfile: null
-    ssr_component: null
   - filename: timeline
     ssr: false
-    ssr_contentfile: null
-    ssr_component: null
   - filename: summary_by_category_area
     ssr: false
-    ssr_contentfile: null
-    ssr_component: null
   - filename: incident_trends
     ssr: false
-    ssr_contentfile: null
-    ssr_component: null
   - filename: victim_trends
     ssr: false
-    ssr_contentfile: null
-    ssr_component: null
   - filename: location_types
     ssr: false
-    ssr_contentfile: null
-    ssr_component: null
   - filename: relationship_types
     ssr: false
-    ssr_contentfile: null
-    ssr_component: null
   - filename: victims_by_age
     ssr: false
-    ssr_contentfile: null
-    ssr_component: null
   - filename: victims_by_sex
     ssr: false
-    ssr_contentfile: null
-    ssr_component: null
   - filename: offenders_by_sex
     ssr: false
-    ssr_contentfile: null
-    ssr_component: null
   - filename: offenders_by_age
     ssr: false
-    ssr_contentfile: null
-    ssr_component: null
   - filename: weapon_types
     ssr: false
-    ssr_contentfile: null
-    ssr_component: null
   - filename: gun_types
     ssr: false
-    ssr_contentfile: null
-    ssr_component: null

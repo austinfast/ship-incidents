@@ -9,7 +9,7 @@ const get_package = () => {
 };
 
 const get_info = () => {
-	const rawInfoFile = fs.readFileSync(path.join(PROJECT_DIR, "graphicinfo.json"), "utf-8");
+	const rawInfoFile = fs.readFileSync(path.join(PROJECT_DIR, "graphicinfo.yml"), "utf-8");
 	return yaml.load(rawInfoFile);
 };
 
