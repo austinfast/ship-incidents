@@ -34,3 +34,5 @@ output:
     ssr: false
   - filename: gun_types
     ssr: false
+  - filename: incident_map
+    ssr: false
