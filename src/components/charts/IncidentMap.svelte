@@ -11,8 +11,9 @@
 
 	// Settings
 	let width = 300;
-	const minCircleRadius = width < 400 ? 2 : 3;
-	const maxCircleRadius = width < 400 ? 15 : width < 768 ? 20 : 25;
+	$: minCircleRadius = width < 400 ? 3 : 4;
+	$: maxCircleRadius = width < 400 ? 20 : width < 768 ? 25 : 30;
+	$: stateLabelSize = 10;
 
 	let incidents = [];
 	incidentData.then((d) => {
@@ -39,7 +40,6 @@
 			position,
 		};
 	});
-	$: console.log(incidentFeatures);
 	$: radiusScale = d3
 		.scaleSqrt()
 		.domain([4, d3.max(incidents, (i) => i.victims)])
@@ -49,24 +49,27 @@
 	// in some component variables, rather than setting attributes via d3 selections
 	function zoomed(e) {
 		const { transform } = e;
-		console.log(transform);
 		zoomTransform = transform;
 		// mapG.attr("transform", transform);
 		// mapG.attr("stroke-width", 1 / transform.k);
 	}
 
 	// leaning on this d3 zoom magic
+	// @TODO i feel like i could re-implement this with Svelte tweens and properties
+	// and i wonder if it would be better ?
 	const zoom = d3.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
+
+	// bind events via d3
+	$: svgSelection.call(zoom)
+		.on("wheel.zoom", null);
 
 	//zoom in handlers:
 	// these basically call a d3 transition on our svg selection and calls the d3 zoom function on the transition
 	// will pass these to the zoom UI component
 	function zoomIn() {
-		console.log("zoomINREAL");
 		svgSelection.transition().call(zoom.scaleBy, 2);
 	}
 	function zoomOut() {
-		console.log("zoomOUTREAL");
 		svgSelection.transition().call(zoom.scaleBy, 0.5);
 	}
 </script>
@@ -83,6 +86,13 @@
 						fill={colors["grey-light"]}
 						stroke={colors["grey"]} 
 						stroke-width={1 / zoomTransform.k}/>
+					<text 
+						class="state-label"
+						x={path.centroid(stateFeature)[0] - stateLabelSize / 2}
+						y={path.centroid(stateFeature)[1] }
+						font-size={stateLabelSize / zoomTransform.k}
+						fill={colors["grey-dark"]}
+						>{stateFeature.properties.STUSPS}</text>
 				{/each}
 			</g>
 			<g>
@@ -93,6 +103,8 @@
 							cy={incidentFeature.position[1]}
 							fill={colors["orange"]}
 							opacity="0.8"
+							stroke="#ffffff"
+							stroke-width={1 / zoomTransform.k}
 							r={radiusScale(incidentFeature.victims)} />
 					{/if}
 				{/each}
