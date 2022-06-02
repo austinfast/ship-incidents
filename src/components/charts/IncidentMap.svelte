@@ -11,8 +11,8 @@
 
 	// Settings
 	let width = 300;
-	$: minCircleRadius = width < 400 ? 3 : 4;
-	$: maxCircleRadius = width < 400 ? 20 : width < 768 ? 25 : 30;
+	$: minCircleRadius = (width < 400 ? 3 : 4) / zoomTransform.k;
+	$: maxCircleRadius = (width < 400 ? 20 : width < 768 ? 25 : 30) / zoomTransform.k;
 	$: stateLabelSize = 10;
 
 	let incidents = [];
