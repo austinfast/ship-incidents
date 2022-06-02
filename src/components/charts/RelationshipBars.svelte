@@ -3,7 +3,6 @@
 
 	export let victimData;
 
-	let svgEl;
 	let counts;
 	let width = 300;
 	let barWidth = 80;
@@ -23,29 +22,14 @@
 	const bars = [bar_1, bar_2, bar_3];
 	$: maxCount = max(bars.map((bar) => sum(bar.map((barItem) => counts ? counts[barItem[0]] : 0))));
 	$: heightScale = scaleLinear().domain([0, maxCount]).range([0, maxHeight]);
-
-	//update sizing based on width
-	// $: barWidth = width < 600 ? 60 : 80;
-	// $: barMargin = width < 600 ? 25 : 30;
-
-	// $: if (counts) {
-	// 	let allCounts = [];
-	// 	for (let key in counts) {
-	// 		allCounts.push(counts[key]);
-	// 	}
-	// 	let bar_1_count = counts[bar_1[0][0]] + counts[bar_1[1][0]];
-	// 	allCounts.push(bar_1_count);
-	// 	heightScale = heightScale.domain([0, max(allCounts)]);
-	// }
 	// data
 	victimData.then((d) => {
 		counts = d.victimRelationships;
-		console.log(counts);
 	});
 </script>
 
 <div
-	class="relationship-bar-wrapper chart-wrapper in-depth-article-width"
+	class="chart-wrapper"
 	bind:clientWidth={width}>
 	<div class="key-wrap">
 		{#each bar_1 as keyItem}
@@ -68,7 +52,7 @@
 		{/each}
 	</div>
 	{#if counts && heightScale}
-		<svg class="relationship-bar" bind:this={svgEl} {width} height={maxHeight}>
+		<svg class="relationship-bar" {width} height={maxHeight}>
 			{#each bars as bar, barIndex}
 				<g transform={`translate(${(barWidth + barMargin) * barIndex}, 0)`}>
 					{#each bar as barCategory, i}
