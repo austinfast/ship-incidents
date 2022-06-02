@@ -16,8 +16,10 @@
 	let xAxisEl;
 	let yAxisEl;
 	let width;
-	let height = 400;
+	let height = 300;
 	let defaultDate = new Date();
+	const curve = d3.curveStep;
+	// const curve = d3.curveBumpX;
 
 	$: margin = {
 		top: 20,
@@ -58,12 +60,14 @@
 	$: getLine = (yearlyVariable) =>
 		d3
 			.line()
+			.curve(curve)
 			.x((d) => scaleX(d.year_date))
 			.y((d) => scaleY(d[yearlyVariable.field]));
 
 	$: getArea = (yearlyVariable) =>
 		d3
 			.area()
+			.curve(curve)
 			.x((d) => scaleX(d.year_date))
 			.y0((d, i) => {
 				if (yearlyVariables.indexOf(yearlyVariable) < yearlyVariables.length - 1) {
@@ -167,14 +171,14 @@
 						fill="none"
 						stroke-linejoin="round"
 						stroke-linecap="round" />
-					{#each yearlyData as year}
-						<circle
-							fill={colorScale(yearlyVariable.field)}
-							r={dotRadius}
-							cx={scaleX(year.year_date)}
-							cy={scaleY(year[yearlyVariable.field])} />
-						class="year-dot"
-					{/each}
+					<!-- {#each yearlyData as year} -->
+					<!-- 	<circle -->
+					<!-- 		fill={colorScale(yearlyVariable.field)} -->
+					<!-- 		r={dotRadius} -->
+					<!-- 		cx={scaleX(year.year_date)} -->
+					<!-- 		cy={scaleY(year[yearlyVariable.field])} /> -->
+					<!-- 	class="year-dot" -->
+					<!-- {/each} -->
 				{/each}
 			</g>
 		</g>

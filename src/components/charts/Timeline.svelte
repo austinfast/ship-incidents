@@ -42,7 +42,7 @@
 	$: yScale = d3
 		.scaleOrdinal()
 		.domain(years)
-		.range(years.map((year, i) => i * maxRadius + 10));
+		.range(years.map((_, i) => i * maxRadius + 10));
 	$: xScale = d3.scaleLinear().domain([0, 366]).range([0, chartWidth]);
 
 	// data
@@ -139,12 +139,13 @@
 						on:mouseleave={(e) => onDetails()} />
 				{/each}
 			</g>
+			{#if years.length > 0}
 			<g
 				class="timeline-month-labels"
 				transform="translate(0, {yScale(years[years.length - 1])})">
 				{#each months as month, idx}
 					{#if idx % monthsEvery == 0}
-						<g
+						<g 
 							class="timeline-month-label-group"
 							transform="translate({(chartWidth / 12) * idx}, {monthTickHeight})">
 							<line x1="0" x2="0" y1="0" y2={-monthTickHeight} stroke="black" />
@@ -154,6 +155,7 @@
 					{/if}
 				{/each}
 			</g>
+			{/if}
 		</g>
 	</svg>
 </div>

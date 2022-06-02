@@ -4,11 +4,12 @@
 	export let victimData;
 
 	let svgEl;
-	let counts = [];
+	let counts;
 	let width = 300;
 	let barWidth = 80;
 	let maxHeight = 350;
 	let barMargin = 30;
+
 
 	const bar_1 = [
 		["family", "#d9501e", "Family"],
@@ -20,53 +21,53 @@
 	];
 	const bar_3 = [["unknown", "#8c8c8c", "Unknown"]];
 	const bars = [bar_1, bar_2, bar_3];
-
-	$: maxCount = max(bars.map((bar) => sum(bar.map((barItem) => counts[barItem[0]]))));
+	$: maxCount = max(bars.map((bar) => sum(bar.map((barItem) => counts ? counts[barItem[0]] : 0))));
 	$: heightScale = scaleLinear().domain([0, maxCount]).range([0, maxHeight]);
 
 	//update sizing based on width
 	// $: barWidth = width < 600 ? 60 : 80;
 	// $: barMargin = width < 600 ? 25 : 30;
 
-	$: if (counts) {
-		let allCounts = [];
-		for (let key in counts) {
-			allCounts.push(counts[key]);
-		}
-		let bar_1_count = counts[bar_1[0][0]] + counts[bar_1[1][0]];
-		allCounts.push(bar_1_count);
-		heightScale = heightScale.domain([0, max(allCounts)]);
-	}
+	// $: if (counts) {
+	// 	let allCounts = [];
+	// 	for (let key in counts) {
+	// 		allCounts.push(counts[key]);
+	// 	}
+	// 	let bar_1_count = counts[bar_1[0][0]] + counts[bar_1[1][0]];
+	// 	allCounts.push(bar_1_count);
+	// 	heightScale = heightScale.domain([0, max(allCounts)]);
+	// }
 	// data
 	victimData.then((d) => {
 		counts = d.victimRelationships;
+		console.log(counts);
 	});
 </script>
 
 <div
 	class="relationship-bar-wrapper chart-wrapper in-depth-article-width"
 	bind:clientWidth={width}>
+	<div class="key-wrap">
+		{#each bar_1 as keyItem}
+			<div class="key-item">
+				<div class="key-item-pallette" style={`background: ${keyItem[1]};`} />
+				<p class="key-item-label">{keyItem[2]}</p>
+			</div>
+		{/each}
+		{#each bar_2 as keyItem}
+			<div class="key-item">
+				<div class="key-item-pallette" style={`background: ${keyItem[1]};`} />
+				<p class="key-item-label">{keyItem[2]}</p>
+			</div>
+		{/each}
+		{#each bar_3 as keyItem}
+			<div class="key-item">
+				<div class="key-item-pallette" style={`background: ${keyItem[1]};`} />
+				<p class="key-item-label">{keyItem[2]}</p>
+			</div>
+		{/each}
+	</div>
 	{#if counts && heightScale}
-		<div class="key-wrap">
-			{#each bar_1 as keyItem}
-				<div class="key-item">
-					<div class="key-item-pallette" style={`background: ${keyItem[1]};`} />
-					<p class="key-item-label">{keyItem[2]}</p>
-				</div>
-			{/each}
-			{#each bar_2 as keyItem}
-				<div class="key-item">
-					<div class="key-item-pallette" style={`background: ${keyItem[1]};`} />
-					<p class="key-item-label">{keyItem[2]}</p>
-				</div>
-			{/each}
-			{#each bar_3 as keyItem}
-				<div class="key-item">
-					<div class="key-item-pallette" style={`background: ${keyItem[1]};`} />
-					<p class="key-item-label">{keyItem[2]}</p>
-				</div>
-			{/each}
-		</div>
 		<svg class="relationship-bar" bind:this={svgEl} {width} height={maxHeight}>
 			{#each bars as bar, barIndex}
 				<g transform={`translate(${(barWidth + barMargin) * barIndex}, 0)`}>
