@@ -13,9 +13,6 @@
 	incidentData.then((d) => {
 		incidents = d.incidents;
 	});
-	$: console.log(incidents);
-	$: console.log(statesGeo);
-
 	let width = 300;
 	$: height = width * 0.8;
 	$: projection = d3
@@ -25,9 +22,6 @@
 	$: path = d3.geoPath().projection(projection);
 	$: incidentFeatures = incidents.map((d) => {
 		const position = projection([d.longitude, d.latitude]);
-		if (!position) {
-			console.log(d);
-		}
 		return {
 			...d,
 			position,
@@ -52,7 +46,8 @@
 					<circle
 						cx={incidentFeature.position[0]}
 						cy={incidentFeature.position[1]}
-						fill="coral"
+						fill={colors["orange"]}
+						opacity="0.8"
 						r="5" />
 				{/if}
 			{/each}
