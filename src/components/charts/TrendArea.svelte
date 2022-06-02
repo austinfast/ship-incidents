@@ -16,7 +16,7 @@
 	let xAxisEl;
 	let yAxisEl;
 	let width;
-	let height = 300;
+	let height = 350;
 	let defaultDate = new Date();
 	const curve = d3.curveStep;
 	// const curve = d3.curveBumpX;
@@ -171,14 +171,14 @@
 						fill="none"
 						stroke-linejoin="round"
 						stroke-linecap="round" />
-					<!-- {#each yearlyData as year} -->
-					<!-- 	<circle -->
-					<!-- 		fill={colorScale(yearlyVariable.field)} -->
-					<!-- 		r={dotRadius} -->
-					<!-- 		cx={scaleX(year.year_date)} -->
-					<!-- 		cy={scaleY(year[yearlyVariable.field])} /> -->
-					<!-- 	class="year-dot" -->
-					<!-- {/each} -->
+					{#each yearlyData as year}
+						<circle
+							fill={colorScale(yearlyVariable.field)}
+							r={dotRadius}
+							cx={scaleX(year.year_date)}
+							cy={scaleY(year[yearlyVariable.field])} />
+						class="year-dot"
+					{/each}
 				{/each}
 			</g>
 		</g>

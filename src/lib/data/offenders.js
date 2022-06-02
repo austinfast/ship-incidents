@@ -27,7 +27,6 @@ async function generateOffenderData() {
 	const offenderGenderCounts = countTypes(cleanedOffenders, "sex");
 	return {
 		offenders: cleanedOffenders,
-		offenderAgeScale,
 		offenderAges,
 		offenderGenderCounts
 	}

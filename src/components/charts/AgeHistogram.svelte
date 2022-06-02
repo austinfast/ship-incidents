@@ -4,17 +4,14 @@
 	export let color = "#e3e3e3";
 	export let sourceData;
 	export let ageBinKey;
-	export let ageScaleKey;
 
 	let width = 300;
-	let binnedData;
-	let ageScale;
+	let binnedData = [];
 	let xAxisEl;
 	let yAxisEl;
 
 	sourceData.then((d) => {
 		binnedData = d[ageBinKey];
-		ageScale = d[ageScaleKey];
 	});
 
 	$: height = width < 600 ? width / 1.5 : width / 2;
@@ -27,10 +24,9 @@
 	$: barmargin = width > 600 ? 10 : 5;
 	$: chartHeight = height - margin.top - margin.bottom;
 	$: chartWidth = width - margin.left - margin.right;
-	$: if (ageScale && chartWidth) {
-		ageScale.range([0, chartWidth]);
-	}
-	$: xAxis = d3.axisBottom(ageScale).ticks(20);
+	$: maxAge = binnedData.length > 0 ? d3.max(binnedData, bin => bin.x1) : 100;
+	$: xScale = d3.scaleLinear().domain([0, maxAge]).range([0, chartWidth]);
+	$: xAxis = d3.axisBottom(xScale).ticks(20);
 	$: yScale = d3
 		.scaleLinear()
 		.domain([0, binnedData ? d3.max(binnedData.map((d) => d.length)) : 1])
@@ -70,9 +66,9 @@
 			<g class="chart-group" transform="translate({margin.left}, {margin.top})">
 				{#each binnedData as bin}
 					<rect
-						x={ageScale(bin.x0)}
+						x={xScale(bin.x0)}
 						y={yScale(bin.length)}
-						width={Math.max(0, ageScale(bin.x1) - ageScale(bin.x0) - barmargin)}
+						width={Math.max(0, xScale(bin.x1) - xScale(bin.x0) - barmargin)}
 						height={yScale(0) - yScale(bin.length)}
 						fill={color} />
 				{/each}

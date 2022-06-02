@@ -32,7 +32,6 @@ async function generateVictimData() {
 	return {
 		victimRelationships,
 		victimAges,
-		victimAgeScale,
 		victimGenderCounts,
 	};
 }
