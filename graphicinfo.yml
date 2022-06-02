@@ -36,3 +36,5 @@ output:
     ssr: false
   - filename: incident_map
     ssr: false
+  - filename: incident_lookup
+    ssr: false

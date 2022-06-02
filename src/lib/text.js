@@ -9,3 +9,7 @@ export function prettyDate(d) {
 	return f(d);
 }
 
+export function shortDate(d) {
+	let f = timeFormat("%m/%d/%Y");
+	return f(d);
+}
