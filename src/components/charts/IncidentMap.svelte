@@ -91,7 +91,7 @@
 						x={path.centroid(stateFeature)[0] - stateLabelSize / 2}
 						y={path.centroid(stateFeature)[1] }
 						font-size={stateLabelSize / zoomTransform.k}
-						fill={colors["grey-dark"]}
+						fill={colors["grey"]}
 						>{stateFeature.properties.STUSPS}</text>
 				{/each}
 			</g>

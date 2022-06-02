@@ -1,6 +1,6 @@
 MAPSHAPER = node_modules/mapshaper/bin/mapshaper
 
-.INTERMEDIATE: output_data/cb_2021_us_state_500k.zip output_data/cb_2021_us_state_500k/cb_2021_us_state_500k.shp
+.INTERMEDIATE: output_data/cb_2021_us_state_500k.zip
 
 .PHONY: clean clean-deps clean-all default
 
@@ -16,7 +16,11 @@ clean-deps:
 
 src/static/states_topo.json: output_data/cb_2021_us_state_500k/cb_2021_us_state_500k.shp
 	mkdir -p $(dir $@)
-	$(MAPSHAPER) $^ -rename-layers states -simplify visvalingam 1% -o format=topojson $@
+	$(MAPSHAPER) $^ \
+		-filter "parseInt(STATEFP) < 60" \
+		-simplify visvalingam 3% \
+		-rename-layers states \
+		-o format=topojson $@
 	touch $@
 
 output_data/cb_2021_us_state_500k/cb_2021_us_state_500k.shp: output_data/cb_2021_us_state_500k.zip
