@@ -10,6 +10,6 @@ export function prettyDate(d) {
 }
 
 export function shortDate(d) {
-	let f = timeFormat("%m/%d/%Y");
-	return f(d);
+	let f = timeFormat("%_m/%_d/%Y");
+	return f(d).replace(/\s/g, "");
 }
