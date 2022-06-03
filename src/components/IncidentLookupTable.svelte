@@ -207,7 +207,6 @@
 		padding: 8px 5px 8px 30px;
 		min-width: 160px;
 		border-radius: 5px;
-		padding: none;
 	}
 	.search-icon {
 		width: 20px;
