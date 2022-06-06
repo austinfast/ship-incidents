@@ -3,9 +3,12 @@
 	import { filterUnique } from "../lib/utils.js";
 	import FilterSelect from "./FilterSelect.svelte";
 	import colors from "../lib/colors.js";
+
+	// properties from parent
 	export let incidentData;
 	export let popupSlot;
 
+	// internal state
 	let incidents = [];
 	let width = 300;
 	let searchFilter = "";
@@ -53,7 +56,7 @@
 			};
 		})
 		.sort((a, b) => (a.value > b.value ? 1 : b.value > a.value ? -1 : 0));
-
+	// function to sort rows based on sort settings
 	$: sortRows = (a, b) => {
 		if (sortAscending) {
 			return a[sortColumn] > b[sortColumn] ? 1 : a[sortColumn] < b[sortColumn] ? -1 : 0;
@@ -61,6 +64,7 @@
 			return a[sortColumn] > b[sortColumn] ? -1 : a[sortColumn] < b[sortColumn] ? 1 : 0;
 		}
 	};
+	// function that filters incidents to correct results
 	$: filterIncidents = function (d) {
 		const searchResult =
 			d.casename.toLowerCase().indexOf(searchFilter.toLowerCase()) >= 0;
@@ -68,13 +72,21 @@
 		const typeResult = typeFilter ? d.type == typeFilter : true;
 		return searchResult && stateResult && typeResult;
 	};
+	// filter incidents down based on all filters
 	$: filteredIncidents = incidents.filter(filterIncidents).sort(sortRows);
+	// get just the current page of results
 	$: paginatedIncidents = filteredIncidents.slice(
 		currentPage * itemsPerPage,
 		(currentPage + 1) * itemsPerPage
 	);
+	// calculate total number of pages based on filtered results
 	$: totalPages = Math.ceil(filteredIncidents.length / itemsPerPage);
+	// reset page to zero upon search or filtering
+	$: if (searchFilter || stateFilter || typeFilter) {
+		currentPage = 0;
+	}
 
+	// event handler for headers, set sort options
 	function handleHeaderClick(header) {
 		// if header is already selected as sort column, reverse order
 		if (header[0] == sortColumn) {
