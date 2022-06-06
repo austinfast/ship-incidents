@@ -1,5 +1,7 @@
 <script>
 	import { prettyDate, shortDate } from "../lib/text.js";
+	import { filterUnique } from "../lib/utils.js";
+	import FilterSelect from "./FilterSelect.svelte";
 	import colors from "../lib/colors.js";
 	export let incidentData;
 	export let popupSlot;
@@ -12,6 +14,8 @@
 	let sortColumn = "real_date";
 	let sortAscending = false;
 	let showSearchClearButton = false;
+	let typeFilter = null;
+	let stateFilter = null;
 
 	// headers in the format of
 	// [dataField, prettyLabel, showMobile?, formatFunction]
@@ -24,18 +28,32 @@
 		["type", "Type", false],
 		["location_type", "Location", false],
 	];
-
-	$: numHeaders =
-		width >= 768
-			? tableHeaders.length
-			: width >= 400
-			? tableHeaders.length - 1
-			: tableHeaders.length - 2;
-
+	// initialize data
 	incidentData.then((d) => {
 		incidents = d.incidents;
 	});
-	// $: sortRows = (a, b) => b[sortColumn] - a[sortColumn];
+	// options for filtering by type
+	$: typeFilterOptions = incidents
+		.map((d) => d.type)
+		.filter(filterUnique)
+		.map((d) => {
+			return {
+				label: d,
+				value: d,
+			};
+		});
+	// options for filtering by state
+	$: stateFilterOptions = incidents
+		.map((d) => d.state)
+		.filter(filterUnique)
+		.map((d) => {
+			return {
+				label: d,
+				value: d,
+			};
+		})
+		.sort((a, b) => (a.value > b.value ? 1 : b.value > a.value ? -1 : 0));
+
 	$: sortRows = (a, b) => {
 		if (sortAscending) {
 			return a[sortColumn] > b[sortColumn] ? 1 : a[sortColumn] < b[sortColumn] ? -1 : 0;
@@ -43,19 +61,19 @@
 			return a[sortColumn] > b[sortColumn] ? -1 : a[sortColumn] < b[sortColumn] ? 1 : 0;
 		}
 	};
-	$: filteredIncidents = incidents
-		.filter((d) => d.casename.toLowerCase().indexOf(searchFilter.toLowerCase()) >= 0)
-		.sort(sortRows);
+	$: filterIncidents = function (d) {
+		const searchResult =
+			d.casename.toLowerCase().indexOf(searchFilter.toLowerCase()) >= 0;
+		const stateResult = stateFilter ? d.state == stateFilter : true;
+		const typeResult = typeFilter ? d.type == typeFilter : true;
+		return searchResult && stateResult && typeResult;
+	};
+	$: filteredIncidents = incidents.filter(filterIncidents).sort(sortRows);
 	$: paginatedIncidents = filteredIncidents.slice(
 		currentPage * itemsPerPage,
 		(currentPage + 1) * itemsPerPage
 	);
-	$: if (searchFilter != "") {
-		currentPage = 0;
-	}
 	$: totalPages = Math.ceil(filteredIncidents.length / itemsPerPage);
-	$: console.log(filteredIncidents);
-	$: console.log(showSearchClearButton);
 
 	function handleHeaderClick(header) {
 		// if header is already selected as sort column, reverse order
@@ -77,34 +95,38 @@
 </script>
 
 <div class="table-wrapper" bind:clientWidth={width}>
-	<div class="search-wrap">
-		<span class="search-icon-wrap"
-			><svg
-				width="25"
-				height="22"
-				viewBox="0 0 25 22"
-				fill="none"
-				xmlns="http://www.w3.org/2000/svg"
-				class="search-icon">
-				<path
-					fill-rule="evenodd"
-					clip-rule="evenodd"
-					d="M7.90083 13.403C10.8098 13.403 13.1681 11.0027 13.1681 8.04182C13.1681 5.0809 10.8098 2.68061 7.90083 2.68061C4.99183 2.68061 2.63361 5.0809 2.63361 8.04182C2.63361 11.0027 4.99183 13.403 7.90083 13.403ZM7.90083 16.0836C12.2643 16.0836 15.8017 12.4832 15.8017 8.04182C15.8017 3.60044 12.2643 0 7.90083 0C3.53732 0 0 3.60044 0 8.04182C0 12.4832 3.53732 16.0836 7.90083 16.0836Z"
-					fill={colors["grey"]} />
-				<path
-					fill-rule="evenodd"
-					clip-rule="evenodd"
-					d="M13.6336 11.5889L22 20.1045L20.1378 22L11.7714 13.4843L13.6336 11.5889Z"
-					fill={colors["grey"]} />
-			</svg></span>
-		<input
-			type="text"
-			bind:value={searchFilter}
-			placeholder="Search by date or location"
-			class="incident-lookup-table-search-input"
-			on:focus={onSearchFocus}
-			on:blur={onSearchBlur} />
-		<span class="search-clear-button" class:show={showSearchClearButton}>x</span>
+	<div class="table-top-control-wrap">
+		<div class="search-wrap">
+			<span class="search-icon-wrap"
+				><svg
+					width="25"
+					height="22"
+					viewBox="0 0 25 22"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+					class="search-icon">
+					<path
+						fill-rule="evenodd"
+						clip-rule="evenodd"
+						d="M7.90083 13.403C10.8098 13.403 13.1681 11.0027 13.1681 8.04182C13.1681 5.0809 10.8098 2.68061 7.90083 2.68061C4.99183 2.68061 2.63361 5.0809 2.63361 8.04182C2.63361 11.0027 4.99183 13.403 7.90083 13.403ZM7.90083 16.0836C12.2643 16.0836 15.8017 12.4832 15.8017 8.04182C15.8017 3.60044 12.2643 0 7.90083 0C3.53732 0 0 3.60044 0 8.04182C0 12.4832 3.53732 16.0836 7.90083 16.0836Z"
+						fill={colors["grey"]} />
+					<path
+						fill-rule="evenodd"
+						clip-rule="evenodd"
+						d="M13.6336 11.5889L22 20.1045L20.1378 22L11.7714 13.4843L13.6336 11.5889Z"
+						fill={colors["grey"]} />
+				</svg></span>
+			<input
+				type="text"
+				bind:value={searchFilter}
+				placeholder="Search by date or location"
+				class="incident-lookup-table-search-input"
+				on:focus={onSearchFocus}
+				on:blur={onSearchBlur} />
+			<span class="search-clear-button" class:show={showSearchClearButton}>x</span>
+		</div>
+		<FilterSelect bind:currentValue={stateFilter} options={stateFilterOptions} filterLabel="Filter by state"/>
+		<FilterSelect bind:currentValue={typeFilter} options={typeFilterOptions} filterLabel="Filter by type"/>
 	</div>
 	<table class="incident-lookup-table">
 		<thead>
@@ -141,12 +163,14 @@
 				{#if currentPage > 0}
 					<button
 						class="incident-lookup-table-page-button"
-						on:click={() => (currentPage -= 1)} aria-label="Previous page">←</button>
+						on:click={() => (currentPage -= 1)}
+						aria-label="Previous page">←</button>
 				{/if}
 				{#if currentPage + 1 < totalPages}
 					<button
 						class="incident-lookup-table-page-button"
-						on:click={() => (currentPage += 1)} aria-label="Next page">→</button>
+						on:click={() => (currentPage += 1)}
+						aria-label="Next page">→</button>
 				{/if}
 				<p class="incident-page-num">Page {currentPage + 1} of {totalPages}</p>
 			</div>
@@ -290,6 +314,13 @@
 	}
 	.incident-page-num {
 		font-size: 0.8em;
+	}
+	.table-top-control-wrap {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		margin: 1em auto;
+		flex-wrap: wrap;
 	}
 	@media (min-width: 500px) {
 		.incident-lookup-table tbody td,
