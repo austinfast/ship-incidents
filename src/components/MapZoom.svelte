@@ -34,7 +34,8 @@
 	}
 	.map-zoom-button {
 		background: #ffffff;
-		border: solid 1px var(--mk-color-grey-light);
+		background: var(--mk-color-grey-light);
+		border: solid 1px var(--mk-color-grey);
 		display: block;
 		width: 29px;
 		height: 29px;
