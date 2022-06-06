@@ -78,9 +78,9 @@
 				return chartHeight;
 			})
 			.y1((d) => scaleY(d[yearlyVariable.field]));
-
+	$: xTicksEvery = width < 500 ? 2 : 1;
 	$: axisY = d3.axisLeft(scaleY);
-	$: axisX = d3.axisBottom(scaleX);
+	$: axisX = d3.axisBottom(scaleX).ticks(d3.timeYear.every(xTicksEvery));
 	$: if (xAxisEl) {
 		d3.select(xAxisEl)
 			.call(axisX)
