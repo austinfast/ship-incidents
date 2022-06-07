@@ -10,7 +10,6 @@
 
 	// internal state
 	let incidents = [];
-	let width = 300;
 	let searchFilter = "";
 	let currentPage = 0;
 	let itemsPerPage = 10;
@@ -31,10 +30,12 @@
 		["type", "Type", false],
 		["location_type", "Location", false],
 	];
+
 	// initialize data
 	incidentData.then((d) => {
 		incidents = d.incidents;
 	});
+
 	// options for filtering by type
 	$: typeFilterOptions = incidents
 		.map((d) => d.type)
@@ -45,6 +46,7 @@
 				value: d,
 			};
 		});
+
 	// options for filtering by state
 	$: stateFilterOptions = incidents
 		.map((d) => d.state)
@@ -56,6 +58,7 @@
 			};
 		})
 		.sort((a, b) => (a.value > b.value ? 1 : b.value > a.value ? -1 : 0));
+
 	// function to sort rows based on sort settings
 	$: sortRows = (a, b) => {
 		if (sortAscending) {
@@ -64,6 +67,7 @@
 			return a[sortColumn] > b[sortColumn] ? -1 : a[sortColumn] < b[sortColumn] ? 1 : 0;
 		}
 	};
+
 	// function that filters incidents to correct results
 	$: filterIncidents = function (d) {
 		const searchResult =
@@ -72,21 +76,25 @@
 		const typeResult = typeFilter ? d.type == typeFilter : true;
 		return searchResult && stateResult && typeResult;
 	};
+
 	// filter incidents down based on all filters
 	$: filteredIncidents = incidents.filter(filterIncidents).sort(sortRows);
+
 	// get just the current page of results
 	$: paginatedIncidents = filteredIncidents.slice(
 		currentPage * itemsPerPage,
 		(currentPage + 1) * itemsPerPage
 	);
+
 	// calculate total number of pages based on filtered results
 	$: totalPages = Math.ceil(filteredIncidents.length / itemsPerPage);
 	// reset page to zero upon search or filtering
+
 	$: if (searchFilter || stateFilter || typeFilter) {
 		currentPage = 0;
 	}
 
-	// event handler for headers, set sort options
+	// click event handler for headers, set sort options
 	function handleHeaderClick(header) {
 		// if header is already selected as sort column, reverse order
 		if (header[0] == sortColumn) {
@@ -96,9 +104,11 @@
 			sortColumn = header[0];
 		}
 	}
+
 	function onSearchFocus() {
 		showSearchClearButton = false;
 	}
+
 	function onSearchBlur() {
 		if (searchFilter != "") {
 			showSearchClearButton = true;
@@ -106,7 +116,7 @@
 	}
 </script>
 
-<div class="table-wrapper" bind:clientWidth={width}>
+<div class="table-wrapper">
 	<div class="table-top-control-wrap">
 		<div class="search-wrap">
 			<span class="search-icon-wrap"
@@ -137,8 +147,14 @@
 				on:blur={onSearchBlur} />
 			<span class="search-clear-button" class:show={showSearchClearButton}>x</span>
 		</div>
-		<FilterSelect bind:currentValue={stateFilter} options={stateFilterOptions} filterLabel="Filter by state"/>
-		<FilterSelect bind:currentValue={typeFilter} options={typeFilterOptions} filterLabel="Filter by type"/>
+		<FilterSelect
+			bind:currentValue={stateFilter}
+			options={stateFilterOptions}
+			filterLabel="Filter by state" />
+		<FilterSelect
+			bind:currentValue={typeFilter}
+			options={typeFilterOptions}
+			filterLabel="Filter by type" />
 	</div>
 	<table class="incident-lookup-table">
 		<thead>
