@@ -3,7 +3,9 @@
 	import * as d3 from "d3";
 	import statesTopo from "../../static/states_topo.json";
 	import colors from "../../lib/colors.js";
+	import { filterUnique } from "../../lib/utils.js";
 	import ZoomControls from "../MapZoom.svelte";
+	import FilterSelect from "../FilterSelect.svelte";
 
 	// PROPS
 	export let incidentData;
@@ -11,6 +13,7 @@
 
 	// Settings
 	let width = 300;
+	let typeFilter = null;
 	$: minCircleRadius = (width < 400 ? 3 : 4) / zoomTransform.k;
 	$: maxCircleRadius = (width < 400 ? 20 : width < 768 ? 25 : 30) / zoomTransform.k;
 	$: stateLabelSize = 10;
@@ -33,7 +36,22 @@
 		.scale(width * 1.1)
 		.translate([width / 2, height / 2]);
 	$: path = d3.geoPath().projection(projection);
-	$: incidentFeatures = incidents.map((d) => {
+	$: typeFilterOptions = incidents
+		.map((d) => d.type)
+		.filter(filterUnique)
+		.map((d) => {
+			return {
+				label: d,
+				value: d,
+			};
+		});
+	// filter incidents down based on all filters
+	$: filteredIncidents = typeFilter
+		? incidents.filter(
+				(d) => d.type.toLowerCase().indexOf(typeFilter.toLowerCase()) >= 0
+		  )
+		: incidents;
+	$: incidentFeatures = filteredIncidents.map((d) => {
 		const position = projection([d.longitude, d.latitude]);
 		return {
 			...d,
@@ -60,8 +78,7 @@
 	const zoom = d3.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
 
 	// bind events via d3
-	$: svgSelection.call(zoom)
-		.on("wheel.zoom", null);
+	$: svgSelection.call(zoom).on("wheel.zoom", null);
 
 	//zoom in handlers:
 	// these basically call a d3 transition on our svg selection and calls the d3 zoom function on the transition
@@ -75,41 +92,60 @@
 </script>
 
 <div class="chart-wrapper" bind:clientWidth={width}>
-	<svg {width} {height} bind:this={svgEl}>
-		<g
-			class="zoomGroup"
-			transform="translate({zoomTransform.x}, {zoomTransform.y}) scale({zoomTransform.k})">
-			<g>
-				{#each statesGeo.features as stateFeature}
-					<path
-						d={path(stateFeature)}
-						fill={colors["grey-light"]}
-						stroke={colors["grey"]} 
-						stroke-width={1 / zoomTransform.k}/>
-					<text 
-						class="state-label"
-						x={path.centroid(stateFeature)[0] - stateLabelSize / 2}
-						y={path.centroid(stateFeature)[1] }
-						font-size={stateLabelSize / zoomTransform.k}
-						fill={colors["grey"]}
-						>{stateFeature.properties.STUSPS}</text>
-				{/each}
+	<div class="map-controls">
+		<FilterSelect
+			bind:currentValue={typeFilter}
+			options={typeFilterOptions}
+			defaultLabel="All"
+			filterLabel="Filter by type" />
+	</div>
+	<div class="map-wrap">
+		<svg {width} {height} bind:this={svgEl}>
+			<g
+				class="zoomGroup"
+				transform="translate({zoomTransform.x}, {zoomTransform.y}) scale({zoomTransform.k})">
+				<g>
+					{#each statesGeo.features as stateFeature}
+						<path
+							d={path(stateFeature)}
+							fill={colors["grey-light"]}
+							stroke={colors["grey"]}
+							stroke-width={1 / zoomTransform.k} />
+						<text
+							class="state-label"
+							x={path.centroid(stateFeature)[0] - stateLabelSize / 2}
+							y={path.centroid(stateFeature)[1]}
+							font-size={stateLabelSize / zoomTransform.k}
+							fill={colors["grey"]}>{stateFeature.properties.STUSPS}</text>
+					{/each}
+				</g>
+				<g>
+					{#each incidentFeatures as incidentFeature}
+						{#if incidentFeature.position}
+							<circle
+								cx={incidentFeature.position[0]}
+								cy={incidentFeature.position[1]}
+								fill={colors["orange"]}
+								opacity="0.8"
+								stroke="#ffffff"
+								stroke-width={1 / zoomTransform.k}
+								r={radiusScale(incidentFeature.victims)} />
+						{/if}
+					{/each}
+				</g>
 			</g>
-			<g>
-				{#each incidentFeatures as incidentFeature}
-					{#if incidentFeature.position}
-						<circle
-							cx={incidentFeature.position[0]}
-							cy={incidentFeature.position[1]}
-							fill={colors["orange"]}
-							opacity="0.8"
-							stroke="#ffffff"
-							stroke-width={1 / zoomTransform.k}
-							r={radiusScale(incidentFeature.victims)} />
-					{/if}
-				{/each}
-			</g>
-		</g>
-	</svg>
-	<ZoomControls {zoomIn} {zoomOut} />
+		</svg>
+		<ZoomControls {zoomIn} {zoomOut} />
+	</div>
 </div>
+
+<style>
+	.map-controls {
+		display: flex;
+		justify-content: flex-end;
+		margin-bottom: 1em;
+	}
+	.map-wrap {
+		position: relative;
+	}
+</style>
