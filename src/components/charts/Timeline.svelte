@@ -1,6 +1,8 @@
 <script>
 	import * as d3 from "d3";
 	import Popup from "../Popup.svelte";
+	import FilterSelect from "../FilterSelect.svelte";
+	import { filterUnique } from "../../lib/utils.js";
 	import { popupDetails } from "../../stores/popup.js";
 	import colors from "../../lib/colors.js";
 	import months from "../../lib/months.js";
@@ -19,6 +21,7 @@
 	let category = "All";
 	const arc = d3.arc();
 	const monthTickHeight = 10;
+	let typeFilter = null;
 
 	$: years = incidents
 		.map((d) => d.year)
@@ -26,7 +29,7 @@
 		.sort((a, b) => parseInt(a) - parseInt(b));
 	$: margin = {
 		top: 20,
-		right: width < 600 ? 50 : 100,
+		right: 25,
 		bottom: 20,
 		left: width < 600 ? 50 : 100,
 	};
@@ -44,6 +47,17 @@
 		.domain(years)
 		.range(years.map((_, i) => i * maxRadius + 10));
 	$: xScale = d3.scaleLinear().domain([0, 366]).range([0, chartWidth]);
+	$: typeFilterOptions = incidents
+		.map((d) => d.type)
+		.filter(filterUnique)
+		.map((d) => {
+			return {
+				label: d,
+				value: d,
+			};
+		});
+	// filter incidents down based on all filters
+	$: filteredIncidents = typeFilter ? incidents.filter((d) => d.type.toLowerCase().indexOf(typeFilter.toLowerCase()) >= 0) : incidents;
 
 	// data
 	incidentData.then((d) => {
@@ -78,30 +92,14 @@
 	}
 </script>
 
-<style>
-	.timeline-year-label {
-		font-family: "Unify Sans", sans-serif;
-		font-size: 12px;
-	}
-	:global(.timeline-chart-month-axis .domain) {
-		display: none;
-		opacity: 0;
-	}
-
-	:global(.timeline-chart-year-label) {
-		color: #404040;
-		font-size: 12px;
-		font-weight: 700;
-	}
-
-	@media (min-width: 600px) {
-		:global(.timeline-chart-year-label) {
-			font-size: 16px;
-		}
-	}
-</style>
-
 <div class="chart-wrapper" bind:this={wrapEl} bind:clientWidth={width}>
+	<div class="timeline-controls">
+		<FilterSelect
+			bind:currentValue={typeFilter}
+			options={typeFilterOptions}
+			defaultLabel="All"
+			filterLabel="Filter by type" />
+	</div>
 	<svg class="timeline-svg" bind:this={svgEl} {width} {height}>
 		<g class="chart-inner" transform="translate({margin.left}, {margin.top})">
 			<g class="timeline-yearinfo-group">
@@ -120,7 +118,7 @@
 				{/each}
 			</g>
 			<g class="timeline-incident-group">
-				{#each incidents as incident}
+				{#each filteredIncidents as incident}
 					<path
 						transform="translate({xScale(getDaysIntoYear(incident.real_date))}, {yScale(
 							incident.year
@@ -140,21 +138,21 @@
 				{/each}
 			</g>
 			{#if years.length > 0}
-			<g
-				class="timeline-month-labels"
-				transform="translate(0, {yScale(years[years.length - 1])})">
-				{#each months as month, idx}
-					{#if idx % monthsEvery == 0}
-						<g 
-							class="timeline-month-label-group"
-							transform="translate({(chartWidth / 12) * idx}, {monthTickHeight})">
-							<line x1="0" x2="0" y1="0" y2={-monthTickHeight} stroke="black" />
-							<text font-size={monthTickHeight} y={monthTickHeight} x="-8"
-								>{month.shortName}</text>
-						</g>
-					{/if}
-				{/each}
-			</g>
+				<g
+					class="timeline-month-labels"
+					transform="translate(0, {yScale(years[years.length - 1])})">
+					{#each months as month, idx}
+						{#if idx % monthsEvery == 0}
+							<g
+								class="timeline-month-label-group"
+								transform="translate({(chartWidth / 12) * idx}, {monthTickHeight})">
+								<line x1="0" x2="0" y1="0" y2={-monthTickHeight} stroke="black" />
+								<text font-size={monthTickHeight} y={monthTickHeight} x="-8"
+									>{month.shortName}</text>
+							</g>
+						{/if}
+					{/each}
+				</g>
 			{/if}
 		</g>
 	</svg>
@@ -164,3 +162,31 @@
 {#if ($popupDetails.incidentId || $popupDetails.customContent) && $popupDetails.position && $popupDetails.slot == popupSlot}
 	<Popup details={$popupDetails} {incidentLookup} />
 {/if}
+
+<style>
+	.timeline-year-label {
+		font-family: "Unify Sans", sans-serif;
+		font-size: 12px;
+	}
+	.timeline-controls {
+		display: flex;
+		justify-content: flex-end;
+		margin-bottom: 1em;
+	}
+	:global(.timeline-chart-month-axis .domain) {
+		display: none;
+		opacity: 0;
+	}
+
+	:global(.timeline-chart-year-label) {
+		color: #404040;
+		font-size: 12px;
+		font-weight: 700;
+	}
+
+	@media (min-width: 600px) {
+		:global(.timeline-chart-year-label) {
+			font-size: 16px;
+		}
+	}
+</style>
