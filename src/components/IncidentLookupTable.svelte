@@ -15,7 +15,7 @@
 	let itemsPerPage = 10;
 	let sortColumn = "real_date";
 	let sortAscending = false;
-	let showSearchClearButton = false;
+	let showClearButton = false;
 	let typeFilter = null;
 	let stateFilter = null;
 
@@ -88,11 +88,12 @@
 
 	// calculate total number of pages based on filtered results
 	$: totalPages = Math.ceil(filteredIncidents.length / itemsPerPage);
-	// reset page to zero upon search or filtering
 
+	// reset page to zero upon search or filtering
 	$: if (searchFilter || stateFilter || typeFilter) {
 		currentPage = 0;
 	}
+	$: showClearButton = (searchFilter || stateFilter || typeFilter)
 
 	// click event handler for headers, set sort options
 	function handleHeaderClick(header) {
@@ -104,48 +105,44 @@
 			sortColumn = header[0];
 		}
 	}
-
-	function onSearchFocus() {
-		showSearchClearButton = false;
-	}
-
-	function onSearchBlur() {
-		if (searchFilter != "") {
-			showSearchClearButton = true;
-		}
+	function clearFilters() {
+		searchFilter = "";
+		stateFilter = null;
+		typeFilter = null;
 	}
 </script>
 
 <div class="table-wrapper">
 	<div class="table-top-control-wrap">
-		<div class="search-wrap">
-			<span class="search-icon-wrap"
-				><svg
-					width="25"
-					height="22"
-					viewBox="0 0 25 22"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-					class="search-icon">
-					<path
-						fill-rule="evenodd"
-						clip-rule="evenodd"
-						d="M7.90083 13.403C10.8098 13.403 13.1681 11.0027 13.1681 8.04182C13.1681 5.0809 10.8098 2.68061 7.90083 2.68061C4.99183 2.68061 2.63361 5.0809 2.63361 8.04182C2.63361 11.0027 4.99183 13.403 7.90083 13.403ZM7.90083 16.0836C12.2643 16.0836 15.8017 12.4832 15.8017 8.04182C15.8017 3.60044 12.2643 0 7.90083 0C3.53732 0 0 3.60044 0 8.04182C0 12.4832 3.53732 16.0836 7.90083 16.0836Z"
-						fill={colors["grey"]} />
-					<path
-						fill-rule="evenodd"
-						clip-rule="evenodd"
-						d="M13.6336 11.5889L22 20.1045L20.1378 22L11.7714 13.4843L13.6336 11.5889Z"
-						fill={colors["grey"]} />
-				</svg></span>
-			<input
-				type="text"
-				bind:value={searchFilter}
-				placeholder="Search by date or location"
-				class="incident-lookup-table-search-input"
-				on:focus={onSearchFocus}
-				on:blur={onSearchBlur} />
-			<span class="search-clear-button" class:show={showSearchClearButton}>x</span>
+		<div>
+			<label class="search-label" for="table-search-input">Search</label>
+			<div class="search-wrap">
+				<span class="search-icon-wrap">
+					<svg
+						width="25"
+						height="22"
+						viewBox="0 0 25 22"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+						class="search-icon">
+						<path
+							fill-rule="evenodd"
+							clip-rule="evenodd"
+							d="M7.90083 13.403C10.8098 13.403 13.1681 11.0027 13.1681 8.04182C13.1681 5.0809 10.8098 2.68061 7.90083 2.68061C4.99183 2.68061 2.63361 5.0809 2.63361 8.04182C2.63361 11.0027 4.99183 13.403 7.90083 13.403ZM7.90083 16.0836C12.2643 16.0836 15.8017 12.4832 15.8017 8.04182C15.8017 3.60044 12.2643 0 7.90083 0C3.53732 0 0 3.60044 0 8.04182C0 12.4832 3.53732 16.0836 7.90083 16.0836Z"
+							fill={colors["grey"]} />
+						<path
+							fill-rule="evenodd"
+							clip-rule="evenodd"
+							d="M13.6336 11.5889L22 20.1045L20.1378 22L11.7714 13.4843L13.6336 11.5889Z"
+							fill={colors["grey"]} />
+					</svg></span>
+				<input
+					type="text"
+					id="table-search-input"
+					bind:value={searchFilter}
+					placeholder="Search by date or location"
+					class="incident-lookup-table-search-input" />
+			</div>
 		</div>
 		<FilterSelect
 			bind:currentValue={stateFilter}
@@ -155,6 +152,7 @@
 			bind:currentValue={typeFilter}
 			options={typeFilterOptions}
 			filterLabel="Filter by type" />
+		<button class="incident-lookup-table-clear-filters-button table-ui-button" on:click={clearFilters} class:show={showClearButton}>Clear filters</button>
 	</div>
 	<table class="incident-lookup-table">
 		<thead>
@@ -190,13 +188,13 @@
 			<div class="incident-page-control-group">
 				{#if currentPage > 0}
 					<button
-						class="incident-lookup-table-page-button"
+						class="incident-lookup-table-page-button table-ui-button"
 						on:click={() => (currentPage -= 1)}
 						aria-label="Previous page">←</button>
 				{/if}
 				{#if currentPage + 1 < totalPages}
 					<button
-						class="incident-lookup-table-page-button"
+						class="incident-lookup-table-page-button table-ui-button"
 						on:click={() => (currentPage += 1)}
 						aria-label="Next page">→</button>
 				{/if}
@@ -288,7 +286,10 @@
 	}
 	.search-wrap {
 		position: relative;
-		display: inline-block;
+		display: block;
+	}
+	.search-label {
+		font-size: 0.8em;
 	}
 	.incident-lookup-table-search-input {
 		border: solid 1px var(--mk-color-grey-light);
@@ -302,15 +303,6 @@
 		top: 5px;
 		left: 5px;
 	}
-	.search-clear-button {
-		display: none;
-		/* position: absolute; */
-		right: 2px;
-		top: 2px;
-	}
-	.search-clear-button.show {
-		/* display: block; */
-	}
 	.incident-lookup-table-page-info {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
@@ -322,19 +314,29 @@
 		font-style: italic;
 		color: var(--mk-color-grey);
 	}
+	.table-ui-button {
+		background-color: var(--mk-color-grey-light);
+		border: solid 1px var(--mk-color-grey);
+		border-radius: 5px;
+		cursor: pointer;
+		transition: background-color 250ms ease;
+	}
 	.incident-lookup-table-page-button {
 		width: 40px;
 		height: 40px;
-		background-color: var(--mk-color-grey-light);
-		border: solid 1px var(--mk-color-grey);
-		/* border: none; */
-		border-radius: 5px;
-		cursor: pointer;
 		font-size: 1.2em;
-		transition: background-color 250ms ease;
 	}
-	.incident-lookup-table-page-button:hover {
+	.table-ui-button:hover {
 		background-color: var(--mk-color-grey);
+	}
+	.incident-lookup-table-clear-filters-button {
+		display: none;
+		font-size: 0.8em;
+		padding: 8px 5px;
+		max-width: 150px;
+	}
+	.incident-lookup-table-clear-filters-button.show {
+		display: block;
 	}
 	.incident-page-control-group {
 		text-align: right;
@@ -344,9 +346,10 @@
 		font-size: 0.8em;
 	}
 	.table-top-control-wrap {
-		display: flex;
-		align-items: flex-end;
-		justify-content: space-between;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		column-gap: 4px;
+		align-items: end;
 		margin: 1em auto;
 		flex-wrap: wrap;
 	}
@@ -354,6 +357,13 @@
 		.incident-lookup-table tbody td,
 		.incident-lookup-table thead th {
 			display: table-cell;
+		}
+	}
+	@media (min-width: 620px) {
+		.table-top-control-wrap {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr) 0.75fr;
+			column-gap: 4px;
 		}
 	}
 	@media (min-width: 768px) {
