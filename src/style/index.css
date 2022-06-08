@@ -99,6 +99,10 @@ body {
 	.usat-interactive-graphic .in-depth-article-width {
 		padding: 0 18vw;
 	}
+	.chart-wrap-double-group {
+		max-width: 1200px;
+		margin: 0 auto;
+	}
 }
 @media (min-width: 1024px) {
 	.usat-interactive-graphic .in-depth-article-width {

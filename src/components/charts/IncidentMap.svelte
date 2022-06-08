@@ -34,7 +34,7 @@
 	$: projection = d3
 		.geoAlbersUsa()
 		.scale(width * 1.1)
-		.translate([width / 2, height / 2]);
+		.translate([width / 1.75, height / 2]);
 	$: path = d3.geoPath().projection(projection);
 	$: typeFilterOptions = incidents
 		.map((d) => d.type)
@@ -91,7 +91,7 @@
 	}
 </script>
 
-<div class="chart-wrapper" bind:clientWidth={width}>
+<div class="chart-wrap-double-group" bind:clientWidth={width}>
 	<div class="map-controls">
 		<FilterSelect
 			bind:currentValue={typeFilter}
