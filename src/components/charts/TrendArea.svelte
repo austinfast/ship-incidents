@@ -112,37 +112,6 @@
 	}
 </script>
 
-<style>
-	:global(.tick text) {
-		color: "#404040";
-		font-family: var(--font-family-sans, sans-serif);
-		font-weight: 700;
-	}
-
-	.key-wrapper {
-		display: flex;
-	}
-
-	.key-item {
-		display: flex;
-		/* justify-content: center; */
-		align-items: center;
-		margin-right: 10px;
-	}
-
-	.key-item-swatch {
-		width: 10px;
-		height: 10px;
-	}
-
-	p.key-item-label {
-		font-size: var(--font-size-small);
-		line-height: var(--line-height-small);
-		margin-bottom: 0;
-		margin-left: 5px;
-	}
-</style>
-
 <div class="trend-line-wrap chart-wrapper" bind:this={wrapEl} bind:clientWidth={width}>
 	<div class="key-wrapper">
 		{#each yearlyVariables as yearlyVariable}
@@ -184,3 +153,36 @@
 		</g>
 	</svg>
 </div>
+
+<style>
+	:global(.tick text) {
+		color: var(--mk-color-grey-dark);
+		font-family: var(--mk-font-family-sans, sans-serif);
+		font-weight: 700;
+	}
+
+	.key-wrapper {
+		display: flex;
+	}
+
+	.key-item {
+		display: flex;
+		/* justify-content: center; */
+		align-items: center;
+		margin-right: 10px;
+	}
+
+	.key-item-swatch {
+		width: 10px;
+		height: 10px;
+	}
+
+	p.key-item-label {
+		font-size: var(--mk-font-size-small);
+		line-height: var(--mk-line-height-small);
+		font-family: var(--mk-font-family-sans, sans-serif);
+		font-weight: 700;
+		margin-bottom: 0;
+		margin-left: 5px;
+	}
+</style>

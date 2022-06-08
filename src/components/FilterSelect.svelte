@@ -33,10 +33,11 @@
 <style>
 	.filter-select {
 		appearance: none;
-		border: solid 1px var(--mk-color-grey-light);
+		border: solid 1px var(--mk-color-grey);
 		border-radius: 5px;
 		cursor: pointer;
-		color: var(--mk-color-grey);
+		color: var(--mk-color-grey-dark);
+		font-family: var(--mk-font-family-sans, sans-serif);
 		padding: 8px 25px 8px 5px;
 		display: block;
 		min-width: 160px;

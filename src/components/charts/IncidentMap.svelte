@@ -15,7 +15,7 @@
 	let width = 300;
 	let typeFilter = null;
 	$: minCircleRadius = (width < 400 ? 3 : 4) / zoomTransform.k;
-	$: maxCircleRadius = (width < 400 ? 20 : width < 768 ? 25 : 30) / zoomTransform.k;
+	$: maxCircleRadius = (width < 500 ? 20 : width < 768 ? 25 : 30) / zoomTransform.k;
 	$: stateLabelSize = 10;
 
 	let incidents = [];
@@ -34,7 +34,7 @@
 	$: projection = d3
 		.geoAlbersUsa()
 		.scale(width * 1.1)
-		.translate([width / 1.75, height / 2]);
+		.translate([width / 1.9, height / 2]);
 	$: path = d3.geoPath().projection(projection);
 	$: typeFilterOptions = incidents
 		.map((d) => d.type)

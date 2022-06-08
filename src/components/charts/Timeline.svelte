@@ -165,8 +165,9 @@
 
 <style>
 	.timeline-year-label {
-		font-family: "Unify Sans", sans-serif;
-		font-size: 12px;
+		font-family: var(--mk-font-family-sans, sans-serif);
+		font-weight: 700;
+		font-size: var(--mk-font-size-small, 12px);
 	}
 	.timeline-controls {
 		display: flex;
@@ -179,14 +180,19 @@
 	}
 
 	:global(.timeline-chart-year-label) {
-		color: #404040;
-		font-size: 12px;
+		color: var(--mk-color-grey-dark);
+		font-size: var(--mk-font-size-small, 12px);
+		font-weight: 700;
+	}
+	:global(.timeline-month-labels text) {
+		color: var(--mk-color-grey-dark);
+		font-size: 10px;
 		font-weight: 700;
 	}
 
 	@media (min-width: 600px) {
 		:global(.timeline-chart-year-label) {
-			font-size: 16px;
+			font-size: var(--mk-font-size-medium, 16px);
 		}
 	}
 </style>

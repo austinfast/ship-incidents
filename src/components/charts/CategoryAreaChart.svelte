@@ -2,16 +2,15 @@
 	import * as d3 from "d3";
 	import colors from "../../lib/colors.js";
 
-	export let categories; 
+	export let categories;
 	export let incidentData;
-	console.log(incidentData);
 	let summaryStatistics;
 	let width = 800;
 
 	// data
 	incidentData.then((d) => {
 		summaryStatistics = d.overallSummary;
-	})
+	});
 	$: margin = {
 		top: 0,
 		right: 0,
@@ -32,16 +31,7 @@
 		.range([0, boxSize]);
 </script>
 
-<style>
-	.chart-label {
-		text-align: right;
-		font-size: 12px;
-		transform: translate(-5px, 12px);
-		font-family: var(--mk-font-family-sans);
-	}
-</style>
-
-<div class="chart-wrapper" bind:clientWidth={width}>
+<div class="chart-wrapper category-chart" bind:clientWidth={width}>
 	{#if summaryStatistics}
 		<svg {width} height={boxSize}>
 			<g class="chart-group" transform="translate({margin.left}, {margin.top})">
@@ -66,3 +56,20 @@
 		</svg>
 	{/if}
 </div>
+
+<style>
+	.chart-label {
+		text-align: right;
+		font-size: 12px;
+		transform: translate(-5px, 12px);
+		font-family: var(--mk-font-family-sans);
+	}
+	.category-chart {
+		width: 100%
+	}
+	@media (min-width: 1024px) {
+		.category-chart {
+			width: 50%;
+		}
+	}
+</style>

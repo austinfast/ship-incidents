@@ -8,7 +8,7 @@
 	let items = [];
 	let wrapEl;
 	let width = 900;
-	let barMargin = 10;
+	let barMargin = 5;
 	let labelSize = 12;
 	let margin = {
 		top: 20,
@@ -16,7 +16,7 @@
 		bottom: 10,
 		left: 0,
 	};
-	$: barHeight = width >= 600 ? 30 : 20;
+	$: barHeight = width >= 600 ? 35 : 30;
 	$: chartWidth = width - margin.left - margin.right;
 	$: height =
 		items.length * (barHeight + barMargin * 2 + labelSize) + margin.top + margin.bottom;
@@ -28,30 +28,6 @@
 		items = d.locationTypes;
 	});
 </script>
-
-<style>
-	.ranked-bar-chart {
-		display: block;
-	}
-
-	.ranked-bar-label {
-		fill: #404040;
-		font-size: var(--font-size-small);
-		line-height: var(--line-height-small);
-	}
-
-	.ranked-bar-count {
-		font-weight: 700;
-		fill: #404040;
-	}
-
-	@media (min-width: 600px) {
-		.ranked-bar-label {
-			font-size: var(--font-size-medium);
-			line-height: var(--line-height-medium);
-		}
-	}
-</style>
 
 <div class="ranked-bar-wrap chart-wrapper" bind:this={wrapEl} bind:clientWidth={width}>
 	<svg class="ranked-bar-chart" {width} {height}>
@@ -76,3 +52,29 @@
 		</g>
 	</svg>
 </div>
+
+<style>
+	.ranked-bar-chart {
+		display: block;
+	}
+
+	.ranked-bar-label {
+		fill: var(--mk-color-grey-dark, #404040);
+		font-size: var(--mk-font-size-small);
+		line-height: var(--mk-line-height-small);
+		font-weight: 700;
+	}
+
+	.ranked-bar-count {
+		font-weight: 700;
+		fill: var(--mk-color-grey-dark, #404040);
+		font-size: var(--mk-font-size-small);
+	}
+
+	@media (min-width: 600px) {
+		.ranked-bar-label {
+			/* font-size: var(--mk-font-size-medium); */
+			/* line-height: var(--mk-line-height-medium); */
+		}
+	}
+</style>

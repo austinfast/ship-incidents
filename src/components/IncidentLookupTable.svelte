@@ -294,7 +294,8 @@
 		font-size: 0.8em;
 	}
 	.incident-lookup-table-search-input {
-		border: solid 1px var(--mk-color-grey-light);
+		border: solid 1px var(--mk-color-grey);
+		font-family: var(--mk-font-family-sans, sans-serif);
 		padding: 8px 5px 8px 30px;
 		min-width: 160px;
 		border-radius: 5px;
@@ -314,7 +315,9 @@
 	.incident-result-num {
 		grid-column-start: 2;
 		font-style: italic;
-		color: var(--mk-color-grey);
+		color: var(--mk-color-grey-dark);
+		font-family: var(--mk-font-family-sans, sans-serif);
+		font-size: 0.8em;
 	}
 	.table-ui-button {
 		background-color: var(--mk-color-grey-light);
@@ -346,6 +349,7 @@
 	}
 	.incident-page-num {
 		font-size: 0.8em;
+		font-family: var(--mk-font-family-sans, sans-serif);
 	}
 	.table-top-control-wrap {
 		display: grid;

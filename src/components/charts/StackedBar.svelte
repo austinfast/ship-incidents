@@ -94,8 +94,9 @@
 	}
 
 	.key-item-label {
-		font-size: var(--font-size-small);
-		line-height: var(--line-height-small);
+		font-size: var(--mk-font-size-small);
+		line-height: var(--mk-line-height-small);
+		font-family: var(--mk-font-family-sans, sans-serif);
 		margin-left: 5px;
 		margin-bottom: 0;
 	}

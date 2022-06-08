@@ -2,7 +2,6 @@
 	import CategoryAreaChart from "./charts/CategoryAreaChart.svelte";
 
 	export let incidentData;
-	console.log(incidentData);
 
 	const incidentCategories = [
 		{
@@ -43,5 +42,12 @@
 	.category-charts {
 		display: flex;
 		justify-content: center;
+		width: 100%;
+		flex-wrap: wrap;
+	}
+	@media (min-width: 1024px) {
+		.category-charts {
+			flex-wrap: nowrap;
+		}
 	}
 </style>
