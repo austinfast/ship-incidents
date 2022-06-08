@@ -147,10 +147,12 @@
 		<FilterSelect
 			bind:currentValue={stateFilter}
 			options={stateFilterOptions}
+			defaultLabel="All"
 			filterLabel="Filter by state" />
 		<FilterSelect
 			bind:currentValue={typeFilter}
 			options={typeFilterOptions}
+			defaultLabel="All"
 			filterLabel="Filter by type" />
 		<button class="incident-lookup-table-clear-filters-button table-ui-button" on:click={clearFilters} class:show={showClearButton}>Clear filters</button>
 	</div>
