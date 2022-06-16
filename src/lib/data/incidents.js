@@ -67,6 +67,10 @@ function formatYearlySummaries(rawIncidents) {
 						incident.metaType == "mass_public_shooting"
 							? yearInfo.mass_shooting_victims + incident.victims
 							: yearInfo.mass_shooting_victims,
+					non_public_mass_shooting_victims:
+						incident.metaType == "mass_shooting"
+							? yearInfo.non_public_mass_shooting_victims + incident.victims
+							: yearInfo.non_public_mass_shooting_victims,
 					mass_public_shooting_victims:
 						incident.metaType == "mass_public_shooting"
 							? yearInfo.mass_public_shooting_victims + incident.victims
@@ -94,22 +98,38 @@ function formatYearlySummaries(rawIncidents) {
 						incident.metaType == "mass_public_shooting"
 							? yearInfo.mass_shootings + 1
 							: yearInfo.mass_shootings,
+					non_public_mass_shootings:
+						incident.metaType == "mass_shooting"
+							? yearInfo.non_public_mass_shootings + 1
+							: yearInfo.non_public_mass_shootings,
 					mass_public_shootings:
 						incident.metaType == "mass_public_shooting"
 							? yearInfo.mass_public_shootings + 1
 							: yearInfo.mass_public_shootings,
+					non_shooting_mass_killings:
+						incident.metaType == "mass_killing"
+							? yearInfo.non_shooting_mass_killings + 1
+							: yearInfo.non_shooting_mass_killings,
+					non_shooting_mass_killing_victims:
+						incident.metaType == "mass_killing"
+							? yearInfo.non_shooting_mass_killing_victims + incident.victims
+							: yearInfo.non_shooting_mass_killing_victims,
 				});
 			},
 			{
 				year,
 				year_date: parseDate(year + "-1-1"),
 				victims: 0,
-				mass_shooting_victims: 0,
-				mass_public_shooting_victims: 0,
 				numinjured: 0,
 				incidents: 0,
-				mass_shootings: 0,
 				mass_public_shootings: 0,
+				mass_public_shooting_victims: 0,
+				mass_shootings: 0,
+				mass_shooting_victims: 0,
+				non_public_mass_shootings: 0,
+				non_public_mass_shooting_victims: 0,
+				non_shooting_mass_killings: 0,
+				non_shooting_mass_killing_victims: 0,
 				incidents_family: 0,
 				incidents_public: 0,
 				incidents_felony: 0,
@@ -122,10 +142,9 @@ function formatYearlySummaries(rawIncidents) {
 }
 
 function getAllYears(rawIncidents) {
-	return rawIncidents
-		.map((d) => d.year)
-		.filter((value, index, self) => self.indexOf(value) === index)
-		.sort((a, b) => parseInt(a) - parseInt(b));
+	return Array.from(new Set(rawIncidents.map((d) => d.year))).sort(
+		(a, b) => parseInt(a) - parseInt(b)
+	);
 }
 /*
  * Summarizes various high level statistics across all years
