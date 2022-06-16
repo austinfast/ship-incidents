@@ -22,7 +22,7 @@ async function generateIncidentData() {
 	let incidentLookup = {};
 
 	// set parse and set a few additional variables for each incident
-	rawIncidents.forEach((incident) => {
+	rawIncidents.incidents.forEach((incident) => {
 		// a real JS date
 		incident.real_date = parseDate(incident.date);
 
@@ -31,16 +31,16 @@ async function generateIncidentData() {
 		incidentLookup[incident.id] = incident;
 	});
 	// format yearly summary data
-	const yearlySummaries = formatYearlySummaries(rawIncidents);
+	const yearlySummaries = formatYearlySummaries(rawIncidents.incidents);
 
 	// format overall summary data
 	const overallSummary = formatOverallSummary(yearlySummaries);
 
 	// count location types
-	const locationTypes = countTypes(rawIncidents, "location_type");
+	const locationTypes = countTypes(rawIncidents.incidents, "location_type");
 
 	return {
-		incidents: rawIncidents,
+		incidents: rawIncidents.incidents,
 		incidentLookup,
 		yearlySummaries,
 		overallSummary,

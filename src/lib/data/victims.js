@@ -1,10 +1,4 @@
-import {
-	getDataURL,
-	getDataFromURL,
-	countTypes,
-	getAgeBins,
-	getAgeScale,
-} from "./index.js";
+import { getDataURL, getDataFromURL } from "./index.js";
 
 export let victimData = null;
 
@@ -24,18 +18,18 @@ async function generateVictimData() {
 	const rawData = await getDataFromURL(dataURL);
 
 	// count victim relationships
-	const victimRelationships = getRelationshipCounts(rawData);
+	//@TODO move this to back end
+	const victimRelationships = getRelationshipCounts(rawData.victims);
 
-	const victimAgeScale = getAgeScale(rawData);
-	const victimAges = getAgeBins(rawData, victimAgeScale);
-	const victimGenderCounts = countTypes(rawData, "sex");
 	return {
-		victimRelationships,
-		victimAges,
-		victimGenderCounts,
+		victimRelationships: victimRelationships,
+		victimAges: rawData.summaries.victimAges,
+		victimGenderCounts: rawData.summaries.victimGenderCounts,
+		updated_at: rawData.updated_at
 	};
 }
 
+//@TODO move this to back end
 function getRelationshipCounts(victims) {
 	return victims.reduce((allCounts, victim) => {
 		if (allCounts[victim.relationshipcat]) {

@@ -1,4 +1,4 @@
-import { getDataURL, getDataFromURL, countTypes, getAgeBins, getAgeScale} from "./index.js";
+import { getDataURL, getDataFromURL } from "./index.js";
 
 let offenderData = null;
 
@@ -16,29 +16,17 @@ async function generateOffenderData() {
 	console.log("get offender data");
 	const dataURL = getDataURL("offenders.json");
 	const rawData = await getDataFromURL(dataURL);
-	// clean offenders
-	const cleanedOffenders = cleanOffenders(rawData);
 
 	// offender age bins
-	const offenderAgeScale = getAgeScale(cleanedOffenders);
-	const offenderAges = getAgeBins(cleanedOffenders, offenderAgeScale);
+	//@TODO remove this and do it on the back end
 
 	// offender sex
-	const offenderGenderCounts = countTypes(cleanedOffenders, "sex");
+	//@TODO remove this and do it on the back end
 	return {
-		offenders: cleanedOffenders,
-		offenderAges,
-		offenderGenderCounts
+		offenders: rawData.offenders,
+		offenderAges: rawData.summaries.offenderAges,
+		offenderGenderCounts: rawData.summaries.offenderGenderCounts,
+		offenderRaceCounts: rawData.summaries.offenderRaceCounts,
+		updated_at: rawData.updated_at
 	}
-}
-
-function cleanOffenders(rawOffenders) {
-	return rawOffenders.map((offender) => {
-		let cleanOffender = Object.assign({}, offender);
-		// replace empty and null sex fields with "Unknown"
-		if (cleanOffender.sex == "" || cleanOffender.sex == null) {
-			cleanOffender.sex = "Unknown";
-		}
-		return cleanOffender;
-	});
 }

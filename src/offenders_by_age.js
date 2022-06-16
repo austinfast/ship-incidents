@@ -13,7 +13,6 @@ let ageHistogram = new AgeHistogram({
 		color: colors.blue,
 		sourceData: getOffenderData(),
 		ageBinKey: "offenderAges",
-		ageScaleKey: "offenderAgeScale",
 	}
 });
 
