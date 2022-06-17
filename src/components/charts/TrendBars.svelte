@@ -1,4 +1,5 @@
 <script>
+	import { onMount } from "svelte";
 	import * as d3 from "d3";
 	import colors from "../../lib/colors.js";
 
@@ -18,7 +19,9 @@
 	let width;
 	let height = 350;
 	let defaultDate = new Date();
+	let svgEl;
 	const curve = d3.curveStep;
+
 	// const curve = d3.curveBumpX;
 
 	$: margin = {
@@ -34,15 +37,8 @@
 		.domain(yearlyVariables.map((c) => c.field))
 		.range([colors["orange-dark"], colors["orange"], colors["orange-light"]]);
 	$: scaleX = d3
-		.scaleTime()
-		.domain([
-			yearlyData.length > 0 ? yearlyData[0].year_date : defaultDate,
-			yearlyData.length > 0 ? yearlyData[yearlyData.length - 1].year_date : defaultDate,
-		])
-		.range([0, chartWidth]);
-	$: scaleXNew = d3
 		.scaleBand()
-		.domain(yearlyData.map(d => d.year))
+		.domain(yearlyData.map((d) => d.year))
 		.range([0, chartWidth]);
 
 	$: scaleY = d3
@@ -58,18 +54,18 @@
 			}),
 		])
 		.range([height - margin.bottom, margin.top]);
-		$: console.log(scaleY.domain())
-	$: posY = function(yearData, varIdx) {
+	$: console.log(scaleY.domain());
+	$: posY = function (yearData, varIdx) {
 		let y = 0;
 		for (let i = varIdx; i >= 0; i--) {
 			y += scaleY(0) - scaleY(yearData[yearlyVariables[i].field]);
 		}
 		return chartHeight - y;
-	}
+	};
 
 	$: xTicksEvery = width < 500 ? 2 : 1;
 	$: axisY = d3.axisLeft(scaleY);
-	$: axisX = d3.axisBottom(scaleXNew);
+	$: axisX = d3.axisBottom(scaleX);
 	$: if (xAxisEl) {
 		d3.select(xAxisEl)
 			.call(axisX)
@@ -86,6 +82,10 @@
 				g.selectAll(".domain").attr("stroke", "#DEDEDE");
 				g.select(".domain").remove();
 			});
+	}
+	function isCurrentYear(year) {
+		let currentDate = new Date();
+		return parseInt(year) == currentDate.getFullYear();
 	}
 
 	function hexToRGB(hex, alpha) {
@@ -112,16 +112,26 @@
 			</div>
 		{/each}
 	</div>
-	<svg {width} {height}>
+	<svg {width} {height} bind:this={svgEl}>
 		<g class="chart-g" transform="translate({margin.left}, {margin.top})">
 			<g class="x-axis-g" transform="translate(0, {chartHeight})" bind:this={xAxisEl} />
-			<g class="y-axis-g" bind:this={yAxisEl} transform="translate(0, {-margin.bottom})"/>
-			<g class="new-data-g">
+			<g
+				class="y-axis-g"
+				bind:this={yAxisEl}
+				transform="translate(0, {-margin.bottom})" />
+			<g class="data-g">
 				{#each yearlyData as year}
-					<g class="year-g" transform="translate({scaleXNew(year.year)})">
-					{#each yearlyVariables as yearlyVariable, i}
-						<rect height={scaleY(0) - scaleY(year[yearlyVariable.field])} y={posY(year, i)} width={scaleXNew.bandwidth()} fill={colorScale(yearlyVariable.field)} fill-opacity="0.9" stroke={colorScale(yearlyVariable.field)} stroke-width="0"></rect>
-					{/each}
+					<g class="year-g" transform="translate({scaleX(year.year)})">
+						{#each yearlyVariables as yearlyVariable, i}
+							<rect
+								class:current-year={isCurrentYear(year.year)}
+								height={scaleY(0) - scaleY(year[yearlyVariable.field])}
+								y={posY(year, i)}
+								width={scaleX.bandwidth()}
+								fill={colorScale(yearlyVariable.field)}
+								stroke={colorScale(yearlyVariable.field)}
+								stroke-width="0" />
+						{/each}
 					</g>
 				{/each}
 			</g>
@@ -160,11 +170,11 @@
 		margin-bottom: 0;
 		margin-left: 5px;
 	}
-	.data-g {
-		display: none;
-	}
 	rect:hover {
 		stroke-width: 2;
 		stroke-alignment: inner;
+	}
+	rect.current-year {
+		fill-opacity: 0.75;
 	}
 </style>
