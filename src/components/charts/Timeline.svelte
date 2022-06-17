@@ -1,6 +1,8 @@
 <script>
+	import { fade } from "svelte/transition";
 	import * as d3 from "d3";
 	import Popup from "../Popup.svelte";
+	import Loading from "../Loading.svelte";
 	import FilterSelect from "../FilterSelect.svelte";
 	import { filterUnique } from "../../lib/utils.js";
 	import { popupDetails } from "../../stores/popup.js";
@@ -57,7 +59,11 @@
 			};
 		});
 	// filter incidents down based on all filters
-	$: filteredIncidents = typeFilter ? incidents.filter((d) => d.type.toLowerCase().indexOf(typeFilter.toLowerCase()) >= 0) : incidents;
+	$: filteredIncidents = typeFilter
+		? incidents.filter(
+				(d) => d.type.toLowerCase().indexOf(typeFilter.toLowerCase()) >= 0
+		  )
+		: incidents;
 
 	// data
 	incidentData.then((d) => {
@@ -93,69 +99,75 @@
 </script>
 
 <div class="chart-wrapper" bind:this={wrapEl} bind:clientWidth={width}>
-	<div class="timeline-controls">
-		<FilterSelect
-			bind:currentValue={typeFilter}
-			options={typeFilterOptions}
-			defaultLabel="All"
-			filterLabel="Filter by type" />
-	</div>
-	<svg class="timeline-svg" bind:this={svgEl} {width} {height}>
-		<g class="chart-inner" transform="translate({margin.left}, {margin.top})">
-			<g class="timeline-yearinfo-group">
-				{#each years as year}
-					<g
-						class="timeline-year-group"
-						transform="translate({-margin.left}, {yScale(year)})">
-						<line
-							x1={margin.left - 20}
-							x2={width - margin.right + 20}
-							y1={0}
-							y2={0}
-							stroke="black" />
-						<text class="timeline-year-label">{year}</text>
-					</g>
-				{/each}
-			</g>
-			<g class="timeline-incident-group">
-				{#each filteredIncidents as incident}
-					<path
-						transform="translate({xScale(getDaysIntoYear(incident.real_date))}, {yScale(
-							incident.year
-						)})"
-						d={arc({
-							innerRadius: 0,
-							outerRadius: circleRadiusScale(incident.victims),
-							startAngle: -Math.PI * 0.5,
-							endAngle: Math.PI * 0.5,
-						})}
-						fill={colors.orange}
-						opacity="0.75"
-						stroke="#404040"
-						on:mouseenter={(e) => onDetails(incident, [e.clientX, e.clientY])}
-						on:mousemove={(e) => onDetails(incident, [e.clientX, e.clientY])}
-						on:mouseleave={(e) => onDetails()} />
-				{/each}
-			</g>
-			{#if years.length > 0}
-				<g
-					class="timeline-month-labels"
-					transform="translate(0, {yScale(years[years.length - 1])})">
-					{#each months as month, idx}
-						{#if idx % monthsEvery == 0}
+	{#await incidentData}
+		<Loading height={500}/>
+	{:then _}
+		<div class="chart-inner" transition:fade>
+			<div class="timeline-controls">
+				<FilterSelect
+					bind:currentValue={typeFilter}
+					options={typeFilterOptions}
+					defaultLabel="All"
+					filterLabel="Filter by type" />
+			</div>
+			<svg class="timeline-svg" bind:this={svgEl} {width} {height}>
+				<g class="chart-inner" transform="translate({margin.left}, {margin.top})">
+					<g class="timeline-yearinfo-group">
+						{#each years as year}
 							<g
-								class="timeline-month-label-group"
-								transform="translate({(chartWidth / 12) * idx}, {monthTickHeight})">
-								<line x1="0" x2="0" y1="0" y2={-monthTickHeight} stroke="black" />
-								<text font-size={monthTickHeight} y={monthTickHeight} x="-8"
-									>{month.shortName}</text>
+								class="timeline-year-group"
+								transform="translate({-margin.left}, {yScale(year)})">
+								<line
+									x1={margin.left - 20}
+									x2={width - margin.right + 20}
+									y1={0}
+									y2={0}
+									stroke="black" />
+								<text class="timeline-year-label">{year}</text>
 							</g>
-						{/if}
-					{/each}
+						{/each}
+					</g>
+					<g class="timeline-incident-group">
+						{#each filteredIncidents as incident}
+							<path
+								transform="translate({xScale(
+									getDaysIntoYear(incident.real_date)
+								)}, {yScale(incident.year)})"
+								d={arc({
+									innerRadius: 0,
+									outerRadius: circleRadiusScale(incident.victims),
+									startAngle: -Math.PI * 0.5,
+									endAngle: Math.PI * 0.5,
+								})}
+								fill={colors.orange}
+								opacity="0.75"
+								stroke="#404040"
+								on:mouseenter={(e) => onDetails(incident, [e.clientX, e.clientY])}
+								on:mousemove={(e) => onDetails(incident, [e.clientX, e.clientY])}
+								on:mouseleave={(e) => onDetails()} />
+						{/each}
+					</g>
+					{#if years.length > 0}
+						<g
+							class="timeline-month-labels"
+							transform="translate(0, {yScale(years[years.length - 1])})">
+							{#each months as month, idx}
+								{#if idx % monthsEvery == 0}
+									<g
+										class="timeline-month-label-group"
+										transform="translate({(chartWidth / 12) * idx}, {monthTickHeight})">
+										<line x1="0" x2="0" y1="0" y2={-monthTickHeight} stroke="black" />
+										<text font-size={monthTickHeight} y={monthTickHeight} x="-8"
+											>{month.shortName}</text>
+									</g>
+								{/if}
+							{/each}
+						</g>
+					{/if}
 				</g>
-			{/if}
-		</g>
-	</svg>
+			</svg>
+		</div>
+	{/await}
 </div>
 <!-- @todo need to figure out how to manage data/state in the popup component. right now things are too split up between parent components, stores, and data manager. -->
 <!-- really need to streamline this before it will work well. -->

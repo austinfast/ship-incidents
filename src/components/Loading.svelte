@@ -79,7 +79,7 @@
   }
 }
 </style>
-<div class="loading-module-wrapper" style="height: {height}">
+<div class="loading-module-wrapper" style="height: {height}px">
   <div class="loading-icon">
     <div class="loading-icon-content">
       <div class="loading-icon-text">Loading</div>
