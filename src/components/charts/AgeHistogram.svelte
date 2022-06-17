@@ -9,6 +9,8 @@
 	let binnedData = [];
 	let xAxisEl;
 	let yAxisEl;
+	const numYTicks = 5;
+	const tickHeight = 12;
 
 	sourceData.then((d) => {
 		binnedData = d[ageBinKey];
@@ -19,60 +21,98 @@
 		top: 50,
 		right: 20,
 		bottom: 20,
-		left: 20,
+		left: 50,
 	};
-	$: barmargin = width > 600 ? 10 : 5;
+	// $: barmargin = width > 600 ? 10 : 5;
+	$: barmargin = 0;
 	$: chartHeight = height - margin.top - margin.bottom;
 	$: chartWidth = width - margin.left - margin.right;
-	$: maxAge = binnedData.length > 0 ? d3.max(binnedData, bin => bin.x1) : 100;
-	$: xScale = d3.scaleLinear().domain([0, maxAge]).range([0, chartWidth]);
-	$: xAxis = d3.axisBottom(xScale).ticks(20);
-	$: yScale = d3
+	$: maxAge = binnedData.length > 0 ? d3.max(binnedData, (bin) => bin.x1) : 100;
+	$: scaleX = d3.scaleBand().domain(d3.range(maxAge)).range([0, chartWidth]);
+	$: xAxis = d3.axisBottom(scaleX).ticks(5);
+	$: xTicksEvery = width < 500 ? 10 : 5;
+	$: ticksY = scaleY.ticks(numYTicks);
+	$: scaleY = d3
 		.scaleLinear()
 		.domain([0, binnedData ? d3.max(binnedData.map((d) => d.length)) : 1])
 		.nice()
 		.range([chartHeight, 0]);
-	$: yAxis = d3.axisLeft(yScale).ticks(6).tickSize(-chartWidth);
-	$: if (xAxisEl) {
-		d3.select(xAxisEl)
-			.call(xAxis)
-			.call((g) => {
-				g.selectAll("line").attr("stroke", "#DEDEDE");
-				g.selectAll(".domain").attr("stroke", "#DEDEDE");
-			});
-	}
-	$: if (yAxisEl) {
-		d3.select(yAxisEl)
-			.call(yAxis)
-			.call((g) => {
-				g.selectAll("line").attr("stroke", "#DEDEDE");
-				g.selectAll(".domain").attr("stroke", "#DEDEDE");
-				g.select(".domain").remove();
-			});
-	}
+	$: yAxis = d3.axisLeft(scaleY).ticks(6).tickSize(-chartWidth);
+	// $: if (xAxisEl) {
+	// 	d3.select(xAxisEl)
+	// 		.call(xAxis)
+	// 		.call((g) => {
+	// 			g.selectAll("line").attr("stroke", "#DEDEDE");
+	// 			g.selectAll(".domain").attr("stroke", "#DEDEDE");
+	// 		});
+	// }
+	// $: if (yAxisEl) {
+	// 	d3.select(yAxisEl)
+	// 		.call(yAxis)
+	// 		.call((g) => {
+	// 			g.selectAll("line").attr("stroke", "#DEDEDE");
+	// 			g.selectAll(".domain").attr("stroke", "#DEDEDE");
+	// 			g.select(".domain").remove();
+	// 		});
+	// }
 </script>
 
 <div class="age-histogram-wrap chart-wrapper" bind:clientWidth={width}>
 	{#if binnedData}
 		<svg class="age-histogram-svg" {width} {height}>
-			<g
-				class="x-axis-group"
-				bind:this={xAxisEl}
-				transform="translate({margin.left}, {height - margin.bottom})" />
-			<g
-				class="y-axis-group"
-				bind:this={yAxisEl}
-				transform="translate({margin.left}, {margin.top})" />
 			<g class="chart-group" transform="translate({margin.left}, {margin.top})">
+				<g class="x-axis-g" transform="translate(0, {chartHeight})" bind:this={xAxisEl}>
+					{#each scaleX.domain() as tick, i}
+						{#if i % xTicksEvery == 0}
+							<g class="tick tick-{i}" transform="translate({scaleX(tick)})">
+								<text y={tickHeight + 2} x={scaleX.bandwidth() / 2}>{tick}</text>
+								<line
+									x1={scaleX.bandwidth() / 2}
+									x2={scaleX.bandwidth() / 2}
+									y1="0"
+									y2={tickHeight / 2} />
+							</g>
+						{/if}
+					{/each}
+				</g>
+				<g class="y-axis-g" transform="translate({-margin.left}, 0)">
+					{#each ticksY as tick, i}
+						<g
+							class="tick tick-{i}"
+							transform="translate({margin.left / 2}, {scaleY(tick)})">
+							<text y={-2} x={0}>{tick}</text>
+							<line y1={0} y2={0} x1={0} x2={width} />
+						</g>
+					{/each}
+				</g>
 				{#each binnedData as bin}
 					<rect
-						x={xScale(bin.x0)}
-						y={yScale(bin.length)}
-						width={Math.max(0, xScale(bin.x1) - xScale(bin.x0) - barmargin)}
-						height={yScale(0) - yScale(bin.length)}
+						x={scaleX(bin.x0)}
+						y={scaleY(bin.length)}
+						width={scaleX.bandwidth()}
+						height={scaleY(0) - scaleY(bin.length)}
 						fill={color} />
 				{/each}
 			</g>
 		</svg>
 	{/if}
 </div>
+<style>
+	.tick text {
+		font-size: 10px;
+		font-weight: 700px;
+		fill: var(--mk-color-grey-dark);
+		font-family: var(--mk-font-family-sans, sans-serif);
+		font-weight: 700;
+		text-anchor: middle;
+	}
+	.y-axis-g .tick text {
+		text-anchor: start;
+	}
+	.y-axis-g .tick line {
+		stroke: var(--mk-color-grey-light);
+	}
+	.tick line {
+		stroke: var(--mk-color-grey);
+	}
+</style>

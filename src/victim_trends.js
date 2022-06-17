@@ -1,26 +1,25 @@
 import "./style/fonts.css";
 import "./style/index.css";
-import TrendArea from "./components/charts/TrendArea.svelte";
+import TrendBars from "./components/charts/TrendBars.svelte";
 import { getIncidentData } from "./lib/data/incidents.js";
 
 const mainEl = document.getElementById("MK-victim_trends-embed");
-
 const yearlyVariables = [
 	{
-		field: "victims",
-		label: "Mass killing victims",
-	},
-	{
-		field: "mass_shooting_victims",
-		label: "Mass shooting victims",
-	},
-	{
 		field: "mass_public_shooting_victims",
-		label: "Mass public shooting victims",
+		label: "Public mass shooting victims",
+	},
+	{
+		field: "non_public_mass_shooting_victims",
+		label: "Non-public mass shooting victims",
+	},
+	{
+		field: "non_shooting_mass_killing_victims",
+		label: "Non-shooting mass killing victims",
 	},
 ];
 
-let trendArea = new TrendArea({
+let trendBars = new TrendBars({
 	target: mainEl,
 	props: {
 		yearlyVariables,

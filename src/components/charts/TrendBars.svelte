@@ -21,6 +21,8 @@
 	let defaultDate = new Date();
 	let svgEl;
 	const curve = d3.curveStep;
+	const tickHeight = 12;
+	const numYTicks = 5;
 
 	// const curve = d3.curveBumpX;
 
@@ -28,7 +30,7 @@
 		top: 20,
 		right: 20,
 		bottom: 20,
-		left: 30,
+		left: 50,
 	};
 	$: chartWidth = width - margin.left - margin.right;
 	$: chartHeight = height - margin.top - margin.bottom;
@@ -53,8 +55,7 @@
 				return totalVal;
 			}),
 		])
-		.range([height - margin.bottom, margin.top]);
-	$: console.log(scaleY.domain());
+		.range([chartHeight, 0]);
 	$: posY = function (yearData, varIdx) {
 		let y = 0;
 		for (let i = varIdx; i >= 0; i--) {
@@ -64,40 +65,10 @@
 	};
 
 	$: xTicksEvery = width < 500 ? 2 : 1;
-	$: axisY = d3.axisLeft(scaleY);
-	$: axisX = d3.axisBottom(scaleX);
-	$: if (xAxisEl) {
-		d3.select(xAxisEl)
-			.call(axisX)
-			.call((g) => {
-				g.selectAll("line").attr("stroke", "#DEDEDE");
-				g.selectAll(".domain").attr("stroke", "#DEDEDE");
-			});
-	}
-	$: if (yAxisEl) {
-		d3.select(yAxisEl)
-			.call(axisY)
-			.call((g) => {
-				g.selectAll("line").attr("stroke", "#DEDEDE");
-				g.selectAll(".domain").attr("stroke", "#DEDEDE");
-				g.select(".domain").remove();
-			});
-	}
+	$: ticksY = scaleY.ticks(numYTicks);
 	function isCurrentYear(year) {
 		let currentDate = new Date();
 		return parseInt(year) == currentDate.getFullYear();
-	}
-
-	function hexToRGB(hex, alpha) {
-		var r = parseInt(hex.slice(1, 3), 16),
-			g = parseInt(hex.slice(3, 5), 16),
-			b = parseInt(hex.slice(5, 7), 16);
-
-		if (alpha) {
-			return "rgba(" + r + ", " + g + ", " + b + ", " + alpha + ")";
-		} else {
-			return "rgb(" + r + ", " + g + ", " + b + ")";
-		}
 	}
 </script>
 
@@ -114,11 +85,26 @@
 	</div>
 	<svg {width} {height} bind:this={svgEl}>
 		<g class="chart-g" transform="translate({margin.left}, {margin.top})">
-			<g class="x-axis-g" transform="translate(0, {chartHeight})" bind:this={xAxisEl} />
+			<g class="x-axis-g" transform="translate(0, {chartHeight})" bind:this={xAxisEl} >
+				{#each scaleX.domain() as tick, i}
+					{#if i % xTicksEvery == 0}
+					<g class="tick tick-{i}" transform="translate({scaleX(tick)})">
+						<text y={tickHeight + 2} x={scaleX.bandwidth() / 2}>{tick}</text>
+						<line x1={scaleX.bandwidth() / 2} x2={scaleX.bandwidth() / 2} y1="0" y2={tickHeight / 2}></line>
+					</g>
+					{/if}
+				{/each}
+			</g>
 			<g
 				class="y-axis-g"
-				bind:this={yAxisEl}
-				transform="translate(0, {-margin.bottom})" />
+				transform="translate({-margin.left}, 0)">
+					{#each ticksY as tick, i}
+					<g class="tick tick-{i}" transform="translate({margin.left / 2}, {scaleY(tick)})">
+						<text y={-2} x={0} >{tick}</text>
+						<line y1={0} y2={0} x1={0} x2={width}></line>
+					</g>
+					{/each}
+			</g>
 			<g class="data-g">
 				{#each yearlyData as year}
 					<g class="year-g" transform="translate({scaleX(year.year)})">
@@ -140,12 +126,6 @@
 </div>
 
 <style>
-	:global(.tick text) {
-		color: var(--mk-color-grey-dark);
-		font-family: var(--mk-font-family-sans, sans-serif);
-		font-weight: 700;
-	}
-
 	.key-wrapper {
 		display: flex;
 	}
@@ -170,11 +150,24 @@
 		margin-bottom: 0;
 		margin-left: 5px;
 	}
-	rect:hover {
-		stroke-width: 2;
-		stroke-alignment: inner;
-	}
 	rect.current-year {
 		fill-opacity: 0.75;
+	}
+	.tick text {
+		font-size: 10px;
+		font-weight: 700px;
+		fill: var(--mk-color-grey-dark);
+		font-family: var(--mk-font-family-sans, sans-serif);
+		font-weight: 700;
+		text-anchor: middle;
+	}
+	.y-axis-g .tick text {
+		text-anchor: start;
+	}
+	.y-axis-g .tick line {
+		stroke: var(--mk-color-grey-light);
+	}
+	.tick line {
+		stroke: var(--mk-color-grey);
 	}
 </style>
