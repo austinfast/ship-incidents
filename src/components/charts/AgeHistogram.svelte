@@ -29,7 +29,6 @@
 	$: chartWidth = width - margin.left - margin.right;
 	$: maxAge = binnedData.length > 0 ? d3.max(binnedData, (bin) => bin.x1) : 100;
 	$: scaleX = d3.scaleBand().domain(d3.range(maxAge)).range([0, chartWidth]);
-	$: xAxis = d3.axisBottom(scaleX).ticks(5);
 	$: xTicksEvery = width < 500 ? 10 : 5;
 	$: ticksY = scaleY.ticks(numYTicks);
 	$: scaleY = d3
@@ -37,24 +36,6 @@
 		.domain([0, binnedData ? d3.max(binnedData.map((d) => d.length)) : 1])
 		.nice()
 		.range([chartHeight, 0]);
-	$: yAxis = d3.axisLeft(scaleY).ticks(6).tickSize(-chartWidth);
-	// $: if (xAxisEl) {
-	// 	d3.select(xAxisEl)
-	// 		.call(xAxis)
-	// 		.call((g) => {
-	// 			g.selectAll("line").attr("stroke", "#DEDEDE");
-	// 			g.selectAll(".domain").attr("stroke", "#DEDEDE");
-	// 		});
-	// }
-	// $: if (yAxisEl) {
-	// 	d3.select(yAxisEl)
-	// 		.call(yAxis)
-	// 		.call((g) => {
-	// 			g.selectAll("line").attr("stroke", "#DEDEDE");
-	// 			g.selectAll(".domain").attr("stroke", "#DEDEDE");
-	// 			g.select(".domain").remove();
-	// 		});
-	// }
 </script>
 
 <div class="age-histogram-wrap chart-wrapper" bind:clientWidth={width}>

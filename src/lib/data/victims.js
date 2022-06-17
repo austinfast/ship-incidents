@@ -25,6 +25,7 @@ async function generateVictimData() {
 		victimRelationships: victimRelationships,
 		victimAges: rawData.summaries.victimAges,
 		victimGenderCounts: rawData.summaries.victimGenderCounts,
+		totalVictims: rawData.victims.length,
 		updated_at: rawData.updated_at
 	};
 }

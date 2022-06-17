@@ -34,7 +34,6 @@
 	}
 
 	sourceData.then((d) => {
-		console.log(d)
 		dataCounts = d[countKey];
 	});
 

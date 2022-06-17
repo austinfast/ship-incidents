@@ -1,16 +1,16 @@
+<script>
+ export let height = 200;
+</script>
 <style>
 
 .loading-module-wrapper {
-  min-height: 300px;
-  height: 50vh;
-  max-height: 600px;
-  background: #F7F7F7;
+  background: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .loading-icon {
-  --accent-color: #A61103;
+  --accent-color: var(--mk-color-orange);
 }
 .loading-icon-content .loading-icon-text {
     text-align: center;
@@ -79,7 +79,7 @@
   }
 }
 </style>
-<div class="loading-module-wrapper">
+<div class="loading-module-wrapper" style="height: {height}">
   <div class="loading-icon">
     <div class="loading-icon-content">
       <div class="loading-icon-text">Loading</div>

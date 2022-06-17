@@ -12,6 +12,8 @@ output:
     local_only: true
   - filename: timeline
     ssr: false
+  - filename: number_summary
+    ssr: false
   - filename: summary_by_category_area
     ssr: false
   - filename: incident_trends

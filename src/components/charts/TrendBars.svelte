@@ -11,7 +11,6 @@
 	// data
 	incidentData.then((d) => {
 		yearlyData = d.yearlySummaries;
-		console.log(yearlyData);
 	});
 
 	let xAxisEl;
