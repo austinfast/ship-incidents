@@ -257,7 +257,7 @@
 		text-transform: uppercase;
 	}
 	.incident-lookup-table tbody td {
-		border-bottom: solid 1px var(--mk-color-grey-light);
+		border-bottom: solid 1px var(--mk-color-grey);
 		padding: 12px 15px 7px 0;
 	}
 	.incident-lookup-table tbody tr:hover {

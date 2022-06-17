@@ -41,9 +41,21 @@
 	color: var(--mk-color-orange);
 	font-size: 4em;
 	font-family: var(--mk-font-family-serif);
-	margin-bottom: 2rem;
+	/* margin-bottom: 2rem; */
 }
 .number-overview .summary-description {
 	font-size: var(--mk-font-size-small);
+}
+@media(min-width: 768px) {
+	.number-overview .summary-number {
+		font-size: 6em;
+		line-height: 1.25em;
+	}
+}
+@media(min-width: 1400px) {
+	.number-overview .summary-number {
+		font-size: 6vw;
+		line-height: 1.25em;
+	}
 }
 </style>

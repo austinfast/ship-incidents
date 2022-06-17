@@ -164,7 +164,7 @@
 		text-anchor: start;
 	}
 	.y-axis-g .tick line {
-		stroke: var(--mk-color-grey-light);
+		stroke: var(--mk-color-grey);
 	}
 	.tick line {
 		stroke: var(--mk-color-grey);
