@@ -3,8 +3,12 @@
 	import colors from "../lib/colors.js";
 	import Bars from "./charts/RankedBar.svelte";
 	import Loading from "./Loading.svelte";
+
 	export let offenderData;
 	export let victimData;
+	export let valueKey;
+	export let victimHeadline;
+	export let offenderHeadline;
 
 	let unkownVictims;
 	let totalVictims;
@@ -21,17 +25,16 @@
 	});
 </script>
 <div class="chart-wrapper chart-group">
-
 	{#await Promise.all([offenderData, victimData])}
 		<Loading height={500}/>
 	{:then _}
 		<div class="group-item">
-			<h3 class="chart-sub-head">Victims per 1 million U.S. residents</h3>
-			<Bars chartData={victimData} dataKey="victimRaceCounts" color={colors.orange} valueKey="countPerMillion" numTicks={3}/>
+			<h3 class="chart-sub-head">{victimHeadline}</h3>
+			<Bars chartData={victimData} dataKey="victimRaceCounts" color={colors.orange} valueKey={valueKey} numTicks={3}/>
 		</div>
 		<div class="group-item">
-			<h3 class="chart-sub-head">Offenders per 1 million U.S. residents</h3>
-			<Bars chartData={offenderData} dataKey="offenderRaceCounts" color={colors.blue} valueKey="countPerMillion" numTicks={3}/>
+			<h3 class="chart-sub-head">{offenderHeadline}</h3>
+			<Bars chartData={offenderData} dataKey="offenderRaceCounts" color={colors.blue} valueKey={valueKey} numTicks={3}/>
 		</div>
 		<p class="chart-note">NOTE Race is unkown for {prettyNumber(unkownVictims)} out of {prettyNumber(totalVictims)} victims and {prettyNumber(unkownOffenders)} out of {prettyNumber(totalOffenders)} offenders.</p>
 	{/await}

@@ -5,16 +5,16 @@ import colors from "./lib/colors.js";
 import { getVictimData } from "./lib/data/victims.js";
 import { getOffenderData } from "./lib/data/offenders.js";
 
-const mainEl = document.getElementById("MK-victims_offenders_by_race-embed");
+const mainEl = document.getElementById("MK-victims_offenders_by_race_per_cap-embed");
 
 new ChartGroup({
 	target: mainEl,
 	props: {
 		victimData: getVictimData(),
 		offenderData: getOffenderData(),
-		valueKey: "count",
-		victimHeadline: "Total victims",
-		offenderHeadline: "Total offenders"
+		valueKey: "countPerMillion",
+		victimHeadline: "Victims per 1 million U.S. residents",
+		offenderHeadline: "Offenders per 1 million U.S. residents"
 	},
 });
 

@@ -32,6 +32,8 @@ output:
     ssr: false
   - filename: victims_offenders_by_race
     ssr: false
+  - filename: victims_offenders_by_race_per_cap
+    ssr: false
   - filename: offenders_by_age
     ssr: false
   - filename: weapon_types
