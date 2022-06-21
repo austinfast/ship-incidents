@@ -45,7 +45,7 @@
 				{#each ticksX as tick, i}
 				<g class="tick tick-{i}" transform="translate({scaleX(tick)}, {margin.top - tickSize})">
 					<text y={-2} x={0} >{tick}</text>
-					<line y1={0} y2={height - margin.bottom - margin.top} x1={0} x2={0}></line>
+					<line y1={0} y2={height - margin.top } x1={0} x2={0}></line>
 				</g>
 				{/each}
 		</g>
