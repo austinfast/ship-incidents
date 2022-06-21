@@ -122,7 +122,7 @@
 									x2={width - margin.right + 20}
 									y1={0}
 									y2={0}
-									stroke="black" />
+								 />
 								<text class="timeline-year-label">{year}</text>
 							</g>
 						{/each}
@@ -156,7 +156,7 @@
 									<g
 										class="timeline-month-label-group"
 										transform="translate({(chartWidth / 12) * idx}, {monthTickHeight})">
-										<line x1="0" x2="0" y1="0" y2={-monthTickHeight} stroke="black" />
+										<line x1="0" x2="0" y1="0" y2={-monthTickHeight} />
 										<text font-size={monthTickHeight} y={monthTickHeight} x="-8"
 											>{month.shortName}</text>
 									</g>
@@ -185,6 +185,12 @@
 		display: flex;
 		justify-content: flex-end;
 		margin-bottom: 1em;
+	}
+	.timeline-year-group line {
+		stroke: var(--mk-color-grey);
+	}
+	.timeline-month-label-group line {
+		stroke: var(--mk-color-grey);
 	}
 	:global(.timeline-chart-month-axis .domain) {
 		display: none;
