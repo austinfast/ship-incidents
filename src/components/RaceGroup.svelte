@@ -27,11 +27,11 @@
 	{:then _}
 		<div class="group-item">
 			<h3 class="chart-sub-head">Victims per 1 million U.S. residents</h3>
-			<Bars chartData={victimData} dataKey="victimRaceCounts" color={colors.orange} valueKey="countPerMillion"/>
+			<Bars chartData={victimData} dataKey="victimRaceCounts" color={colors.orange} valueKey="countPerMillion" numTicks={3}/>
 		</div>
 		<div class="group-item">
 			<h3 class="chart-sub-head">Offenders per 1 million U.S. residents</h3>
-			<Bars chartData={offenderData} dataKey="offenderRaceCounts" color={colors.blue} valueKey="countPerMillion"/>
+			<Bars chartData={offenderData} dataKey="offenderRaceCounts" color={colors.blue} valueKey="countPerMillion" numTicks={3}/>
 		</div>
 		<p class="chart-note">NOTE Race is unkown for {prettyNumber(unkownVictims)} out of {prettyNumber(totalVictims)} victims and {prettyNumber(unkownOffenders)} out of {prettyNumber(totalOffenders)} offenders.</p>
 	{/await}
