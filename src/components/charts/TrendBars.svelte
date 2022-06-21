@@ -42,6 +42,7 @@
 
 	$: scaleX = d3
 		.scaleBand()
+		.paddingInner(0.1)
 		.domain(yearlyData.map((d) => d.year))
 		.range([0, chartWidth]);
 

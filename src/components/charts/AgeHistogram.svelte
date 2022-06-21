@@ -23,13 +23,11 @@
 		bottom: 20,
 		left: 50,
 	};
-	// $: barmargin = width > 600 ? 10 : 5;
-	$: barmargin = 0;
 	$: chartHeight = height - margin.top - margin.bottom;
 	$: chartWidth = width - margin.left - margin.right;
 	$: maxAge = binnedData.length > 0 ? d3.max(binnedData, (bin) => bin.x1) : 100;
-	$: scaleX = d3.scaleBand().domain(d3.range(maxAge)).range([0, chartWidth]);
-	$: xTicksEvery = width < 500 ? 10 : 5;
+	$: scaleX = d3.scaleBand().paddingInner(0.1).domain(d3.range(0, maxAge, 5)).range([0, chartWidth]);
+	$: xTicksEvery = width < 500 ? 2 : 1;
 	$: ticksY = scaleY.ticks(numYTicks);
 	$: scaleY = d3
 		.scaleLinear()
@@ -46,7 +44,7 @@
 					{#each scaleX.domain() as tick, i}
 						{#if i % xTicksEvery == 0}
 							<g class="tick tick-{i}" transform="translate({scaleX(tick)})">
-								<text y={tickHeight + 2} x={scaleX.bandwidth() / 2}>{tick}</text>
+								<text y={tickHeight + 2} x={scaleX.bandwidth() / 2}>{tick}-{tick + 4}</text>
 								<line
 									x1={scaleX.bandwidth() / 2}
 									x2={scaleX.bandwidth() / 2}
