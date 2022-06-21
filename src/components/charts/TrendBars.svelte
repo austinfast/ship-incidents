@@ -13,30 +13,33 @@
 		yearlyData = d.yearlySummaries;
 	});
 
-	let xAxisEl;
-	let yAxisEl;
 	let width;
 	let height = 350;
-	let defaultDate = new Date();
-	let svgEl;
-	const curve = d3.curveStep;
 	const tickHeight = 12;
 	const numYTicks = 5;
-
-	// const curve = d3.curveBumpX;
-
-	$: margin = {
+	const margin = {
 		top: 20,
 		right: 20,
 		bottom: 20,
 		left: 50,
 	};
+
 	$: chartWidth = width - margin.left - margin.right;
+
 	$: chartHeight = height - margin.top - margin.bottom;
+
 	$: colorScale = d3
 		.scaleOrdinal()
 		.domain(yearlyVariables.map((c) => c.field))
 		.range([colors["orange-dark"], colors["orange"], colors["orange-light"]]);
+
+	$: stackFunc = d3.stack()
+		.keys(yearlyVariables.map((d) => d.field))
+		.order(d3.stackOrderNone)
+		.offset(d3.stackOffsetNone);
+
+	$: stackedData = stackFunc(yearlyData);
+
 	$: scaleX = d3
 		.scaleBand()
 		.domain(yearlyData.map((d) => d.year))
@@ -55,16 +58,11 @@
 			}),
 		])
 		.range([chartHeight, 0]);
-	$: posY = function (yearData, varIdx) {
-		let y = 0;
-		for (let i = varIdx; i >= 0; i--) {
-			y += scaleY(0) - scaleY(yearData[yearlyVariables[i].field]);
-		}
-		return chartHeight - y;
-	};
 
 	$: xTicksEvery = width < 500 ? 2 : 1;
+
 	$: ticksY = scaleY.ticks(numYTicks);
+
 	function isCurrentYear(year) {
 		let currentDate = new Date();
 		return parseInt(year) == currentDate.getFullYear();
@@ -82,9 +80,9 @@
 			</div>
 		{/each}
 	</div>
-	<svg {width} {height} bind:this={svgEl}>
+	<svg {width} {height} >
 		<g class="chart-g" transform="translate({margin.left}, {margin.top})">
-			<g class="x-axis-g" transform="translate(0, {chartHeight})" bind:this={xAxisEl} >
+			<g class="x-axis-g" transform="translate(0, {chartHeight})"  >
 				{#each scaleX.domain() as tick, i}
 					{#if i % xTicksEvery == 0}
 					<g class="tick tick-{i}" transform="translate({scaleX(tick)})">
@@ -105,19 +103,18 @@
 					{/each}
 			</g>
 			<g class="data-g">
-				{#each yearlyData as year}
-					<g class="year-g" transform="translate({scaleX(year.year)})">
-						{#each yearlyVariables as yearlyVariable, i}
-							<rect
-								class:current-year={isCurrentYear(year.year)}
-								height={scaleY(0) - scaleY(year[yearlyVariable.field])}
-								y={posY(year, i)}
-								width={scaleX.bandwidth()}
-								fill={colorScale(yearlyVariable.field)}
-								stroke={colorScale(yearlyVariable.field)}
-								stroke-width="0" />
-						{/each}
-					</g>
+				{#each stackedData as row, rowIdx}
+					{#each row as bar}
+						<rect
+							class:current-year={isCurrentYear(bar.data.year)}
+							y={Math.min(scaleY(bar[0]), scaleY(bar[1]))}
+							height={Math.abs(scaleY(bar[0]) - scaleY(bar[1]))}
+							fill={colorScale(yearlyVariables[rowIdx].field)}
+							width={scaleX.bandwidth()}
+							x={scaleX(bar.data.year)}
+
+						></rect>
+					{/each}
 				{/each}
 			</g>
 		</g>
