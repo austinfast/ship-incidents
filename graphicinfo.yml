@@ -30,6 +30,8 @@ output:
     ssr: false
   - filename: offenders_by_sex
     ssr: false
+  - filename: victims_offenders_by_race
+    ssr: false
   - filename: offenders_by_age
     ssr: false
   - filename: weapon_types

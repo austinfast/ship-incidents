@@ -10,7 +10,8 @@ console.log("Rendering trend chart");
 let locationBars = new Bars({
 	target: mainEl,
 	props: {
-		incidentData: getIncidentData(),
+		chartData: getIncidentData(),
+		dataKey: "locationTypes",
 		color: colors.orange
 	}
 });

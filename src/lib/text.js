@@ -1,7 +1,7 @@
 import { timeFormat } from "d3";
 
-export function prettyNumber(x) {
-	return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+export function prettyNumber(x, roundBy = 100) {
+	return (Math.round(x * roundBy) / roundBy).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 export function prettyDate(d) {
