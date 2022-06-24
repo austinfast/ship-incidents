@@ -44,3 +44,5 @@ output:
     ssr: false
   - filename: incident_lookup
     ssr: false
+  - filename: incident_year_lines
+    ssr: false
