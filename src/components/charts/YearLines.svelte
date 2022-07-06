@@ -13,12 +13,11 @@
 	const numYTicks = 10;
 	const tickHeight = 12;
 	const currentYear = new Date().getFullYear();
-	const height = 500;
 	const margin = {
 		top: 50,
 		right: 20,
 		bottom: 20,
-		left: 20,
+		left: 50,
 	};
 	const tickFormat = d3.timeFormat("%b");
 	const variableOptions = [{
@@ -30,12 +29,13 @@
 		value: "victims"
 	}];
 
+	$: height = width * 0.8;
 	$: chartHeight = height - margin.top - margin.bottom;
 	$: chartWidth = width - margin.left - margin.right;
 	$: chartMax = d3.max(incidentsByYear, (year) =>
 		d3.max(year.counts, (d) => d[chartValue])
 	);
-	$: scaleY = d3.scaleLinear().domain([0, chartMax]).range([chartHeight, 0]);
+	$: scaleY = d3.scaleLinear().domain([0, chartMax]).range([chartHeight, 0]).nice();
 	$: ticksY = scaleY.ticks(numYTicks);
 	$: getScaleX = function (year) {
 		return d3
@@ -65,10 +65,15 @@
 		);
 		for (let yearIdx = 0; yearIdx < years.length; yearIdx += 1) {
 			const year = years[yearIdx];
+			const initialValue = {
+				date: new Date(year, 0, 1),
+				incidents: 0,
+				victims: 0
+			};
 			let victimCount = 0;
 			results[yearIdx] = {
 				year: year,
-				counts: [],
+				counts: [initialValue],
 			};
 			const yearIncidents = rawIncidents
 				.filter((d) => d.year == year)
@@ -91,11 +96,13 @@
 	});
 </script>
 
-<div class="chart-wrap" bind:clientWidth={width}>
+<div class="chart-wrapper" bind:clientWidth={width}>
 	{#await incidentData}
 		<Loading height={500} />
 	{:then _}
-		<TabButtons options={variableOptions} bind:currentValue={chartValue}/>
+		<div class="chart-controls">
+			<TabButtons options={variableOptions} bind:currentValue={chartValue}/>
+		</div>
 		{#if lines.length > 0 && scalesX.length > 0}
 			<svg {width} {height}>
 				<g transform="translate({margin.left}, {margin.top})">
@@ -113,9 +120,9 @@
 					class="y-axis-g"
 					transform="translate({-margin.left}, 0)">
 						{#each ticksY as tick, i}
-						<g class="tick tick-{i}" transform="translate({margin.left / 2}, {scaleY(tick)})">
-							<text y={-2} x={0} >{tick}</text>
-							<line y1={0} y2={0} x1={margin.left / 2} x2={chartWidth}></line>
+						<g class="tick tick-{i}" transform="translate({margin.left - 5}, {scaleY(tick)})">
+							<text y={0} x={0} dominant-baseline="central" text-anchor="end">{tick}</text>
+							<line y1={0} y2={0} x1={5} x2={chartWidth}></line>
 						</g>
 						{/each}
 				</g>
@@ -143,7 +150,7 @@
 		text-anchor: middle;
 	}
 	.y-axis-g .tick text {
-		text-anchor: start;
+		text-anchor: end;
 	}
 	.tick line {
 		stroke: var(--mk-color-grey-light);
