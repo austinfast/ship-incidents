@@ -20,14 +20,16 @@
 		left: 50,
 	};
 	const tickFormat = d3.timeFormat("%b");
-	const variableOptions = [{
-		label: "Incidents",
-		value: "incidents"
-	},
-	{
-		label: "Victims",
-		value: "victims"
-	}];
+	const variableOptions = [
+		{
+			label: "Incidents",
+			value: "incidents",
+		},
+		{
+			label: "Victims",
+			value: "victims",
+		},
+	];
 
 	$: height = width * 0.8;
 	$: chartHeight = height - margin.top - margin.bottom;
@@ -53,6 +55,12 @@
 			.curve(d3.curveStepAfter);
 	};
 	$: lines = incidentsByYear.map((d, i) => getLine(i));
+	$: lastIncident =
+		incidentsByYear.length > 0
+			? incidentsByYear[incidentsByYear.length - 1].counts[
+					incidentsByYear[incidentsByYear.length - 1].counts.length - 1
+			  ]
+			: null;
 
 	function isCurrentYear(yr) {
 		return yr == currentYear;
@@ -65,10 +73,11 @@
 		);
 		for (let yearIdx = 0; yearIdx < years.length; yearIdx += 1) {
 			const year = years[yearIdx];
+			// initial value is 0 for everything on January 1
 			const initialValue = {
 				date: new Date(year, 0, 1),
 				incidents: 0,
-				victims: 0
+				victims: 0,
 			};
 			let victimCount = 0;
 			results[yearIdx] = {
@@ -87,6 +96,17 @@
 					victims: victimCount,
 				});
 			}
+			// add a final value for December 31 for all past years
+			if (!isCurrentYear(year)) {
+				const lastEntry = results[yearIdx].counts[results[yearIdx].counts.length - 1];
+				// final value contains the last entry's values with a data of December 31
+				const finalValue = {
+					date: new Date(year, 11, 31),
+					incidents: lastEntry.incidents,
+					victims: lastEntry.victims,
+				};
+				results[yearIdx].counts.push(finalValue);
+			}
 		}
 		return results;
 	}
@@ -101,46 +121,63 @@
 		<Loading height={500} />
 	{:then _}
 		<div class="chart-controls">
-			<TabButtons options={variableOptions} bind:currentValue={chartValue}/>
+			<TabButtons options={variableOptions} bind:currentValue={chartValue} />
 		</div>
 		{#if lines.length > 0 && scalesX.length > 0}
 			<svg {width} {height}>
 				<g transform="translate({margin.left}, {margin.top})">
-				<g class="x-axis-g" transform="translate(0, {chartHeight})"  >
-					{#each ticksX as tick, i}
-						{#if i % xTicksEvery == 0}
-						<g class="tick tick-{i}" transform="translate({scalesX[0](tick)})">
-							<text y={tickHeight + 2} x={0}>{tickFormat(tick)}</text>
-							<line x1={0} x2={0} y1="0" y2={-chartHeight}></line>
-						</g>
-						{/if}
-					{/each}
-				</g>
-				<g
-					class="y-axis-g"
-					transform="translate({-margin.left}, 0)">
-						{#each ticksY as tick, i}
-						<g class="tick tick-{i}" transform="translate({margin.left - 5}, {scaleY(tick)})">
-							<text y={0} x={0} dominant-baseline="central" text-anchor="end">{tick}</text>
-							<line y1={0} y2={0} x1={5} x2={chartWidth}></line>
-						</g>
+					<g class="x-axis-g" transform="translate(0, {chartHeight})">
+						{#each ticksX as tick, i}
+							{#if i % xTicksEvery == 0}
+								<g class="tick tick-{i}" transform="translate({scalesX[0](tick)})">
+									<text y={tickHeight + 2} x={0}>{tickFormat(tick)}</text>
+									<line x1={0} x2={0} y1="0" y2={-chartHeight} />
+								</g>
+							{/if}
 						{/each}
-				</g>
-				{#each incidentsByYear as year, yearIdx}
-					<path
-						d={lines[yearIdx](year.counts)}
-						fill="none"
-						stroke-width={isCurrentYear(year.year) ? 3 : 1}
-						opacity={isCurrentYear(year.year) ? 1 : 0.75}
-						stroke={isCurrentYear(year.year) ? colors.orange : colors["grey"]} />
-				{/each}
+					</g>
+					<g class="y-axis-g" transform="translate({-margin.left}, 0)">
+						{#each ticksY as tick, i}
+							<g
+								class="tick tick-{i}"
+								transform="translate({margin.left - 5}, {scaleY(tick)})">
+								<text y={0} x={0} dominant-baseline="central" text-anchor="end"
+									>{tick}</text>
+								<line y1={0} y2={0} x1={5} x2={chartWidth} />
+							</g>
+						{/each}
+					</g>
+					{#each incidentsByYear as year, yearIdx}
+						<path
+							d={lines[yearIdx](year.counts)}
+							fill="none"
+							stroke-width={isCurrentYear(year.year) ? 3 : 2}
+							opacity={isCurrentYear(year.year) ? 1 : 0.5}
+							stroke={isCurrentYear(year.year) ? colors.orange : colors["grey"]} />
+						<circle
+							r={isCurrentYear(year.year) ? 3 : 3}
+							fill="#ffffff"
+							stroke-width="3"
+							opacity={isCurrentYear(year.year) ? 1 : 0.5}
+							stroke={isCurrentYear(year.year) ? colors["orange"] : colors["grey"]}
+							cx={scalesX[yearIdx](year.counts[year.counts.length - 1].date)}
+							cy={scaleY(year.counts[year.counts.length - 1][chartValue])} />
+					{/each}
+					<g
+						transform="translate({scalesX[scalesX.length - 1](lastIncident.date) +
+							10}, {scaleY(lastIncident[chartValue])})">
+						<text class="chart-annotation"
+							>{incidentsByYear[incidentsByYear.length - 1].year}</text>
+						<text class="chart-annotation" dy="20"
+							>{lastIncident[chartValue]} {" " + chartValue}</text>
+					</g>
 				</g>
 			</svg>
 		{/if}
 	{/await}
 </div>
-<style>
 
+<style>
 	.tick text {
 		font-size: 10px;
 		font-weight: 700px;
@@ -154,5 +191,10 @@
 	}
 	.tick line {
 		stroke: var(--mk-color-grey-light);
+	}
+	.chart-annotation {
+		font-weight: 900;
+		text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8), 1px -1px 0px rgba(255, 255, 255, 0.8), -1px 1px 0px rgba(255, 255, 255, 0.8), -1px -1px 0px rgba(255, 255, 255, 0.8);
+		fill: var(--mk-color-grey-dark);
 	}
 </style>
