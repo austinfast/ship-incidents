@@ -15,7 +15,7 @@
 	const currentYear = new Date().getFullYear();
 	const margin = {
 		top: 50,
-		right: 20,
+		right: 60,
 		bottom: 20,
 		left: 50,
 	};
@@ -61,11 +61,21 @@
 					incidentsByYear[incidentsByYear.length - 1].counts.length - 1
 			  ]
 			: null;
+	$: highestYear = incidentsByYear.length > 0 ? getHighestYear(incidentsByYear, chartValue) : null;
 
 	function isCurrentYear(yr) {
 		return yr == currentYear;
 	}
 
+	function getHighestYear(incidentsByYear, field) {
+		const totals = incidentsByYear
+			.map(year => {
+				return Object.assign(year.counts[year.counts.length - 1], {year: year.year});
+			})
+			.sort((a,b) => b[field] - a[field]);
+		return totals[0];
+	}
+ 
 	function getCumulativeIncidents(rawIncidents) {
 		let results = [];
 		const years = Array.from(new Set(rawIncidents.map((i) => i.year))).sort(
@@ -152,24 +162,34 @@
 							d={lines[yearIdx](year.counts)}
 							fill="none"
 							stroke-width={isCurrentYear(year.year) ? 3 : 2}
-							opacity={isCurrentYear(year.year) ? 1 : 0.5}
+							opacity={isCurrentYear(year.year) || highestYear.year == year.year ? 1 : 0.5}
 							stroke={isCurrentYear(year.year) ? colors.orange : colors["grey"]} />
 						<circle
 							r={isCurrentYear(year.year) ? 3 : 3}
 							fill="#ffffff"
 							stroke-width="3"
-							opacity={isCurrentYear(year.year) ? 1 : 0.5}
+							opacity={isCurrentYear(year.year) || highestYear.year == year.year ? 1 : 0.5}
 							stroke={isCurrentYear(year.year) ? colors["orange"] : colors["grey"]}
 							cx={scalesX[yearIdx](year.counts[year.counts.length - 1].date)}
 							cy={scaleY(year.counts[year.counts.length - 1][chartValue])} />
 					{/each}
+					<!-- current year -->
 					<g
 						transform="translate({scalesX[scalesX.length - 1](lastIncident.date) +
 							10}, {scaleY(lastIncident[chartValue])})">
 						<text class="chart-annotation"
 							>{incidentsByYear[incidentsByYear.length - 1].year}</text>
-						<text class="chart-annotation" dy="20"
+						<text class="chart-annotation" dy="15"
 							>{lastIncident[chartValue]} {" " + chartValue}</text>
+					</g>
+					<!-- highest year -->
+					<g
+						transform="translate({chartWidth +
+							10}, {scaleY(highestYear[chartValue])})">
+						<text class="chart-annotation highest"
+							>{highestYear.year}</text>
+						<text class="chart-annotation highest" dy="15"
+							>{highestYear[chartValue]}</text>
 					</g>
 				</g>
 			</svg>
@@ -194,7 +214,13 @@
 	}
 	.chart-annotation {
 		font-weight: 900;
+		font-size: 12px;
 		text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8), 1px -1px 0px rgba(255, 255, 255, 0.8), -1px 1px 0px rgba(255, 255, 255, 0.8), -1px -1px 0px rgba(255, 255, 255, 0.8);
 		fill: var(--mk-color-grey-dark);
+	}
+	.chart-annotation.highest {
+		/* font-weight: 400; */
+		fill: var(--mk-color-grey);
+		text-shadow: none;
 	}
 </style>
