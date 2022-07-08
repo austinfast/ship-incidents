@@ -24,7 +24,7 @@
 		totalOffenders = d.offenders.length;
 	});
 </script>
-<div class="chart-wrapper chart-group">
+<div class="chart-group">
 	{#await Promise.all([offenderData, victimData])}
 		<Loading height={500}/>
 	{:then _}
@@ -36,7 +36,6 @@
 			<h3 class="chart-label">{offenderHeadline}</h3>
 			<Bars chartData={offenderData} dataKey="offenderRaceCounts" color={colors.blue} valueKey={valueKey} numTicks={3}/>
 		</div>
-		<!-- <p class="chart-note">NOTE Race is unkown for {prettyNumber(unkownVictims)} out of {prettyNumber(totalVictims)} victims and {prettyNumber(unkownOffenders)} out of {prettyNumber(totalOffenders)} offenders.</p> -->
 	{/await}
 </div>
 
@@ -47,9 +46,6 @@
 }
 .group-item {
 	width: 100%;
-}
-.chart-note {
-	font-size: var(--mk-font-size-small);
 }
 @media(min-width: 768px) {
 	.group-item {
