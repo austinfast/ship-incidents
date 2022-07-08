@@ -32,10 +32,10 @@
 	width: 100%;
 }
 .victim-count {
-	margin-right: 15px;
+	margin-right: 25px;
 }
 .incident-count {
-	margin-left: 15px;
+	margin-left: 25px;
 }
 .number-overview .summary-number {
 	color: var(--mk-color-orange);

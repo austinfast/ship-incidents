@@ -8,7 +8,7 @@ const mainEl = document.getElementById("MK-gun_types-embed");
 const splitBy = "gun_class";
 
 const typeLabels = {
-	"HG": "Hand guns",
+	"HG": "Handguns",
 	"LG": "Long guns",
 	"UG": "Unknown guns",
 };
