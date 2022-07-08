@@ -13,8 +13,8 @@ new ChartGroup({
 		victimData: getVictimData(),
 		offenderData: getOffenderData(),
 		valueKey: "count",
-		victimHeadline: "Total victims",
-		offenderHeadline: "Total offenders"
+		victimHeadline: "Number of victims by race",
+		offenderHeadline: "Number of offenders by race"
 	},
 });
 
