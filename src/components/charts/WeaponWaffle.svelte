@@ -106,38 +106,40 @@
 	}
 </script>
 
-<div class="chart-wrapper weapon-waffle" bind:clientWidth={width}>
-	{#if chartLabel}
-		<h3 class="chart-label">{chartLabel}</h3>
-	{/if}
-	{#if chartsData.length > 0}
-		<svg {width} {height}>
-			{#each chartsData as chartRow, rowIdx}
-				<g transform="translate(0, {getWaffleYPosition(rowIdx)})" class="chart-row">
-					{#each chartRow as chartData, chartIdx}
-						<g
-							transform="translate({getWaffleXPosition(chartIdx)}, 0)"
-							class="chart-item">
-							{#each chartData as weapon, i}
-								<rect
-									width={boxSize}
-									height={boxSize}
-									x={(i % boxesPerRow) * (boxSize + boxMargin)}
-									y={getWaffleRowHeight(chartRow) -
-										waffleMargin.bottom -
-										waffleMargin.top -
-										Math.floor(i / boxesPerRow) * (boxSize + boxMargin)}
-									fill={chartColor} />
-							{/each}
-							<text
-								font-size={waffleLabelSize}
-								transform="translate(0, {getWaffleRowHeight(chartRow) -
-									waffleMargin.bottom +
-									waffleLabelSize})">{getLabel(chartData[0][splitBy])}</text>
-						</g>
-					{/each}
-				</g>
-			{/each}
-		</svg>
-	{/if}
+<div class="chart-wrapper weapon-waffle">
+	<div bind:clientWidth={width}>
+		{#if chartLabel}
+			<h3 class="chart-label">{chartLabel}</h3>
+		{/if}
+		{#if chartsData.length > 0}
+			<svg {width} {height}>
+				{#each chartsData as chartRow, rowIdx}
+					<g transform="translate(0, {getWaffleYPosition(rowIdx)})" class="chart-row">
+						{#each chartRow as chartData, chartIdx}
+							<g
+								transform="translate({getWaffleXPosition(chartIdx)}, 0)"
+								class="chart-item">
+								{#each chartData as weapon, i}
+									<rect
+										width={boxSize}
+										height={boxSize}
+										x={(i % boxesPerRow) * (boxSize + boxMargin)}
+										y={getWaffleRowHeight(chartRow) -
+											waffleMargin.bottom -
+											waffleMargin.top -
+											Math.floor(i / boxesPerRow) * (boxSize + boxMargin)}
+										fill={chartColor} />
+								{/each}
+								<text
+									font-size={waffleLabelSize}
+									transform="translate(0, {getWaffleRowHeight(chartRow) -
+										waffleMargin.bottom +
+										waffleLabelSize})">{getLabel(chartData[0][splitBy])}</text>
+							</g>
+						{/each}
+					</g>
+				{/each}
+			</svg>
+		{/if}
+	</div>
 </div>

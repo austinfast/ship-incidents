@@ -47,33 +47,35 @@
 	};
 </script>
 
-<div class="stacked-bar-wrap chart-wrapper" bind:clientWidth={width}>
-	{#if chartLabel}
-		<h3 class="chart-label">{chartLabel}</h3>
-	{/if}
-	<div class="key-wrap article-text-width">
-		{#each dataCounts as keyItem, i}
-			<div class="key-item">
-				<div class="key-item-pallette" style={`background: ${colors[i]};`} />
-				<p class="key-item-label">{keyItem.label}</p>
-			</div>
-		{/each}
-	</div>
-	<svg class="stacked-bar" {width} {height}>
-		<g
-			class="scale-g"
-			bind:this={scaleEl}
-			transform={`translate(${margin.left}, ${barSize + barMargin})`} />
-		<g>
-			{#each dataCounts as count, i}
-				<rect
-					height={barSize}
-					width={scale(count.count)}
-					fill={colors[i]}
-					x={margin.left + getXPosition(i)} />
+<div class="stacked-bar-wrap chart-wrapper" >
+	<div bind:clientWidth={width}>
+		{#if chartLabel}
+			<h3 class="chart-label">{chartLabel}</h3>
+		{/if}
+		<div class="key-wrap article-text-width">
+			{#each dataCounts as keyItem, i}
+				<div class="key-item">
+					<div class="key-item-pallette" style={`background: ${colors[i]};`} />
+					<p class="key-item-label">{keyItem.label}</p>
+				</div>
 			{/each}
-		</g>
-	</svg>
+		</div>
+		<svg class="stacked-bar" {width} {height}>
+			<g
+				class="scale-g"
+				bind:this={scaleEl}
+				transform={`translate(${margin.left}, ${barSize + barMargin})`} />
+			<g>
+				{#each dataCounts as count, i}
+					<rect
+						height={barSize}
+						width={scale(count.count)}
+						fill={colors[i]}
+						x={margin.left + getXPosition(i)} />
+				{/each}
+			</g>
+		</svg>
+	</div>
 </div>
 
 <style>

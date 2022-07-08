@@ -30,11 +30,14 @@
 		k: 1,
 	};
 	$: svgSelection = d3.select(svgEl);
-	$: height = width * 0.55;
+	$: height = width * 0.65;
+	// $: projection = d3
+	// 	.geoAlbersUsa()
+	// 	.scale(width * 1.1)
+	// 	.translate([width / 1.9, height / 2]);
 	$: projection = d3
 		.geoAlbersUsa()
-		.scale(width * 1.1)
-		.translate([width / 1.9, height / 2]);
+		.fitWidth(width, statesGeo);
 	$: path = d3.geoPath().projection(projection);
 	$: typeFilterOptions = incidents
 		.map((d) => d.type)
@@ -91,52 +94,54 @@
 	}
 </script>
 
-<div class="chart-wrap-double-group" bind:clientWidth={width}>
-	<h3 class="chart-label">Mass killings by location scaled by number of victims</h3>
-	<div class="map-controls">
-		<FilterSelect
-			bind:currentValue={typeFilter}
-			options={typeFilterOptions}
-			defaultLabel="All"
-			filterLabel="Filter by type" />
-	</div>
-	<div class="map-wrap">
-		<svg {width} {height} bind:this={svgEl}>
-			<g
-				class="zoomGroup"
-				transform="translate({zoomTransform.x}, {zoomTransform.y}) scale({zoomTransform.k})">
-				<g>
-					{#each statesGeo.features as stateFeature}
-						<path
-							d={path(stateFeature)}
-							fill={colors["grey-light"]}
-							stroke={colors["grey"]}
-							stroke-width={1 / zoomTransform.k} />
-						<text
-							class="state-label"
-							x={path.centroid(stateFeature)[0] - stateLabelSize / 2}
-							y={path.centroid(stateFeature)[1]}
-							font-size={stateLabelSize / zoomTransform.k}
-							fill={colors["grey"]}>{stateFeature.properties.STUSPS}</text>
-					{/each}
+<div class="chart-wrap-double-group">
+	<div bind:clientWidth={width}>
+		<h3 class="chart-label">Mass killings by location scaled by number of victims</h3>
+		<div class="map-controls">
+			<FilterSelect
+				bind:currentValue={typeFilter}
+				options={typeFilterOptions}
+				defaultLabel="All"
+				filterLabel="Filter by type" />
+		</div>
+		<div class="map-wrap">
+			<svg {width} {height} bind:this={svgEl}>
+				<g
+					class="zoomGroup"
+					transform="translate({zoomTransform.x}, {zoomTransform.y}) scale({zoomTransform.k})">
+					<g>
+						{#each statesGeo.features as stateFeature}
+							<path
+								d={path(stateFeature)}
+								fill={colors["grey-light"]}
+								stroke={colors["grey"]}
+								stroke-width={1 / zoomTransform.k} />
+							<text
+								class="state-label"
+								x={path.centroid(stateFeature)[0] - stateLabelSize / 2}
+								y={path.centroid(stateFeature)[1]}
+								font-size={stateLabelSize / zoomTransform.k}
+								fill={colors["grey"]}>{stateFeature.properties.STUSPS}</text>
+						{/each}
+					</g>
+					<g>
+						{#each incidentFeatures as incidentFeature}
+							{#if incidentFeature.position}
+								<circle
+									cx={incidentFeature.position[0]}
+									cy={incidentFeature.position[1]}
+									fill={colors["orange"]}
+									opacity="0.8"
+									stroke="#ffffff"
+									stroke-width={1 / zoomTransform.k}
+									r={radiusScale(incidentFeature.victims)} />
+							{/if}
+						{/each}
+					</g>
 				</g>
-				<g>
-					{#each incidentFeatures as incidentFeature}
-						{#if incidentFeature.position}
-							<circle
-								cx={incidentFeature.position[0]}
-								cy={incidentFeature.position[1]}
-								fill={colors["orange"]}
-								opacity="0.8"
-								stroke="#ffffff"
-								stroke-width={1 / zoomTransform.k}
-								r={radiusScale(incidentFeature.victims)} />
-						{/if}
-					{/each}
-				</g>
-			</g>
-		</svg>
-		<ZoomControls {zoomIn} {zoomOut} />
+			</svg>
+			<ZoomControls {zoomIn} {zoomOut} />
+		</div>
 	</div>
 </div>
 

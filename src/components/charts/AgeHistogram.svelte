@@ -42,8 +42,8 @@
 		.range([chartHeight, 0]);
 </script>
 
-<div class:in-depth-article-width={!isEmbed()}>
-	<div class="age-histogram-wrap chart-wrapper" bind:clientWidth={width}>
+<div class:in-depth-article-width={!isEmbed()} class="chart-wrapper" >
+	<div bind:clientWidth={width}>
 		{#if chartLabel}
 			<h3 class="chart-label">{chartLabel}</h3>
 		{/if}

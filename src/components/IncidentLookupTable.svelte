@@ -211,6 +211,7 @@
 		max-width: 1200px;
 		margin: 0 auto;
 		width: 100%;
+		padding: 0 20px;
 	}
 	.incident-lookup-table {
 		width: 100%;

@@ -31,30 +31,32 @@
 		.range([0, boxSize]);
 </script>
 
-<div class="chart-wrapper category-chart" bind:clientWidth={width}>
-	{#if summaryStatistics}
-		<svg {width} height={boxSize}>
-			<g class="chart-group" transform="translate({margin.left}, {margin.top})">
-				{#each categories as category}
-					<rect
-						y={boxSize - sizeScale(summaryStatistics[category.field])}
-						width={sizeScale(summaryStatistics[category.field])}
-						height={sizeScale(summaryStatistics[category.field])}
-						fill={colorScale(category.field)} />
-				{/each}
-			</g>
-			<g class="label-group">
-				{#each categories as category}
-					<text
-						x={margin.left}
-						text-anchor="end"
-						class="chart-label"
-						y={boxSize - sizeScale(summaryStatistics[category.field])}
-						>{category.label}</text>
-				{/each}
-			</g>
-		</svg>
-	{/if}
+<div class="chart-wrapper category-chart" >
+	<div bind:clientWidth={width} >
+		{#if summaryStatistics}
+			<svg {width} height={boxSize}>
+				<g class="chart-group" transform="translate({margin.left}, {margin.top})">
+					{#each categories as category}
+						<rect
+							y={boxSize - sizeScale(summaryStatistics[category.field])}
+							width={sizeScale(summaryStatistics[category.field])}
+							height={sizeScale(summaryStatistics[category.field])}
+							fill={colorScale(category.field)} />
+					{/each}
+				</g>
+				<g class="label-group">
+					{#each categories as category}
+						<text
+							x={margin.left}
+							text-anchor="end"
+							class="chart-label"
+							y={boxSize - sizeScale(summaryStatistics[category.field])}
+							>{category.label}</text>
+					{/each}
+				</g>
+			</svg>
+		{/if}
+	</div>
 </div>
 
 <style>

@@ -14,10 +14,10 @@
 	const tickHeight = 12;
 	const currentYear = new Date().getFullYear();
 	const margin = {
-		top: 50,
-		right: 60,
+		top: 20,
+		right: 50,
 		bottom: 20,
-		left: 50,
+		left: 20,
 	};
 	const tickFormat = d3.timeFormat("%b");
 	const variableOptions = [
@@ -62,7 +62,8 @@
 					incidentsByYear[incidentsByYear.length - 1].counts.length - 1
 			  ]
 			: null;
-	$: highestYear = incidentsByYear.length > 0 ? getHighestYear(incidentsByYear, chartValue) : null;
+	$: highestYear =
+		incidentsByYear.length > 0 ? getHighestYear(incidentsByYear, chartValue) : null;
 
 	function isCurrentYear(yr) {
 		return yr == currentYear;
@@ -70,13 +71,13 @@
 
 	function getHighestYear(incidentsByYear, field) {
 		const totals = incidentsByYear
-			.map(year => {
-				return Object.assign(year.counts[year.counts.length - 1], {year: year.year});
+			.map((year) => {
+				return Object.assign(year.counts[year.counts.length - 1], { year: year.year });
 			})
-			.sort((a,b) => b[field] - a[field]);
+			.sort((a, b) => b[field] - a[field]);
 		return totals[0];
 	}
- 
+
 	function getCumulativeIncidents(rawIncidents) {
 		let results = [];
 		const years = Array.from(new Set(rawIncidents.map((i) => i.year))).sort(
@@ -127,76 +128,90 @@
 	});
 </script>
 
-<div class="chart-wrapper" bind:clientWidth={width}>
-	{#await incidentData}
-		<Loading height={500} />
-	{:then _}
-		<h3 class="chart-label">Number of mass killings and victims this year compared with previous years</h3>
-		<div class="chart-controls">
-			<TabButtons options={variableOptions} bind:currentValue={chartValue} />
-		</div>
-		{#if lines.length > 0 && scalesX.length > 0}
-			<svg {width} {height}>
-				<g transform="translate({margin.left}, {margin.top})">
-					<g class="x-axis-g" transform="translate(0, {chartHeight})">
-						{#each ticksX as tick, i}
-							{#if i % xTicksEvery == 0}
-								<g class="tick tick-{i}" transform="translate({scalesX[0](tick)})">
-									<text y={tickHeight + 2} x={0}>{tickFormat(tick)}</text>
-									<line x1={0} x2={0} y1="0" y2={-chartHeight} />
+<div class="chart-wrapper">
+	<div bind:clientWidth={width}>
+		{#await incidentData}
+			<Loading height={500} />
+		{:then _}
+			<h3 class="chart-label">
+				Number of mass killings and victims this year compared with previous years
+			</h3>
+			<div class="chart-controls">
+				<TabButtons options={variableOptions} bind:currentValue={chartValue} />
+			</div>
+			{#if lines.length > 0 && scalesX.length > 0}
+				<svg {width} {height}>
+					<g transform="translate({margin.left}, {margin.top})">
+						<g class="x-axis-g" transform="translate(0, {chartHeight})">
+							{#each ticksX as tick, i}
+								{#if i % xTicksEvery == 0}
+									<g class="tick tick-{i}" transform="translate({scalesX[0](tick)})">
+										<text y={tickHeight + 2} x={0}>{tickFormat(tick)}</text>
+										<line x1={0} x2={0} y1="0" y2={-chartHeight} />
+									</g>
+								{/if}
+							{/each}
+						</g>
+						<g class="y-axis-g" transform="translate({-margin.left}, 0)">
+							{#each ticksY as tick, i}
+								<g
+									class="tick tick-{i}"
+									transform="translate({margin.left - 5}, {scaleY(tick)})">
+									<text y={0} x={0} dominant-baseline="central" text-anchor="end"
+										>{tick}</text>
+									<line y1={0} y2={0} x1={5} x2={chartWidth} />
 								</g>
-							{/if}
+							{/each}
+						</g>
+						{#each incidentsByYear as year, yearIdx}
+							<path
+								d={lines[yearIdx](year.counts)}
+								fill="none"
+								stroke-width={isCurrentYear(year.year) ? 3 : 2}
+								opacity={isCurrentYear(year.year) || highestYear.year == year.year
+									? 1
+									: 0.5}
+								stroke={isCurrentYear(year.year) ? colors.orange : colors["grey"]} />
+							<circle
+								r={isCurrentYear(year.year) ? 3 : 3}
+								fill="#ffffff"
+								stroke-width="3"
+								opacity={isCurrentYear(year.year) || highestYear.year == year.year
+									? 1
+									: 0.5}
+								stroke={isCurrentYear(year.year) ? colors["orange"] : colors["grey"]}
+								cx={scalesX[yearIdx](year.counts[year.counts.length - 1].date)}
+								cy={scaleY(year.counts[year.counts.length - 1][chartValue])} />
 						{/each}
+						<!-- current year -->
+						<g
+							transform="translate({scalesX[scalesX.length - 1](lastIncident.date) +
+								10}, {scaleY(lastIncident[chartValue])})">
+							<text class="chart-annotation" font-size={annotationSize}
+								>{incidentsByYear[incidentsByYear.length - 1].year}</text>
+							<text
+								class="chart-annotation"
+								dy={annotationSize + 2}
+								font-size={annotationSize}
+								>{lastIncident[chartValue]} {" " + chartValue}</text>
+						</g>
+						<!-- highest year -->
+						<g
+							transform="translate({chartWidth + 10}, {scaleY(
+								highestYear[chartValue]
+							)})">
+							<text class="chart-annotation highest" font-size={annotationSize}
+								>{highestYear.year}</text>
+							<text
+								class="chart-annotation highest"
+								dy={annotationSize + 2}
+								font-size={annotationSize}>{highestYear[chartValue]}</text>
+						</g>
 					</g>
-					<g class="y-axis-g" transform="translate({-margin.left}, 0)">
-						{#each ticksY as tick, i}
-							<g
-								class="tick tick-{i}"
-								transform="translate({margin.left - 5}, {scaleY(tick)})">
-								<text y={0} x={0} dominant-baseline="central" text-anchor="end"
-									>{tick}</text>
-								<line y1={0} y2={0} x1={5} x2={chartWidth} />
-							</g>
-						{/each}
-					</g>
-					{#each incidentsByYear as year, yearIdx}
-						<path
-							d={lines[yearIdx](year.counts)}
-							fill="none"
-							stroke-width={isCurrentYear(year.year) ? 3 : 2}
-							opacity={isCurrentYear(year.year) || highestYear.year == year.year ? 1 : 0.5}
-							stroke={isCurrentYear(year.year) ? colors.orange : colors["grey"]} />
-						<circle
-							r={isCurrentYear(year.year) ? 3 : 3}
-							fill="#ffffff"
-							stroke-width="3"
-							opacity={isCurrentYear(year.year) || highestYear.year == year.year ? 1 : 0.5}
-							stroke={isCurrentYear(year.year) ? colors["orange"] : colors["grey"]}
-							cx={scalesX[yearIdx](year.counts[year.counts.length - 1].date)}
-							cy={scaleY(year.counts[year.counts.length - 1][chartValue])} />
-					{/each}
-					<!-- current year -->
-					<g
-						transform="translate({scalesX[scalesX.length - 1](lastIncident.date) +
-							10}, {scaleY(lastIncident[chartValue])})">
-						<text class="chart-annotation" font-size={annotationSize}
-							>{incidentsByYear[incidentsByYear.length - 1].year}</text>
-						<text class="chart-annotation" dy={annotationSize + 2} font-size={annotationSize}
-							>{lastIncident[chartValue]} {" " + chartValue}</text>
-					</g>
-					<!-- highest year -->
-					<g
-						transform="translate({chartWidth +
-							10}, {scaleY(highestYear[chartValue])})">
-						<text class="chart-annotation highest" font-size={annotationSize}
-							>{highestYear.year}</text>
-						<text class="chart-annotation highest" dy={annotationSize + 2} font-size={annotationSize}
-							>{highestYear[chartValue]}</text>
-					</g>
-				</g>
-			</svg>
-		{/if}
-	{/await}
+				</svg>
+			{/if}
+		{/await}
+	</div>
 </div>
 
 <style>
@@ -216,11 +231,12 @@
 	}
 	.chart-annotation {
 		font-weight: 900;
-		text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8), 1px -1px 0px rgba(255, 255, 255, 0.8), -1px 1px 0px rgba(255, 255, 255, 0.8), -1px -1px 0px rgba(255, 255, 255, 0.8);
+		text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8),
+			1px -1px 0px rgba(255, 255, 255, 0.8), -1px 1px 0px rgba(255, 255, 255, 0.8),
+			-1px -1px 0px rgba(255, 255, 255, 0.8);
 		fill: var(--mk-color-grey-dark);
 	}
 	.chart-annotation.highest {
-		/* font-weight: 400; */
 		fill: var(--mk-color-grey);
 		text-shadow: none;
 	}

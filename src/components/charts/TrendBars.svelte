@@ -71,57 +71,59 @@
 	}
 </script>
 
-<div class="trend-line-wrap chart-wrapper" bind:clientWidth={width}>
-	<h3 class="chart-label">{chartLabel}</h3>
-	<div class="key-wrapper">
-		{#each yearlyVariables as yearlyVariable}
-			<div class="key-item">
-				<div
-					class="key-item-swatch"
-					style={"background-color: " + colorScale(yearlyVariable.field)} />
-				<p class="key-item-label">{yearlyVariable.label}</p>
-			</div>
-		{/each}
-	</div>
-	<svg {width} {height} >
-		<g class="chart-g" transform="translate({margin.left}, {margin.top})">
-			<g class="x-axis-g" transform="translate(0, {chartHeight})"  >
-				{#each scaleX.domain() as tick, i}
-					{#if i % xTicksEvery == 0}
-					<g class="tick tick-{i}" transform="translate({scaleX(tick)})">
-						<text y={tickHeight + 2} x={scaleX.bandwidth() / 2}>{tick}</text>
-						<line x1={scaleX.bandwidth() / 2} x2={scaleX.bandwidth() / 2} y1="0" y2={tickHeight / 2}></line>
-					</g>
-					{/if}
-				{/each}
-			</g>
-			<g
-				class="y-axis-g"
-				transform="translate({-margin.left}, 0)">
-					{#each ticksY as tick, i}
-					<g class="tick tick-{i}" transform="translate({margin.left / 2}, {scaleY(tick)})">
-						<text y={-2} x={0} >{tick}</text>
-						<line y1={0} y2={0} x1={0} x2={width}></line>
-					</g>
+<div class="trend-line-wrap chart-wrapper" >
+	<div bind:clientWidth={width} >
+		<h3 class="chart-label">{chartLabel}</h3>
+		<div class="key-wrapper">
+			{#each yearlyVariables as yearlyVariable}
+				<div class="key-item">
+					<div
+						class="key-item-swatch"
+						style={"background-color: " + colorScale(yearlyVariable.field)} />
+					<p class="key-item-label">{yearlyVariable.label}</p>
+				</div>
+			{/each}
+		</div>
+		<svg {width} {height} >
+			<g class="chart-g" transform="translate({margin.left}, {margin.top})">
+				<g class="x-axis-g" transform="translate(0, {chartHeight})"  >
+					{#each scaleX.domain() as tick, i}
+						{#if i % xTicksEvery == 0}
+						<g class="tick tick-{i}" transform="translate({scaleX(tick)})">
+							<text y={tickHeight + 2} x={scaleX.bandwidth() / 2}>{tick}</text>
+							<line x1={scaleX.bandwidth() / 2} x2={scaleX.bandwidth() / 2} y1="0" y2={tickHeight / 2}></line>
+						</g>
+						{/if}
 					{/each}
-			</g>
-			<g class="data-g">
-				{#each stackedData as row, rowIdx}
-					{#each row as bar}
-						<rect
-							class:current-year={isCurrentYear(bar.data.year)}
-							y={Math.min(scaleY(bar[0]), scaleY(bar[1]))}
-							height={Math.abs(scaleY(bar[0]) - scaleY(bar[1]))}
-							fill={colorScale(yearlyVariables[rowIdx].field)}
-							width={scaleX.bandwidth()}
-							x={scaleX(bar.data.year)}
+				</g>
+				<g
+					class="y-axis-g"
+					transform="translate({-margin.left}, 0)">
+						{#each ticksY as tick, i}
+						<g class="tick tick-{i}" transform="translate({margin.left / 2}, {scaleY(tick)})">
+							<text y={-2} x={0} >{tick}</text>
+							<line y1={0} y2={0} x1={0} x2={width}></line>
+						</g>
+						{/each}
+				</g>
+				<g class="data-g">
+					{#each stackedData as row, rowIdx}
+						{#each row as bar}
+							<rect
+								class:current-year={isCurrentYear(bar.data.year)}
+								y={Math.min(scaleY(bar[0]), scaleY(bar[1]))}
+								height={Math.abs(scaleY(bar[0]) - scaleY(bar[1]))}
+								fill={colorScale(yearlyVariables[rowIdx].field)}
+								width={scaleX.bandwidth()}
+								x={scaleX(bar.data.year)}
 
-						></rect>
+							></rect>
+						{/each}
 					{/each}
-				{/each}
+				</g>
 			</g>
-		</g>
-	</svg>
+		</svg>
+	</div>
 </div>
 
 <style>
@@ -139,6 +141,7 @@
 	.key-item-swatch {
 		width: 10px;
 		height: 10px;
+		flex: none;
 	}
 
 	p.key-item-label {

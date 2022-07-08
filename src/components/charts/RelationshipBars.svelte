@@ -29,9 +29,9 @@
 	});
 </script>
 <div 
+	class="chart-wrapper"
 	class:in-depth-article-width={!isEmbed()}>
 	<div
-		class="chart-wrapper"
 		bind:clientWidth={width}>
 		<h3 class="chart-label">Number of victims by relationship to their murderers</h3>
 		<div class="key-wrap">

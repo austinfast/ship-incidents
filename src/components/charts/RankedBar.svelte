@@ -38,42 +38,44 @@
 	});
 </script>
 
-<div class="ranked-bar-wrap chart-wrapper" bind:clientWidth={width}>
-	{#if chartLabel}
-		<h3 class="chart-label">{chartLabel}</h3>
-	{/if}
+<div class="ranked-bar-wrap chart-wrapper" >
+	<div bind:clientWidth={width}>
+		{#if chartLabel}
+			<h3 class="chart-label">{chartLabel}</h3>
+		{/if}
 
-	<svg class="ranked-bar-chart" {width} {height}>
-		<g
-			class="x-axis-g"
-			transform="translate({margin.left}, 0)">
-				{#each ticksX as tick, i}
-				<g class="tick tick-{i}" transform="translate({scaleX(tick)}, {margin.top - tickSize})">
-					<text y={-2} x={0} >{tick}</text>
-					<line y1={0} y2={height - margin.top } x1={0} x2={0}></line>
-				</g>
+		<svg class="ranked-bar-chart" {width} {height}>
+			<g
+				class="x-axis-g"
+				transform="translate({margin.left}, 0)">
+					{#each ticksX as tick, i}
+					<g class="tick tick-{i}" transform="translate({scaleX(tick)}, {margin.top - tickSize})">
+						<text y={-2} x={0} >{tick}</text>
+						<line y1={0} y2={height - margin.top } x1={0} x2={0}></line>
+					</g>
+					{/each}
+			</g>
+			<g class="chart-g" transform={`translate(${margin.left}, ${margin.top + tickSize})`}>
+				{#each sortedItems as item, i}
+					<g
+						class="item-g"
+						transform={`translate(0, ${i * (barHeight + barMargin * 2 + labelSize)})`}>
+						<text class="ranked-bar-label">{item.label}</text>
+						<rect
+							height={barHeight}
+							width={scaleX(item[valueKey])}
+							fill={color}
+							transform={"translate(0, " + barMargin + ")"} />
+						<text
+							transform="translate({scaleX(item[valueKey]) + barMargin}, {labelSize / 2 +
+								barMargin +
+								barHeight / 2})"
+							class="ranked-bar-count">{prettyNumber(item[valueKey])}</text>
+					</g>
 				{/each}
-		</g>
-		<g class="chart-g" transform={`translate(${margin.left}, ${margin.top + tickSize})`}>
-			{#each sortedItems as item, i}
-				<g
-					class="item-g"
-					transform={`translate(0, ${i * (barHeight + barMargin * 2 + labelSize)})`}>
-					<text class="ranked-bar-label">{item.label}</text>
-					<rect
-						height={barHeight}
-						width={scaleX(item[valueKey])}
-						fill={color}
-						transform={"translate(0, " + barMargin + ")"} />
-					<text
-						transform="translate({scaleX(item[valueKey]) + barMargin}, {labelSize / 2 +
-							barMargin +
-							barHeight / 2})"
-						class="ranked-bar-count">{prettyNumber(item[valueKey])}</text>
-				</g>
-			{/each}
-		</g>
-	</svg>
+			</g>
+		</svg>
+	</div>
 </div>
 
 <style>
@@ -85,11 +87,17 @@
 		font-size: var(--mk-font-size-small);
 		line-height: var(--mk-line-height-small);
 		font-weight: 700;
+		text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8),
+			1px -1px 0px rgba(255, 255, 255, 0.8), -1px 1px 0px rgba(255, 255, 255, 0.8),
+			-1px -1px 0px rgba(255, 255, 255, 0.8);
 	}
 	.ranked-bar-count {
 		font-weight: 700;
 		fill: var(--mk-color-grey-dark, #404040);
 		font-size: var(--mk-font-size-small);
+		text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8),
+			1px -1px 0px rgba(255, 255, 255, 0.8), -1px 1px 0px rgba(255, 255, 255, 0.8),
+			-1px -1px 0px rgba(255, 255, 255, 0.8);
 	}
 	.x-axis-g .tick text {
 		font-size: var(--mk-font-size-small);
