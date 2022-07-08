@@ -23,7 +23,7 @@
 		top: 50,
 		right: 20,
 		bottom: 20,
-		left: 50,
+		left: 25,
 	};
 	$: chartHeight = height - margin.top - margin.bottom;
 	$: chartWidth = width - margin.left - margin.right;
@@ -72,7 +72,7 @@
 						{#each ticksY as tick, i}
 							<g
 								class="tick tick-{i}"
-								transform="translate({margin.left / 2}, {scaleY(tick)})">
+								transform="translate(0, {scaleY(tick)})">
 								<text y={-2} x={0}>{tick}</text>
 								<line y1={0} y2={0} x1={0} x2={width} />
 							</g>
