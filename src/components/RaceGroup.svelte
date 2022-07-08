@@ -29,12 +29,10 @@
 		<Loading height={500}/>
 	{:then _}
 		<div class="group-item">
-			<h3 class="chart-label">{victimHeadline}</h3>
-			<Bars chartData={victimData} dataKey="victimRaceCounts" color={colors.orange} valueKey={valueKey} numTicks={3}/>
+			<Bars chartLabel={victimHeadline} chartData={victimData} dataKey="victimRaceCounts" color={colors.orange} valueKey={valueKey} numTicks={3}/>
 		</div>
 		<div class="group-item">
-			<h3 class="chart-label">{offenderHeadline}</h3>
-			<Bars chartData={offenderData} dataKey="offenderRaceCounts" color={colors.blue} valueKey={valueKey} numTicks={3}/>
+			<Bars chartLabel={offenderHeadline} chartData={offenderData} dataKey="offenderRaceCounts" color={colors.blue} valueKey={valueKey} numTicks={3}/>
 		</div>
 	{/await}
 </div>
@@ -43,6 +41,8 @@
 .chart-group {
 	display: flex;
 	flex-wrap: wrap;
+	max-width: 900px;
+	margin: 0 auto;
 }
 .group-item {
 	width: 100%;
