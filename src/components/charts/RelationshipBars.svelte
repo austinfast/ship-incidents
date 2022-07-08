@@ -1,5 +1,6 @@
 <script>
 	import { scaleLinear, max, sum } from "d3";
+	import { isEmbed } from "../../lib/utils.js";
 
 	export let victimData;
 
@@ -27,67 +28,70 @@
 		counts = d.victimRelationships;
 	});
 </script>
-
-<div
-	class="chart-wrapper"
-	bind:clientWidth={width}>
-	<h3 class="chart-label">Number of victims by relationship to their murderers</h3>
-	<div class="key-wrap">
-		{#each bar_1 as keyItem}
-			<div class="key-item">
-				<div class="key-item-pallette" style={`background: ${keyItem[1]};`} />
-				<p class="key-item-label">{keyItem[2]}</p>
-			</div>
-		{/each}
-		{#each bar_2 as keyItem}
-			<div class="key-item">
-				<div class="key-item-pallette" style={`background: ${keyItem[1]};`} />
-				<p class="key-item-label">{keyItem[2]}</p>
-			</div>
-		{/each}
-		{#each bar_3 as keyItem}
-			<div class="key-item">
-				<div class="key-item-pallette" style={`background: ${keyItem[1]};`} />
-				<p class="key-item-label">{keyItem[2]}</p>
-			</div>
-		{/each}
-	</div>
-	{#if counts && heightScale}
-		<svg class="relationship-bar" {width} height={maxHeight}>
-			{#each bars as bar, barIndex}
-				<g transform={`translate(${(barWidth + barMargin) * barIndex}, 0)`}>
-					{#each bar as barCategory, i}
-						<rect
-							width={barWidth}
-							height={heightScale(counts[barCategory[0]])}
-							fill={barCategory[1]}
-							y={i > 0
-								? maxHeight -
-								  (heightScale(counts[barCategory[0]]) + heightScale(counts[bar[0][0]]))
-								: maxHeight - heightScale(counts[barCategory[0]])} />
-						<text
-							class="bar-count-label"
-							y={i > 0
-								? barIndex == 1
-									? maxHeight -
-									  (heightScale(counts[barCategory[0]]) +
-											heightScale(counts[bar[0][0]])) -
-									  8
-									: maxHeight -
-									  (heightScale(counts[barCategory[0]]) +
-											heightScale(counts[bar[0][0]])) +
-									  20
-								: maxHeight - heightScale(counts[barCategory[0]]) + 20}
-							x={22}
-							fill={barIndex == 1 && i == 1 ? "#404040" : "#ffffff"}
-							>{counts[barCategory[0]]}</text>
-					{/each}
-				</g>
+<div 
+	class:in-depth-article-width={!isEmbed()}>
+	<div
+		class="chart-wrapper"
+		bind:clientWidth={width}>
+		<h3 class="chart-label">Number of victims by relationship to their murderers</h3>
+		<div class="key-wrap">
+			{#each bar_1 as keyItem}
+				<div class="key-item">
+					<div class="key-item-pallette" style={`background: ${keyItem[1]};`} />
+					<p class="key-item-label">{keyItem[2]}</p>
+				</div>
 			{/each}
-		</svg>
-	{/if}
+			{#each bar_2 as keyItem}
+				<div class="key-item">
+					<div class="key-item-pallette" style={`background: ${keyItem[1]};`} />
+					<p class="key-item-label">{keyItem[2]}</p>
+				</div>
+			{/each}
+			{#each bar_3 as keyItem}
+				<div class="key-item">
+					<div class="key-item-pallette" style={`background: ${keyItem[1]};`} />
+					<p class="key-item-label">{keyItem[2]}</p>
+				</div>
+			{/each}
+		</div>
+		{#if counts && heightScale}
+			<svg class="relationship-bar" {width} height={maxHeight}>
+				<!-- <g transform="translate({(width / 2) - (barWidth * 1.5 + barMargin)},0)"> -->
+					{#each bars as bar, barIndex}
+						<g transform={`translate(${(barWidth + barMargin) * barIndex}, 0)`}>
+							{#each bar as barCategory, i}
+								<rect
+									width={barWidth}
+									height={heightScale(counts[barCategory[0]])}
+									fill={barCategory[1]}
+									y={i > 0
+										? maxHeight -
+										  (heightScale(counts[barCategory[0]]) + heightScale(counts[bar[0][0]]))
+										: maxHeight - heightScale(counts[barCategory[0]])} />
+								<text
+									class="bar-count-label"
+									y={i > 0
+										? barIndex == 1
+											? maxHeight -
+											  (heightScale(counts[barCategory[0]]) +
+													heightScale(counts[bar[0][0]])) -
+											  8
+											: maxHeight -
+											  (heightScale(counts[barCategory[0]]) +
+													heightScale(counts[bar[0][0]])) +
+											  20
+										: maxHeight - heightScale(counts[barCategory[0]]) + 20}
+									x={22}
+									fill={barIndex == 1 && i == 1 ? "#404040" : "#ffffff"}
+									>{counts[barCategory[0]]}</text>
+							{/each}
+						</g>
+					{/each}
+				<!-- </g> -->
+			</svg>
+		{/if}
+	</div>
 </div>
-
 <style>
 	.key-item-pallette {
 		width: 10px;

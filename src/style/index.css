@@ -32,6 +32,10 @@ body {
 	color: var(--mk-color-text);
 }
 
+.usat-interactive-graphic, .usat-interactive-graphic * {
+	box-sizing: border-box;
+}
+
 .usat-interactive-graphic div,
 .usat-interactive-graphic ul,
 .usat-interactive-graphic ol,
