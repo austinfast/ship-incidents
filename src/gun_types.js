@@ -13,7 +13,6 @@ const typeLabels = {
 	"UG": "Unknown guns",
 };
 
-console.log("Rendering gun types");
 new WeaponWaffle({
 	target: mainEl,
 	props: {
@@ -21,7 +20,8 @@ new WeaponWaffle({
 		splitBy,
 		chartColor: colors.blue,
 		labels: typeLabels,
-		dataFilter: [splitBy, ["HG", "LG", "UG"]]
+		dataFilter: [splitBy, ["HG", "LG", "UG"]],
+		chartLabel: "Types of guns used in mass killings"
 	},
 });
 // Set up height resizer for embeds

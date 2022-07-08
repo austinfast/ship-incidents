@@ -95,6 +95,12 @@ body {
 	width: 100%;
 }
 
+.usat-interactive-graphic h3.chart-label {
+	font-size: var(--mk-font-size-medium);
+	font-weight: 700;
+	margin-bottom: 0.75em;
+}
+
 @media (min-width: 768px) {
 	.usat-interactive-graphic .in-depth-article-width {
 		padding: 0 18vw;

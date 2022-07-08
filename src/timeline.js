@@ -3,9 +3,9 @@ import "./style/index.css";
 import Timeline from "./components/charts/Timeline.svelte";
 import { getIncidentData } from "./lib/data/incidents.js";
 
-const mainEl = document.getElementById("MK-timeline-embed");
-console.log("Rendering timeline");
-let timeline = new Timeline({
+const name = "timeline";
+const mainEl = document.getElementById(`MK-${name}-embed`);
+new Timeline({
 	target: mainEl,
 	props: {
 		popupSlot: "incident-timeline",

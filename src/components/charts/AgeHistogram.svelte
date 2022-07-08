@@ -4,6 +4,7 @@
 	export let color = "#e3e3e3";
 	export let sourceData;
 	export let ageBinKey;
+	export let chartLabel;
 
 	let width = 300;
 	let binnedData = [];
@@ -37,6 +38,9 @@
 </script>
 
 <div class="age-histogram-wrap chart-wrapper" bind:clientWidth={width}>
+	{#if chartLabel}
+		<h3 class="chart-label">{chartLabel}</h3>
+	{/if}
 	{#if binnedData}
 		<svg class="age-histogram-svg" {width} {height}>
 			<g class="chart-group" transform="translate({margin.left}, {margin.top})">

@@ -4,10 +4,10 @@
 	export let colors = [];
 	export let sourceData;
 	export let countKey;
+	export let chartLabel;
 
 	let width;
 	let dataCounts = [];
-	let allValues = [];
 	let barSize = 50;
 	let barMargin = 0;
 	let countSum;
@@ -48,6 +48,9 @@
 </script>
 
 <div class="stacked-bar-wrap chart-wrapper" bind:clientWidth={width}>
+	{#if chartLabel}
+		<h3 class="chart-label">{chartLabel}</h3>
+	{/if}
 	<div class="key-wrap article-text-width">
 		{#each dataCounts as keyItem, i}
 			<div class="key-item">

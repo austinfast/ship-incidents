@@ -31,6 +31,7 @@
 <div
 	class="chart-wrapper"
 	bind:clientWidth={width}>
+	<h3 class="chart-label">Number of victims by relationship to their murderers</h3>
 	<div class="key-wrap">
 		{#each bar_1 as keyItem}
 			<div class="key-item">

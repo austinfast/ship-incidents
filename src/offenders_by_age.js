@@ -6,13 +6,13 @@ import colors from "./lib/colors.js";
 
 const mainEl = document.getElementById("MK-offenders_by_age-embed");
 
-console.log("render offenders by age");
-let ageHistogram = new AgeHistogram({
+new AgeHistogram({
 	target: mainEl,
 	props: {
 		color: colors.blue,
 		sourceData: getOffenderData(),
 		ageBinKey: "offenderAges",
+		chartLabel: "Number of offenders by age"
 	}
 });
 

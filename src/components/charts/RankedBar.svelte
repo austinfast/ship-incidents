@@ -7,6 +7,7 @@
 	export let color;
 	export let valueKey = "count";
 	export let barSize;
+	export let chartLabel;
 	export let numTicks = 10;
 
 	let items = [];
@@ -38,6 +39,10 @@
 </script>
 
 <div class="ranked-bar-wrap chart-wrapper" bind:clientWidth={width}>
+	{#if chartLabel}
+		<h3 class="chart-label">{chartLabel}</h3>
+	{/if}
+
 	<svg class="ranked-bar-chart" {width} {height}>
 		<g
 			class="x-axis-g"

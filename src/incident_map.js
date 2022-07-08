@@ -4,7 +4,6 @@ import Map from "./components/charts/IncidentMap.svelte";
 import { getIncidentData } from "./lib/data/incidents.js";
 
 const mainEl = document.getElementById("MK-incident_map-embed");
-console.log("Rendering map");
 new Map({
 	target: mainEl,
 	props: {

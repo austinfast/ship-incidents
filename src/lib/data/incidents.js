@@ -6,16 +6,13 @@ let incidentData = null;
 
 export function getIncidentData() {
 	if (!incidentData) {
-		console.log("incident data doesn't exist, generating");
 		incidentData = generateIncidentData();
 	} else {
-		console.log("incident data already exists, using copy");
 	}
 	return incidentData;
 }
 
 async function generateIncidentData() {
-	console.log("get incident data");
 	const dataURL = getDataURL("incidents.json");
 	const rawIncidents = await getDataFromURL(dataURL);
 	// incident lookup object

@@ -37,6 +37,7 @@
 	$: chartMax = d3.max(incidentsByYear, (year) =>
 		d3.max(year.counts, (d) => d[chartValue])
 	);
+	$: annotationSize = width < 500 ? 12 : 14;
 	$: scaleY = d3.scaleLinear().domain([0, chartMax]).range([chartHeight, 0]).nice();
 	$: ticksY = scaleY.ticks(numYTicks);
 	$: getScaleX = function (year) {
@@ -130,6 +131,7 @@
 	{#await incidentData}
 		<Loading height={500} />
 	{:then _}
+		<h3 class="chart-label">Number of mass killings and victims this year compared with previous years</h3>
 		<div class="chart-controls">
 			<TabButtons options={variableOptions} bind:currentValue={chartValue} />
 		</div>
@@ -177,18 +179,18 @@
 					<g
 						transform="translate({scalesX[scalesX.length - 1](lastIncident.date) +
 							10}, {scaleY(lastIncident[chartValue])})">
-						<text class="chart-annotation"
+						<text class="chart-annotation" font-size={annotationSize}
 							>{incidentsByYear[incidentsByYear.length - 1].year}</text>
-						<text class="chart-annotation" dy="15"
+						<text class="chart-annotation" dy={annotationSize + 2} font-size={annotationSize}
 							>{lastIncident[chartValue]} {" " + chartValue}</text>
 					</g>
 					<!-- highest year -->
 					<g
 						transform="translate({chartWidth +
 							10}, {scaleY(highestYear[chartValue])})">
-						<text class="chart-annotation highest"
+						<text class="chart-annotation highest" font-size={annotationSize}
 							>{highestYear.year}</text>
-						<text class="chart-annotation highest" dy="15"
+						<text class="chart-annotation highest" dy={annotationSize + 2} font-size={annotationSize}
 							>{highestYear[chartValue]}</text>
 					</g>
 				</g>
@@ -214,7 +216,6 @@
 	}
 	.chart-annotation {
 		font-weight: 900;
-		font-size: 12px;
 		text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8), 1px -1px 0px rgba(255, 255, 255, 0.8), -1px 1px 0px rgba(255, 255, 255, 0.8), -1px -1px 0px rgba(255, 255, 255, 0.8);
 		fill: var(--mk-color-grey-dark);
 	}

@@ -7,6 +7,7 @@
 	export let yearlyData = [];
 	export let yearlyVariables = [];
 	export let incidentData;
+	export let chartLabel;
 
 	// data
 	incidentData.then((d) => {
@@ -71,6 +72,7 @@
 </script>
 
 <div class="trend-line-wrap chart-wrapper" bind:clientWidth={width}>
+	<h3 class="chart-label">{chartLabel}</h3>
 	<div class="key-wrapper">
 		{#each yearlyVariables as yearlyVariable}
 			<div class="key-item">

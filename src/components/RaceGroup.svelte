@@ -29,11 +29,11 @@
 		<Loading height={500}/>
 	{:then _}
 		<div class="group-item">
-			<h3 class="chart-sub-head">{victimHeadline}</h3>
+			<h3 class="chart-label">{victimHeadline}</h3>
 			<Bars chartData={victimData} dataKey="victimRaceCounts" color={colors.orange} valueKey={valueKey} numTicks={3}/>
 		</div>
 		<div class="group-item">
-			<h3 class="chart-sub-head">{offenderHeadline}</h3>
+			<h3 class="chart-label">{offenderHeadline}</h3>
 			<Bars chartData={offenderData} dataKey="offenderRaceCounts" color={colors.blue} valueKey={valueKey} numTicks={3}/>
 		</div>
 		<p class="chart-note">NOTE Race is unkown for {prettyNumber(unkownVictims)} out of {prettyNumber(totalVictims)} victims and {prettyNumber(unkownOffenders)} out of {prettyNumber(totalOffenders)} offenders.</p>
@@ -50,10 +50,6 @@
 }
 .chart-note {
 	font-size: var(--mk-font-size-small);
-}
-.chart-sub-head {
-	font-size: var(--mk-font-size-medium);
-	font-weight: 700;
 }
 @media(min-width: 768px) {
 	.group-item {

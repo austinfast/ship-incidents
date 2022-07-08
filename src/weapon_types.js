@@ -7,13 +7,13 @@ import colors from "./lib/colors.js";
 const mainEl = document.getElementById("MK-weapon_types-embed");
 const splitBy = "weapon_type";
 
-console.log("Rendering weapon types");
 new WeaponWaffle({
 	target: mainEl,
 	props: {
 		weaponData: getWeaponData(),
 		splitBy,
-		chartColor: colors.orange
+		chartColor: colors.orange,
+		chartLabel: "Types of weapons used in mass killings"
 	},
 });
 // Set up height resizer for embeds

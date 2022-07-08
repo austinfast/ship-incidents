@@ -5,7 +5,7 @@ import { getIncidentData } from "./lib/data/incidents.js";
 
 let mainEl = document.getElementById("MK-summary_by_category_area-embed");
 
-let chart = new CategoryChartGroup({
+new CategoryChartGroup({
 	target: mainEl,
 	props: {
 		incidentData: getIncidentData(),

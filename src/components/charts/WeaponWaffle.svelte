@@ -4,6 +4,7 @@
 	export let chartColor = "#cecece";
 	export let dataFilter;
 	export let labels = {};
+	export let chartLabel;
 
 	let weapons = [];
 	let boxSize = 10;
@@ -106,6 +107,9 @@
 </script>
 
 <div class="chart-wrapper weapon-waffle" bind:clientWidth={width}>
+	{#if chartLabel}
+		<h3 class="chart-label">{chartLabel}</h3>
+	{/if}
 	{#if chartsData.length > 0}
 		<svg {width} {height}>
 			{#each chartsData as chartRow, rowIdx}

@@ -17,7 +17,6 @@ export function getDataURL(filename) {
 // function that returns a Promise that resolves to data for a corresponding URL, either from cache or fetch()
 export function getDataFromURL(url) {
 	if (!cache.has(url)) {
-		console.log("fetching fresh from server " + url);
 		// fetch url and store a Promise that resolves to the data
 		const data = fetch(url).then((resp) => resp.json());
 		cache.set(url, data);

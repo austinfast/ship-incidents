@@ -19,11 +19,12 @@ const yearlyVariables = [
 	},
 ];
 
-let trendBars = new TrendBars({
+new TrendBars({
 	target: mainEl,
 	props: {
 		yearlyVariables,
-		incidentData: getIncidentData()
+		incidentData: getIncidentData(),
+		chartLabel: "Number of victims year by year"
 	},
 });
 

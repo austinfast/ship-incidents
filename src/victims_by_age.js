@@ -6,7 +6,6 @@ import { getVictimData } from "./lib/data/victims.js";
 
 const mainEl = document.getElementById("MK-victims_by_age-embed");
 
-console.log("render victims by age");
 new AgeHistogram({
 	target: mainEl,
 	props: {
@@ -14,6 +13,7 @@ new AgeHistogram({
 		color: colors.orange,
 		ageBinKey: "victimAges",
 		ageScaleKey: "victimAgeScale",
+		chartLabel: "Number of victims by age"
 	}
 });
 

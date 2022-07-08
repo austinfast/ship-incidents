@@ -92,6 +92,7 @@
 </script>
 
 <div class="chart-wrap-double-group" bind:clientWidth={width}>
+	<h3 class="chart-label">Mass killings by location scaled by number of victims</h3>
 	<div class="map-controls">
 		<FilterSelect
 			bind:currentValue={typeFilter}

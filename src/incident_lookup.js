@@ -4,7 +4,6 @@ import Table from "./components/IncidentLookupTable.svelte";
 import { getIncidentData } from "./lib/data/incidents.js";
 
 const mainEl = document.getElementById("MK-incident_lookup-embed");
-console.log("Rendering table");
 new Table({
 	target: mainEl,
 	props: {

@@ -5,8 +5,7 @@ import { getVictimData } from "./lib/data/victims.js";
 
 const mainEl = document.getElementById("MK-relationship_types-embed");
 
-console.log("Rendering relationship chart");
-let bars = new Bars({
+new Bars({
 	target: mainEl,
 	props: {
 		victimData: getVictimData()

@@ -4,20 +4,6 @@ import TrendBars from "./components/charts/TrendBars.svelte";
 import { getIncidentData } from "./lib/data/incidents.js";
 
 const mainEl = document.getElementById("MK-incident_trends-embed");
-// const yearlyVariables = [
-// 	{
-// 		field: "incidents",
-// 		label: "Mass killings",
-// 	},
-// 	{
-// 		field: "mass_shootings",
-// 		label: "Mass shootings",
-// 	},
-// 	{
-// 		field: "mass_public_shootings",
-// 		label: "Mass public shootings",
-// 	},
-// ];
 
 const yearlyVariables = [
 	{
@@ -34,12 +20,12 @@ const yearlyVariables = [
 	},
 ];
 
-console.log("Rendering trend chart");
-let trendBars = new TrendBars({
+new TrendBars({
 	target: mainEl,
 	props: {
 		yearlyVariables,
-		incidentData: getIncidentData()
+		incidentData: getIncidentData(),
+		chartLabel: "Number of mass killings year by year"
 	},
 });
 

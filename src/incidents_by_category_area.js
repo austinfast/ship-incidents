@@ -19,7 +19,6 @@ const categories = [
 	},
 ];
 
-console.log("Rendering area chart");
 let chart = new CategoryAreaChart({
 	target: mainEl,
 	props: {

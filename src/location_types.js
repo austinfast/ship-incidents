@@ -6,13 +6,13 @@ import colors from "./lib/colors.js";
 
 const mainEl = document.getElementById("MK-location_types-embed");
 
-console.log("Rendering trend chart");
-let locationBars = new Bars({
+new Bars({
 	target: mainEl,
 	props: {
 		chartData: getIncidentData(),
 		dataKey: "locationTypes",
-		color: colors.orange
+		color: colors.orange,
+		chartLabel: "Number of mass killings by location type"
 	}
 });
 

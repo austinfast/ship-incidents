@@ -1,8 +1,5 @@
 title: Mass killings data
 author: USA TODAY Graphics
-description: A graphic published by USA TODAY
-date_published: 1/1/2022 10:00:00
-date_updated: 1/1/2022 10:00:00
 dataSources:
   local: static/data/cache
   production: https://www.gannett-cdn.com/experiments/usatoday/_data/mass-killings
@@ -12,37 +9,52 @@ output:
     local_only: true
   - filename: timeline
     ssr: false
+    label: Incidents scaled by number of victims over time
   - filename: number_summary
     ssr: false
   - filename: summary_by_category_area
     ssr: false
   - filename: incident_trends
     ssr: false
+    label: Number of incidents year by year
   - filename: victim_trends
     ssr: false
+    label: Number of victims year by year
   - filename: location_types
     ssr: false
+    label: Number of incidents by type of location
   - filename: relationship_types
     ssr: false
+    label: Relationships of victims to their killers
   - filename: victims_by_age
     ssr: false
+    label: Victims by age
   - filename: victims_by_sex
     ssr: false
+    label: Victims by sex
   - filename: offenders_by_sex
     ssr: false
+    label: Offenders by sex
   - filename: victims_offenders_by_race
     ssr: false
+    label: Victims and offenders by race
   - filename: victims_offenders_by_race_per_cap
     ssr: false
+    label: Victims and offenders by race per 1 million U.S. residents
   - filename: offenders_by_age
     ssr: false
+    label: Offenders by age
   - filename: weapon_types
     ssr: false
+    label: Types of weapons used in mass killings
   - filename: gun_types
     ssr: false
+    label: Types of guns used in mass killings
   - filename: incident_map
     ssr: false
+    label: Mass killings by location
   - filename: incident_lookup
     ssr: false
   - filename: incident_year_lines
     ssr: false
+    label: Number of incidents and victims this year compared with past years

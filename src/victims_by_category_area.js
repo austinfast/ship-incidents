@@ -3,7 +3,6 @@ import "./style/index.css";
 import dataManager from "./lib/data.js";
 import CategoryAreaChart from "./components/charts/CategoryAreaChart.svelte";
 
-let incidents = [];
 const mainEl = document.getElementById("MK-victims_by_category_area-embed");
 
 const categories = [
@@ -21,7 +20,7 @@ const categories = [
 	},
 ];
 
-let chart = new CategoryAreaChart({
+new CategoryAreaChart({
 	target: mainEl,
 	props: {
 		dataManager,
