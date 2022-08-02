@@ -110,7 +110,6 @@ function getEntries(outputs, production) {
 			"./src/lib/data/victims.js",
 			"./src/lib/data/offenders.js",
 			"./src/lib/data/weapons.js",
-			"./src/stores/popup.js",
 			"./src/style/index.css",
 			"./src/style/fonts.css",
 		],

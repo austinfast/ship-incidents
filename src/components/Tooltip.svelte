@@ -5,14 +5,15 @@
 	export let position;
 	export let onClose = () => null;
 
-	let winWidth = 350;
+	let winWidth = 400;
 	let winHeight = 600;
 	let winScroll = 0;
 	// check for prescence of nav bar above article
 	$: navEl = document ? document.getElementById("navWrapContainer") : null;
 	// get height of nav bar if it exists
 	$: navHeight = navEl ? navEl.getBoundingClientRect().height : 0;
-	$: tooltipWidth = Math.min(winWidth, 350);
+	$: console.log(navHeight);
+	$: tooltipWidth = Math.min(winWidth, 400);
 	$: xPos = ((position[0] + tooltipWidth / 2) > winWidth || (position[0] - tooltipWidth / 2 < 0)) ? winWidth / 2 : position[0];
 	$: toolTipBelow = position[1] < (winHeight / 2 + winScroll);
 	// make sure to adjust for nav bar in vertical position
@@ -70,7 +71,7 @@
 		transform: translate(-50%, -100%);
 		padding: 10px;
 		background: #ffffff;
-		width: 350px;
+		width: 400px;
 		border: solid 2px var(--mk-color-orange);
 		box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.15);
 		font-size: 14px;
