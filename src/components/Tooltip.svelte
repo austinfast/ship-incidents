@@ -22,7 +22,7 @@
 
 <svelte:window bind:innerWidth={winWidth} bind:innerHeight={winHeight} bind:scrollY={winScroll} />
 <div class="tooltip-wrapper" style={`left: ${xPos}px; top: ${yPos}px`} class:below={toolTipBelow}>
-	<button class="tooltip-close" aria-label="close tooltip">✖</button>
+	<button class="tooltip-close" aria-label="close tooltip" on:click={onClose}>✖</button>
 	{#if incident}
 		<p class="tooltip-label">{prettyDate(incident.real_date)}</p>
 		<p class="tooltip-text tooltip-value">{incident.city}, {incident.state}</p>

@@ -224,7 +224,7 @@
 	</div>
 </div>
 {#if tooltip}
-	<Tooltip incident={tooltip.incident} position={tooltip.position} />
+	<Tooltip incident={tooltip.incident} position={tooltip.position} onClose={() => tooltip = null}/>
 {/if}
 
 <style>
