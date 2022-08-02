@@ -4,16 +4,17 @@
 	import statesTopo from "../../static/states_topo.json";
 	import colors from "../../lib/colors.js";
 	import { filterUnique } from "../../lib/utils.js";
+	import Tooltip from "../Tooltip.svelte";
 	import ZoomControls from "../MapZoom.svelte";
 	import FilterSelect from "../FilterSelect.svelte";
 
 	// PROPS
 	export let incidentData;
-	export let popupSlot;
 
 	// Settings
 	let width = 300;
 	let typeFilter = null;
+	let tooltip = null;
 	$: minCircleRadius = (width < 400 ? 3 : 4) / zoomTransform.k;
 	$: maxCircleRadius = (width < 500 ? 20 : width < 768 ? 25 : 30) / zoomTransform.k;
 	$: stateLabelSize = 10;
@@ -92,6 +93,18 @@
 	function zoomOut() {
 		svgSelection.transition().call(zoom.scaleBy, 0.5);
 	}
+
+	// tooltip function
+	function onDetails(incident, position) {
+		if (incident) {
+			tooltip = {
+				incident,
+				position
+			}
+		} else {
+			tooltip = null;
+		}
+	}
 </script>
 
 <div class="chart-wrap-double-group">
@@ -128,13 +141,17 @@
 						{#each incidentFeatures as incidentFeature}
 							{#if incidentFeature.position}
 								<circle
+									class="incident-bubble"
 									cx={incidentFeature.position[0]}
 									cy={incidentFeature.position[1]}
 									fill={colors["orange"]}
-									opacity="0.8"
+									opacity={tooltip && !(tooltip.incident.id == incidentFeature.id) ? 0.25 : 0.75}
 									stroke="#ffffff"
 									stroke-width={1 / zoomTransform.k}
-									r={radiusScale(incidentFeature.victims)} />
+									r={radiusScale(incidentFeature.victims)}
+									on:mouseenter={(e) => onDetails(incidentFeature, [e.pageX, e.pageY])}
+									on:mousemove={(e) => onDetails(incidentFeature, [e.pageX, e.pageY])}
+									on:mouseleave={(e) => onDetails()} />
 							{/if}
 						{/each}
 					</g>
@@ -144,6 +161,9 @@
 		</div>
 	</div>
 </div>
+{#if tooltip}
+	<Tooltip incident={tooltip.incident} position={tooltip.position} />
+{/if}
 
 <style>
 	.map-controls {
@@ -153,5 +173,8 @@
 	}
 	.map-wrap {
 		position: relative;
+	}
+	.incident-bubble {
+		cursor: crosshair;
 	}
 </style>

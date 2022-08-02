@@ -3,15 +3,15 @@
 
 	export let incident;
 	export let position;
-	console.log(incident)
+	export let onClose = () => null;
 
-	function getYPosition(y) {
-		return y - 10;
-	}
-
-	function getXPosition(x) {
-		return x;
-	}
+	let winWidth = 350;
+	let winHeight = 600;
+	let winScroll = 0;
+	$: tooltipWidth = Math.min(winWidth, 350);
+	$: xPos = ((position[0] + tooltipWidth / 2) > winWidth || (position[0] - tooltipWidth / 2 < 0)) ? winWidth / 2 : position[0];
+	$: toolTipBelow = position[1] < (winHeight / 2 + winScroll);
+	$: yPos = toolTipBelow ? position[1] + 10 : position[1] - 10;
 
 	function cleanNarrative(rawNarrative) {
 		return rawNarrative
@@ -20,7 +20,9 @@
 	}
 </script>
 
-<div class="tooltip-wrapper" style={`left: ${getXPosition(position[0])}px; top: ${getYPosition(position[1])}px`}>
+<svelte:window bind:innerWidth={winWidth} bind:innerHeight={winHeight} bind:scrollY={winScroll} />
+<div class="tooltip-wrapper" style={`left: ${xPos}px; top: ${yPos}px`} class:below={toolTipBelow}>
+	<button class="tooltip-close" aria-label="close tooltip">✖</button>
 	{#if incident}
 		<p class="tooltip-label">{prettyDate(incident.real_date)}</p>
 		<p class="tooltip-text tooltip-value">{incident.city}, {incident.state}</p>
@@ -47,7 +49,7 @@
 			</div>
 			<div class="tooltip-detail-group">
 				<p class="tooltip-label">Location type:</p>
-				<p class="tooltip-text tooltip-value">{incident.location}</p>
+				<p class="tooltip-text tooltip-value">{incident.location_type}</p>
 			</div>
 		</div>
 		<p class="tooltip-label">Details:</p>
@@ -69,6 +71,10 @@
 		font-size: 14px;
 		line-height: 15px;
 		max-width: 100%;
+		z-index: 200;
+	}
+	.tooltip-wrapper.below {
+		transform: translate(-50%, 0);
 	}
 	.tooltip-label {
 		font-size: 0.75em;
@@ -93,6 +99,14 @@
 	}
 	.tooltip-detail-group:last-child {
 		margin: 0;
+	}
+	.tooltip-close {
+		background: none;
+		border: none;
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		color: var(--mk-color-grey-dark);
 	}
 
 	@media (min-width: 800px) {

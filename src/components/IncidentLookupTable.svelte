@@ -2,6 +2,7 @@
 	import { prettyDate, shortDate } from "../lib/text.js";
 	import { filterUnique } from "../lib/utils.js";
 	import FilterSelect from "./FilterSelect.svelte";
+	import Tooltip from "./Tooltip.svelte";
 	import colors from "../lib/colors.js";
 
 	// properties from parent
@@ -18,6 +19,7 @@
 	let showClearButton = false;
 	let typeFilter = null;
 	let stateFilter = null;
+	let tooltip = null;
 
 	// headers in the format of
 	// [dataField, prettyLabel, showMobile?, formatFunction]
@@ -110,6 +112,18 @@
 		stateFilter = null;
 		typeFilter = null;
 	}
+
+	// tooltip function
+	function onDetails(incident, position) {
+		if (incident) {
+			tooltip = {
+				incident,
+				position
+			}
+		} else {
+			tooltip = null;
+		}
+	}
 </script>
 
 <div class="table-wrapper">
@@ -173,7 +187,11 @@
 		</thead>
 		<tbody>
 			{#each paginatedIncidents as incident}
-				<tr>
+				<tr
+					on:mouseenter={(e) => onDetails(incident, [e.pageX, e.pageY])}
+					on:mousemove={(e) => onDetails(incident, [e.pageX, e.pageY])}
+					on:mouseleave={(e) => onDetails()}
+				>
 					{#each tableHeaders as header}
 						<td class={header[0]} class:show-mobile={header[2]}
 							>{header.length > 3
@@ -205,6 +223,9 @@
 		{/if}
 	</div>
 </div>
+{#if tooltip}
+	<Tooltip incident={tooltip.incident} position={tooltip.position} />
+{/if}
 
 <style>
 	.table-wrapper {

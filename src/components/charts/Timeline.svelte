@@ -21,9 +21,6 @@
 	let typeFilter = null;
 	let tooltip = null;
 
-	$: tooltip = incidents.length > 0 ? {incident: incidents[0], position: [window.innerWidth / 2, 800]} : null;
-	$: console.log(tooltip)
-
 	$: years = incidents
 		.map((d) => d.year)
 		.filter((value, index, self) => self.indexOf(value) === index)
@@ -166,8 +163,6 @@
 		{/await}
 	</div>
 </div>
-<!-- @todo need to figure out how to manage data/state in the popup component. right now things are too split up between parent components, stores, and data manager. -->
-<!-- really need to streamline this before it will work well. -->
 {#if tooltip}
 	<Tooltip incident={tooltip.incident} position={tooltip.position} />
 {/if}
