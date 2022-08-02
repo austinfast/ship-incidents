@@ -1,21 +1,16 @@
 <script>
 	import { fade } from "svelte/transition";
 	import * as d3 from "d3";
-	import Popup from "../Popup.svelte";
+	import Tooltip from "../Tooltip.svelte";
 	import Loading from "../Loading.svelte";
 	import FilterSelect from "../FilterSelect.svelte";
 	import { filterUnique } from "../../lib/utils.js";
-	import { popupDetails } from "../../stores/popup.js";
 	import colors from "../../lib/colors.js";
 	import months from "../../lib/months.js";
 
-	// @TODO add filtering
-
 	// PROPS
-	export let popupSlot;
 	export let incidentData;
 
-	let svgEl;
 	let incidents = [];
 	let incidentLookup;
 	let wrapEl;
@@ -24,6 +19,10 @@
 	const arc = d3.arc();
 	const monthTickHeight = 10;
 	let typeFilter = null;
+	let tooltip = null;
+
+	$: tooltip = incidents.length > 0 ? {incident: incidents[0], position: [window.innerWidth / 2, 800]} : null;
+	$: console.log(tooltip)
 
 	$: years = incidents
 		.map((d) => d.year)
@@ -38,8 +37,6 @@
 	$: chartWidth = width - margin.left - margin.right;
 	$: maxRadius = width < 600 ? 30 : 50;
 	$: minRadius = width < 600 ? 5 : 10;
-	$: incident_filter = category == "All" ? null : category;
-	$: svg = d3.select(svgEl);
 	$: height = years.length * maxRadius + margin.top * 2;
 	$: extent = d3.extent(incidents, (d) => d.victims);
 	$: circleRadiusScale = d3.scaleSqrt().domain(extent).range([minRadius, maxRadius]);
@@ -84,16 +81,12 @@
 
 	function onDetails(incident, position) {
 		if (incident) {
-			popupDetails.set({
-				incidentId: incident.id,
-				position: position,
-				slot: popupSlot,
-			});
+			tooltip = {
+				incident,
+				position
+			}
 		} else {
-			popupDetails.set({
-				incidentId: null,
-				position: null,
-			});
+			tooltip = null;
 		}
 	}
 </script>
@@ -112,7 +105,7 @@
 						defaultLabel="All"
 						filterLabel="Filter by type" />
 				</div>
-				<svg class="timeline-svg" bind:this={svgEl} {width} {height}>
+				<svg class="timeline-svg" {width} {height}>
 					<g class="chart-inner" transform="translate({margin.left}, {margin.top})">
 						<g class="timeline-yearinfo-group">
 							{#each years as year}
@@ -131,6 +124,7 @@
 						<g class="timeline-incident-group">
 							{#each filteredIncidents as incident}
 								<path
+									class="incident-bubble"
 									transform="translate({xScale(
 										getDaysIntoYear(incident.real_date)
 									)}, {yScale(incident.year)})"
@@ -141,10 +135,10 @@
 										endAngle: Math.PI * 0.5,
 									})}
 									fill={colors.orange}
-									opacity="0.75"
+									opacity={tooltip && !(tooltip.incident.id == incident.id) ? 0.25 : 0.75}
 									stroke="#404040"
-									on:mouseenter={(e) => onDetails(incident, [e.clientX, e.clientY])}
-									on:mousemove={(e) => onDetails(incident, [e.clientX, e.clientY])}
+									on:mouseenter={(e) => onDetails(incident, [e.pageX, e.pageY])}
+									on:mousemove={(e) => onDetails(incident, [e.pageX, e.pageY])}
 									on:mouseleave={(e) => onDetails()} />
 							{/each}
 						</g>
@@ -174,8 +168,8 @@
 </div>
 <!-- @todo need to figure out how to manage data/state in the popup component. right now things are too split up between parent components, stores, and data manager. -->
 <!-- really need to streamline this before it will work well. -->
-{#if ($popupDetails.incidentId || $popupDetails.customContent) && $popupDetails.position && $popupDetails.slot == popupSlot}
-	<Popup details={$popupDetails} {incidentLookup} />
+{#if tooltip}
+	<Tooltip incident={tooltip.incident} position={tooltip.position} />
 {/if}
 
 <style>
@@ -194,6 +188,9 @@
 	}
 	.timeline-month-label-group line {
 		stroke: var(--mk-color-grey);
+	}
+	.incident-bubble {
+		cursor: crosshair;
 	}
 	:global(.timeline-chart-month-axis .domain) {
 		display: none;

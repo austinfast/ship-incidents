@@ -48,9 +48,21 @@ body {
 .usat-interactive-graphic h6 {
 	margin: 0;
 	padding: 0;
+	color: var(--mk-color-text);
+}
+
+.usat-interactive-graphic p,
+.usat-interactive-graphic ul,
+.usat-interactive-graphic ol,
+.usat-interactive-graphic li,
+.usat-interactive-graphic h1,
+.usat-interactive-graphic h2,
+.usat-interactive-graphic h3,
+.usat-interactive-graphic h4,
+.usat-interactive-graphic h5,
+.usat-interactive-graphic h6 {
 	font-size: 16px;
 	font-size: var(--mk-font-size-medium);
-	color: var(--mk-color-text);
 }
 
 .usat-interactive-graphic {
