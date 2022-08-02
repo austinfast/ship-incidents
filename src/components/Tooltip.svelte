@@ -8,10 +8,15 @@
 	let winWidth = 350;
 	let winHeight = 600;
 	let winScroll = 0;
+	// check for prescence of nav bar above article
+	$: navEl = document ? document.getElementById("navWrapContainer") : null;
+	// get height of nav bar if it exists
+	$: navHeight = navEl ? navEl.getBoundingClientRect().height : 0;
 	$: tooltipWidth = Math.min(winWidth, 350);
 	$: xPos = ((position[0] + tooltipWidth / 2) > winWidth || (position[0] - tooltipWidth / 2 < 0)) ? winWidth / 2 : position[0];
 	$: toolTipBelow = position[1] < (winHeight / 2 + winScroll);
-	$: yPos = toolTipBelow ? position[1] + 10 : position[1] - 10;
+	// make sure to adjust for nav bar in vertical position
+	$: yPos = toolTipBelow ? position[1] + 10 - navHeight: position[1] - 10 - navHeight;
 
 	function cleanNarrative(rawNarrative) {
 		return rawNarrative
@@ -72,16 +77,19 @@
 		line-height: 15px;
 		max-width: 100%;
 		z-index: 200;
+		font-family: var(--mk-font-family-sans);
 	}
 	.tooltip-wrapper.below {
 		transform: translate(-50%, 0);
 	}
-	.tooltip-label {
+	p.tooltip-label {
 		font-size: 0.75em;
 		margin: 0;
 		line-height: 1.1;
+		font-family: var(--mk-font-family-sans);
 	}
 	p.tooltip-text {
+		font-family: var(--mk-font-family-sans);
 		font-size: 1em;
 		margin-bottom: 5px;
 		margin-top: 0;
