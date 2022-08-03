@@ -1,4 +1,6 @@
 <script>
+	import Footer from "../ChartFooter.svelte";
+
 	export let weaponData;
 	export let splitBy;
 	export let chartColor = "#cecece";
@@ -10,6 +12,7 @@
 	let boxSize = 10;
 	let boxMargin = 1;
 	let width = 300;
+	let updated_at;
 
 	weaponData.then((d) => {
 		if (dataFilter) {
@@ -17,6 +20,7 @@
 		} else {
 			weapons = d.weapons;
 		}
+		updated_at = d.updated_at;
 	});
 
 	// chart sizing
@@ -142,4 +146,5 @@
 			</svg>
 		{/if}
 	</div>
+	<Footer {updated_at} />
 </div>

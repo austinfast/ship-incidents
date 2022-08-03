@@ -3,6 +3,7 @@
 	import colors from "../lib/colors.js";
 	import Bars from "./charts/RankedBar.svelte";
 	import Loading from "./Loading.svelte";
+	import Footer from "./ChartFooter.svelte";
 
 	export let offenderData;
 	export let victimData;
@@ -14,14 +15,19 @@
 	let totalVictims;
 	let unkownOffenders;
 	let totalOffenders;
+	let victimUpdate;
+	let offenderUpdate;
+	$: updated_at = victimUpdate > offenderUpdate ? victimUpdate : offenderUpdate;
 
 	victimData.then((d) => {
 		unkownVictims = d.victimRaceCounts.find((c) => c.label == "Unknown").count;
 		totalVictims = d.totalVictims;
+		victimUpdate = d.updated_at;
 	});
 	offenderData.then((d) => {
 		unkownOffenders = d.offenderRaceCounts.find((c) => c.label == "Unknown").count;
 		totalOffenders = d.offenders.length;
+		offenderUpdate = d.updated_at;
 	});
 </script>
 <div class="chart-group">
@@ -29,11 +35,12 @@
 		<Loading height={500}/>
 	{:then _}
 		<div class="group-item">
-			<Bars chartLabel={victimHeadline} chartData={victimData} dataKey="victimRaceCounts" color={colors.orange} valueKey={valueKey} numTicks={3}/>
+			<Bars chartLabel={victimHeadline} chartData={victimData} dataKey="victimRaceCounts" color={colors.orange} valueKey={valueKey} numTicks={3} showFooter={false} />
 		</div>
 		<div class="group-item">
-			<Bars chartLabel={offenderHeadline} chartData={offenderData} dataKey="offenderRaceCounts" color={colors.blue} valueKey={valueKey} numTicks={3}/>
+			<Bars chartLabel={offenderHeadline} chartData={offenderData} dataKey="offenderRaceCounts" color={colors.blue} valueKey={valueKey} numTicks={3} showFooter={false} />
 		</div>
+		<Footer {updated_at} />
 	{/await}
 </div>
 

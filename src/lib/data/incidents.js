@@ -32,5 +32,6 @@ async function generateIncidentData() {
 		yearlySummaries: rawIncidents.yearlySummaries,
 		overallSummary: rawIncidents.overallSummary,
 		locationTypes: rawIncidents.locationTypes,
+		updated_at: new Date(rawIncidents.updated_at)
 	};
 }

@@ -3,6 +3,7 @@
 	import * as d3 from "d3";
 	import colors from "../../lib/colors.js";
 	import Tooltip from "../Tooltip.svelte";
+	import Footer from "../ChartFooter.svelte";
 
 	// PROPS
 	export let yearlyData = [];
@@ -10,9 +11,11 @@
 	export let incidentData;
 	export let chartLabel;
 
+    let updated_at;
 	// data
 	incidentData.then((d) => {
 		yearlyData = d.yearlySummaries;
+		updated_at = d.updated_at;
 	});
 
 	let width;
@@ -147,6 +150,7 @@
 			</g>
 		</svg>
 	</div>
+	<Footer {updated_at} />
 </div>
 {#if tooltip}
 	<Tooltip

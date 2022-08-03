@@ -12,8 +12,6 @@ output:
     label: Incidents scaled by number of victims over time
   - filename: number_summary
     ssr: false
-  - filename: summary_by_category_area
-    ssr: false
   - filename: incident_trends
     ssr: false
     label: Number of incidents year by year

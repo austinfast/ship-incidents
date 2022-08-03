@@ -1,3 +1,5 @@
+import { timeFormat } from "d3";
+
 export function parseDate(dateStr) {
 	// handle null dates
 	if (!dateStr) {
@@ -12,4 +14,9 @@ export function yearFromStringDate(stringDate) {
 		return null;
 	}
 	return stringDate.split("-")[0];
+}
+
+export function formatDate(realDate) {
+	const formatter = timeFormat("%m/%d/%Y at %I:%M %p");
+	return formatter(realDate);
 }

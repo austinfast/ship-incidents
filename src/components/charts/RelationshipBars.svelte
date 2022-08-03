@@ -1,6 +1,7 @@
 <script>
 	import { scaleLinear, max, sum } from "d3";
 	import { isEmbed } from "../../lib/utils.js";
+	import Footer from "../ChartFooter.svelte";
 
 	export let victimData;
 
@@ -9,7 +10,7 @@
 	let barWidth = 80;
 	let maxHeight = 350;
 	let barMargin = 30;
-
+	let updated_at;
 
 	const bar_1 = [
 		["family", "#d9501e", "Family"],
@@ -26,6 +27,7 @@
 	// data
 	victimData.then((d) => {
 		counts = d.victimRelationships;
+		updated_at = d.updated_at;
 	});
 </script>
 <div 
@@ -91,6 +93,7 @@
 			</svg>
 		{/if}
 	</div>
+	<Footer {updated_at} />
 </div>
 <style>
 	.key-item-pallette {

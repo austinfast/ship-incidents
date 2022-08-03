@@ -1,5 +1,6 @@
 <script>
 	import { scaleLinear, axisBottom, sum, select } from "d3";
+	import Footer from "../ChartFooter.svelte";
 
 	export let colors = [];
 	export let sourceData;
@@ -18,6 +19,7 @@
 		bottom: 10,
 		left: 5,
 	};
+	let updated_at;
 	$: chartWidth = width - margin.left - margin.right;
 	$: height = barSize + margin.top + margin.bottom + barMargin;
 	$: countSum = sum(dataCounts, (count) => count.count);
@@ -35,6 +37,7 @@
 
 	sourceData.then((d) => {
 		dataCounts = d[countKey];
+		updated_at = d.updated_at;
 	});
 
 	$: getXPosition = function (i) {
@@ -76,6 +79,7 @@
 			</g>
 		</svg>
 	</div>
+	<Footer {updated_at} />
 </div>
 
 <style>

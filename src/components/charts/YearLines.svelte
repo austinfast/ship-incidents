@@ -1,6 +1,7 @@
 <script>
 	import * as d3 from "d3";
 	import Loading from "../Loading.svelte";
+	import Footer from "../ChartFooter.svelte";
 	import TabButtons from "../TabButtons.svelte";
 	import colors from "../../lib/colors.js";
 
@@ -9,6 +10,7 @@
 	let chartValue = "incidents";
 	let incidentsByYear = [];
 	let width = 300;
+	let updated_at;
 	const xTicksEvery = 1;
 	const numYTicks = 10;
 	const tickHeight = 12;
@@ -125,6 +127,7 @@
 
 	incidentData.then((d) => {
 		incidentsByYear = getCumulativeIncidents(d.incidents);
+		updated_at = d.updated_at;
 	});
 </script>
 
@@ -212,6 +215,7 @@
 			{/if}
 		{/await}
 	</div>
+	<Footer {updated_at} />
 </div>
 
 <style>

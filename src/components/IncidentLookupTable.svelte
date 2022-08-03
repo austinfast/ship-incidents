@@ -1,13 +1,13 @@
 <script>
-	import { prettyDate, shortDate } from "../lib/text.js";
+	import { shortDate } from "../lib/text.js";
 	import { filterUnique } from "../lib/utils.js";
 	import FilterSelect from "./FilterSelect.svelte";
 	import Tooltip from "./Tooltip.svelte";
+	import Footer from "./ChartFooter.svelte";
 	import colors from "../lib/colors.js";
 
 	// properties from parent
 	export let incidentData;
-	export let popupSlot;
 
 	// internal state
 	let incidents = [];
@@ -20,6 +20,7 @@
 	let typeFilter = null;
 	let stateFilter = null;
 	let tooltip = null;
+	let updated_at;
 
 	// headers in the format of
 	// [dataField, prettyLabel, showMobile?, formatFunction]
@@ -36,6 +37,7 @@
 	// initialize data
 	incidentData.then((d) => {
 		incidents = d.incidents;
+		updated_at = d.updated_at;
 	});
 
 	// options for filtering by type
@@ -222,6 +224,7 @@
 			</div>
 		{/if}
 	</div>
+	<Footer {updated_at} />
 </div>
 {#if tooltip}
 	<Tooltip incident={tooltip.incident} position={tooltip.position} onClose={() => tooltip = null}/>

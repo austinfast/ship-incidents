@@ -4,6 +4,7 @@
 	import Tooltip from "../Tooltip.svelte";
 	import Loading from "../Loading.svelte";
 	import FilterSelect from "../FilterSelect.svelte";
+	import Footer from "../ChartFooter.svelte";
 	import { filterUnique } from "../../lib/utils.js";
 	import colors from "../../lib/colors.js";
 	import months from "../../lib/months.js";
@@ -12,14 +13,12 @@
 	export let incidentData;
 
 	let incidents = [];
-	let incidentLookup;
-	let wrapEl;
 	let width = 900;
-	let category = "All";
 	const arc = d3.arc();
 	const monthTickHeight = 10;
 	let typeFilter = null;
 	let tooltip = null;
+	let updated_at;
 
 	$: years = incidents
 		.map((d) => d.year)
@@ -29,7 +28,7 @@
 		top: 20,
 		right: 25,
 		bottom: 20,
-		left: width < 600 ? 50 : 100,
+		left: width < 600 ? 50 : 75,
 	};
 	$: chartWidth = width - margin.left - margin.right;
 	$: maxRadius = width < 600 ? 30 : 50;
@@ -62,6 +61,7 @@
 	// data
 	incidentData.then((d) => {
 		incidents = d.incidents;
+		updated_at = d.updated_at;
 	});
 
 	// function that takes a Date object and returns the number of days into the given year
@@ -89,7 +89,7 @@
 </script>
 
 <div class="chart-wrapper">
-	<div bind:this={wrapEl} bind:clientWidth={width}>
+	<div bind:clientWidth={width}>
 		{#await incidentData}
 			<Loading height={500} />
 		{:then _}
@@ -162,6 +162,7 @@
 			</div>
 		{/await}
 	</div>
+	<Footer {updated_at} />
 </div>
 {#if tooltip}
 	<Tooltip incident={tooltip.incident} position={tooltip.position} onClose={() => tooltip = null}/>

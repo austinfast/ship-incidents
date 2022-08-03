@@ -23,7 +23,7 @@ async function generateVictimData() {
 		victimGenderCounts: rawData.summaries.victimGenderCounts,
 		victimRaceCounts: rawData.summaries.victimRaceCounts,
 		totalVictims: rawData.victims.length,
-		updated_at: rawData.updated_at
+		updated_at: new Date(rawData.updated_at)
 	};
 }
 

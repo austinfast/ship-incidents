@@ -1,6 +1,7 @@
 <script>
 	import * as d3 from "d3";
 	import { isEmbed } from "../../lib/utils.js";
+	import Footer from "../ChartFooter.svelte";
 
 	export let color = "#e3e3e3";
 	export let sourceData;
@@ -13,9 +14,11 @@
 	let yAxisEl;
 	const numYTicks = 5;
 	const tickHeight = 12;
+	let updated_at;
 
 	sourceData.then((d) => {
 		binnedData = d[ageBinKey];
+		updated_at = d.updated_at;
 	});
 
 	$: height = width < 600 ? width / 1.5 : width / 2;
@@ -90,6 +93,7 @@
 			</svg>
 		{/if}
 	</div>
+	<Footer {updated_at} />
 </div>
 
 <style>

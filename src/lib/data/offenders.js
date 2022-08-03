@@ -18,6 +18,6 @@ async function generateOffenderData() {
 		offenderAges: rawData.summaries.offenderAges,
 		offenderGenderCounts: rawData.summaries.offenderGenderCounts,
 		offenderRaceCounts: rawData.summaries.offenderRaceCounts,
-		updated_at: rawData.updated_at
+		updated_at: new Date(rawData.updated_at)
 	}
 }

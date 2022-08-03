@@ -1,6 +1,7 @@
 <script>
 	import { scaleLinear, max } from "d3";
 	import { prettyNumber } from "../../lib/text.js";
+	import Footer from "../ChartFooter.svelte";
 
 	export let chartData;
 	export let dataKey;
@@ -9,6 +10,7 @@
 	export let barSize;
 	export let chartLabel;
 	export let numTicks = 10;
+	export let showFooter = true;
 
 	let items = [];
 	let width = 900;
@@ -20,6 +22,7 @@
 		bottom: 10,
 		left: 5,
 	};
+	let updated_at;
 	const tickSize = 12;
 	$: barHeight = barSize ? barSize : width >= 600 ? 35 : 30;
 	$: chartWidth = width - margin.left - margin.right;
@@ -35,6 +38,7 @@
 
 	chartData.then((d) => {
 		items = d[dataKey].filter((d) => d[valueKey] !== null);
+		updated_at = d.updated_at;
 	});
 </script>
 
@@ -76,6 +80,9 @@
 			</g>
 		</svg>
 	</div>
+	{#if showFooter}
+		<Footer {updated_at} />
+	{/if}
 </div>
 
 <style>

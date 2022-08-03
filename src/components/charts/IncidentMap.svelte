@@ -7,6 +7,7 @@
 	import Tooltip from "../Tooltip.svelte";
 	import ZoomControls from "../MapZoom.svelte";
 	import FilterSelect from "../FilterSelect.svelte";
+	import Footer from "../ChartFooter.svelte";
 
 	// PROPS
 	export let incidentData;
@@ -15,6 +16,7 @@
 	let width = 300;
 	let typeFilter = null;
 	let tooltip = null;
+	let updated_at;
 	$: minCircleRadius = (width < 400 ? 3 : 4) / zoomTransform.k;
 	$: maxCircleRadius = (width < 500 ? 20 : width < 768 ? 25 : 30) / zoomTransform.k;
 	$: stateLabelSize = 10;
@@ -22,6 +24,7 @@
 	let incidents = [];
 	incidentData.then((d) => {
 		incidents = d.incidents;
+		updated_at = d.updated_at;
 	});
 	const statesGeo = topojson.feature(statesTopo, "states");
 	let svgEl;
@@ -160,6 +163,7 @@
 			<ZoomControls {zoomIn} {zoomOut} />
 		</div>
 	</div>
+	<Footer {updated_at} />
 </div>
 {#if tooltip}
 	<Tooltip incident={tooltip.incident} position={tooltip.position} onClose={() => tooltip = null}/>
