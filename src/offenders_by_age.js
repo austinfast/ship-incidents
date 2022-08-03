@@ -12,7 +12,7 @@ new AgeHistogram({
 		color: colors.blue,
 		sourceData: getOffenderData(),
 		ageBinKey: "offenderAges",
-		chartLabel: "Number of offenders by age"
+		chartLabel: "Number of mass killing offenders by age"
 	}
 });
 

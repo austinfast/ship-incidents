@@ -129,6 +129,7 @@
 </script>
 
 <div class="table-wrapper">
+	<h3 class="chart-label">Search mass killing incidents</h3>
 	<div class="table-top-control-wrap">
 		<div>
 			<label class="search-label" for="table-search-input">Search</label>
@@ -177,7 +178,7 @@
 			<tr>
 				{#each tableHeaders as header}
 					<th
-						on:click={(_) => handleHeaderClick(header)}
+						on:click={() => handleHeaderClick(header)}
 						class:sort-column={sortColumn == header[0]}
 						class:asc={sortAscending}
 						class:desc={!sortAscending}

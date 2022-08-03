@@ -12,7 +12,7 @@ new Bars({
 		colors: [colors.orange, colors["orange-light"], colors.grey],
 		sourceData: getVictimData(),
 		countKey: "victimGenderCounts",
-		chartLabel: "Victims by sex"
+		chartLabel: "Mass killing victims by sex"
 	},
 });
 

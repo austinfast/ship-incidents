@@ -13,7 +13,7 @@ new AgeHistogram({
 		color: colors.orange,
 		ageBinKey: "victimAges",
 		ageScaleKey: "victimAgeScale",
-		chartLabel: "Number of victims by age"
+		chartLabel: "Number of mass killing victims by age"
 	}
 });
 

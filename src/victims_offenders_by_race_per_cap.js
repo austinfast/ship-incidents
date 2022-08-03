@@ -13,8 +13,8 @@ new ChartGroup({
 		victimData: getVictimData(),
 		offenderData: getOffenderData(),
 		valueKey: "countPerMillion",
-		victimHeadline: "Victims per 1 million U.S. residents",
-		offenderHeadline: "Offenders per 1 million U.S. residents"
+		victimHeadline: "Mass killing victims per 1 million U.S. residents",
+		offenderHeadline: "Mass killing offenders per 1 million U.S. residents"
 	},
 });
 
