@@ -8,15 +8,15 @@ const mainEl = document.getElementById("MK-incident_trends-embed");
 const yearlyVariables = [
 	{
 		field: "mass_public_shootings",
-		label: "Public mass shootings",
+		label: "Public fatal shootings",
 	},
 	{
 		field: "non_public_mass_shootings",
-		label: "Non-public mass shootings",
+		label: "Non-public fatal shootings",
 	},
 	{
 		field: "non_shooting_mass_killings",
-		label: "Non-shooting mass killings",
+		label: "Other mass killings",
 	},
 ];
 

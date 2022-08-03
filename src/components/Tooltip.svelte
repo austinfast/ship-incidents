@@ -2,7 +2,9 @@
 	import { prettyDate } from "../lib/text.js";
 
 	export let incident;
+	export let customContent;
 	export let position;
+	export let size = "large";
 	export let onClose = () => null;
 
 	let winWidth = 400;
@@ -12,7 +14,6 @@
 	$: navEl = document ? document.getElementById("navWrapContainer") : null;
 	// get height of nav bar if it exists
 	$: navHeight = navEl ? navEl.getBoundingClientRect().height : 0;
-	$: console.log(navHeight);
 	$: tooltipWidth = Math.min(winWidth, 400);
 	$: xPos = ((position[0] + tooltipWidth / 2) > winWidth || (position[0] - tooltipWidth / 2 < 0)) ? winWidth / 2 : position[0];
 	$: toolTipBelow = position[1] < (winHeight / 2 + winScroll);
@@ -27,7 +28,7 @@
 </script>
 
 <svelte:window bind:innerWidth={winWidth} bind:innerHeight={winHeight} bind:scrollY={winScroll} />
-<div class="tooltip-wrapper" style={`left: ${xPos}px; top: ${yPos}px`} class:below={toolTipBelow}>
+<div class="tooltip-wrapper" class:small={size=="small"} style={`left: ${xPos}px; top: ${yPos}px`} class:below={toolTipBelow}>
 	<button class="tooltip-close" aria-label="close tooltip" on:click={onClose}>✖</button>
 	{#if incident}
 		<p class="tooltip-label">{prettyDate(incident.real_date)}</p>
@@ -60,6 +61,13 @@
 		</div>
 		<p class="tooltip-label">Details:</p>
 		<p class="tooltip-text tooltip-narrative">{cleanNarrative(incident.narrative)}</p>
+	{:else if customContent}
+		{#each customContent as item}
+		{#if item.label}
+			<p class="tooltip-label">{item.label}: </p>
+		{/if}
+		<p class="tooltip-text tooltip-value">{item.value}</p>
+		{/each}
 	{:else}
 		<p class="tooltip-text">I'm a popup</p>
 	{/if}
@@ -79,6 +87,10 @@
 		max-width: 100%;
 		z-index: 200;
 		font-family: var(--mk-font-family-sans);
+	}
+	.tooltip-wrapper.small {
+		width: 220px;
+		font-size: var(--mk-font-size-small);
 	}
 	.tooltip-wrapper.below {
 		transform: translate(-50%, 0);

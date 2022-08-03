@@ -7,15 +7,15 @@ const mainEl = document.getElementById("MK-victim_trends-embed");
 const yearlyVariables = [
 	{
 		field: "mass_public_shooting_victims",
-		label: "Public mass shooting victims",
+		label: "Public fatal shooting victims",
 	},
 	{
 		field: "non_public_mass_shooting_victims",
-		label: "Non-public mass shooting victims",
+		label: "Non-public fatal shooting victims",
 	},
 	{
 		field: "non_shooting_mass_killing_victims",
-		label: "Non-shooting mass killing victims",
+		label: "Other mass killing victims",
 	},
 ];
 

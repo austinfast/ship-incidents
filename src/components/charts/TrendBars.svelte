@@ -2,6 +2,7 @@
 	import { onMount } from "svelte";
 	import * as d3 from "d3";
 	import colors from "../../lib/colors.js";
+	import Tooltip from "../Tooltip.svelte";
 
 	// PROPS
 	export let yearlyData = [];
@@ -16,6 +17,7 @@
 
 	let width;
 	let height = 350;
+	let tooltip = null;
 	const tickHeight = 12;
 	const numYTicks = 5;
 	const margin = {
@@ -34,7 +36,8 @@
 		.domain(yearlyVariables.map((c) => c.field))
 		.range([colors["orange-dark"], colors["orange"], colors["orange-light"]]);
 
-	$: stackFunc = d3.stack()
+	$: stackFunc = d3
+		.stack()
 		.keys(yearlyVariables.map((d) => d.field))
 		.order(d3.stackOrderNone)
 		.offset(d3.stackOffsetNone);
@@ -69,10 +72,24 @@
 		let currentDate = new Date();
 		return parseInt(year) == currentDate.getFullYear();
 	}
+	function onDetails(yearData, position) {
+		if (yearData) {
+			const content = [
+				{ label: "Year", value: yearData.year },
+				...yearlyVariables.map(v => ({label: v.label, value: yearData[v.field]})),
+			];
+			tooltip = {
+				content,
+				position,
+			};
+		} else {
+			tooltip = null;
+		}
+	}
 </script>
 
-<div class="trend-line-wrap chart-wrapper" >
-	<div bind:clientWidth={width} >
+<div class="trend-line-wrap chart-wrapper">
+	<div bind:clientWidth={width}>
 		<h3 class="chart-label">{chartLabel}</h3>
 		<div class="key-wrapper">
 			{#each yearlyVariables as yearlyVariable}
@@ -84,40 +101,46 @@
 				</div>
 			{/each}
 		</div>
-		<svg {width} {height} >
+		<svg {width} {height}>
 			<g class="chart-g" transform="translate({margin.left}, {margin.top})">
-				<g class="x-axis-g" transform="translate(0, {chartHeight})"  >
+				<g class="x-axis-g" transform="translate(0, {chartHeight})">
 					{#each scaleX.domain() as tick, i}
 						{#if i % xTicksEvery == 0}
-						<g class="tick tick-{i}" transform="translate({scaleX(tick)})">
-							<text y={tickHeight + 2} x={scaleX.bandwidth() / 2}>{tick}</text>
-							<line x1={scaleX.bandwidth() / 2} x2={scaleX.bandwidth() / 2} y1="0" y2={tickHeight / 2}></line>
-						</g>
+							<g class="tick tick-{i}" transform="translate({scaleX(tick)})">
+								<text y={tickHeight + 2} x={scaleX.bandwidth() / 2}>{tick}</text>
+								<line
+									x1={scaleX.bandwidth() / 2}
+									x2={scaleX.bandwidth() / 2}
+									y1="0"
+									y2={tickHeight / 2} />
+							</g>
 						{/if}
 					{/each}
 				</g>
-				<g
-					class="y-axis-g"
-					transform="translate({-margin.left}, 0)">
-						{#each ticksY as tick, i}
-						<g class="tick tick-{i}" transform="translate({margin.left / 2}, {scaleY(tick)})">
-							<text y={-2} x={0} >{tick}</text>
-							<line y1={0} y2={0} x1={0} x2={width}></line>
+				<g class="y-axis-g" transform="translate({-margin.left}, 0)">
+					{#each ticksY as tick, i}
+						<g
+							class="tick tick-{i}"
+							transform="translate({margin.left / 2}, {scaleY(tick)})">
+							<text y={-2} x={0}>{tick}</text>
+							<line y1={0} y2={0} x1={0} x2={width} />
 						</g>
-						{/each}
+					{/each}
 				</g>
 				<g class="data-g">
 					{#each stackedData as row, rowIdx}
 						{#each row as bar}
 							<rect
+								class="trend-bar"
 								class:current-year={isCurrentYear(bar.data.year)}
 								y={Math.min(scaleY(bar[0]), scaleY(bar[1]))}
 								height={Math.abs(scaleY(bar[0]) - scaleY(bar[1]))}
 								fill={colorScale(yearlyVariables[rowIdx].field)}
 								width={scaleX.bandwidth()}
 								x={scaleX(bar.data.year)}
-
-							></rect>
+								on:mouseenter={(e) => onDetails(bar.data, [e.pageX, e.pageY])}
+								on:mousemove={(e) => onDetails(bar.data, [e.pageX, e.pageY])}
+								on:mouseleave={(e) => onDetails()} />
 						{/each}
 					{/each}
 				</g>
@@ -125,6 +148,13 @@
 		</svg>
 	</div>
 </div>
+{#if tooltip}
+	<Tooltip
+		customContent={tooltip.content}
+		position={tooltip.position}
+		size="small"
+		onClose={() => (tooltip = null)} />
+{/if}
 
 <style>
 	.key-wrapper {
@@ -152,7 +182,10 @@
 		margin-bottom: 0;
 		margin-left: 5px;
 	}
-	rect.current-year {
+	.trend-bar {
+		cursor: crosshair;
+	}
+	.trend-bar.current-year {
 		fill-opacity: 0.75;
 	}
 	.tick text {
