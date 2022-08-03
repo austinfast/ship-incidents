@@ -10,12 +10,22 @@
 	let winWidth = 400;
 	let winHeight = 600;
 	let winScroll = 0;
+	// takes a raw x position and returns an adjusted one to prevent tooltip from being cut off
+	function getXPostition(rawX) {
+		if ((rawX + tooltipWidth / 2) > winWidth) {
+			return rawX - tooltipWidth / 2;
+		}
+		if (rawX - tooltipWidth / 2 < 0) {
+			return rawX + tooltipWidth / 2;
+		}
+		return rawX;
+	}
 	// check for prescence of nav bar above article
 	$: navEl = document ? document.getElementById("navWrapContainer") : null;
 	// get height of nav bar if it exists
 	$: navHeight = navEl ? navEl.getBoundingClientRect().height : 0;
-	$: tooltipWidth = Math.min(winWidth, 400);
-	$: xPos = ((position[0] + tooltipWidth / 2) > winWidth || (position[0] - tooltipWidth / 2 < 0)) ? winWidth / 2 : position[0];
+	$: tooltipWidth = size == "small" ? Math.min(winWidth, 220) : Math.min(winWidth, 400);
+	$: xPos = getXPostition(position[0]);
 	$: toolTipBelow = position[1] < (winHeight / 2 + winScroll);
 	// make sure to adjust for nav bar in vertical position
 	$: yPos = toolTipBelow ? position[1] + 10 - navHeight: position[1] - 10 - navHeight;
@@ -68,8 +78,6 @@
 		{/if}
 		<p class="tooltip-text tooltip-value">{item.value}</p>
 		{/each}
-	{:else}
-		<p class="tooltip-text">I'm a popup</p>
 	{/if}
 </div>
 
@@ -85,7 +93,7 @@
 		font-size: 14px;
 		line-height: 15px;
 		max-width: 100%;
-		z-index: 200;
+		z-index: 500;
 		font-family: var(--mk-font-family-sans);
 	}
 	.tooltip-wrapper.small {
@@ -134,6 +142,11 @@
 		p.tooltip-text {
 			/* font-size: var(--font-size-medium);
       line-height: var(--line-height-medium); */
+		}
+	}
+	@media (max-width: 500px) {
+		.tooltip-wrapper {
+			left: 50% !important;
 		}
 	}
 </style>
