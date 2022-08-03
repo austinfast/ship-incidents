@@ -84,7 +84,7 @@
 					return labels[rawStr];
 				}
 		}
-		return rawStr;
+		return rawStr.charAt(0).toUpperCase() + rawStr.substring(1);
 	}
 
 	// takes an array of objects, and a string valueKey
