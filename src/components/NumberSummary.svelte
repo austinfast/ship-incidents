@@ -26,25 +26,17 @@
 	padding: 1em 0;
 }
 .summary-inner {
-	display: flex;
 	text-align: center;
 	justify-content: center;
 	width: 100%;
-}
-.victim-count {
-	margin-right: 25px;
-}
-.incident-count {
-	margin-left: 25px;
 }
 .number-overview .summary-number {
 	color: var(--mk-color-orange);
 	font-size: 4em;
 	font-family: var(--mk-font-family-serif);
-	/* margin-bottom: 2rem; */
 }
 .number-overview .summary-description {
-	font-size: var(--mk-font-size-small);
+	font-size: var(--mk-font-size-medium);
 }
 @media(min-width: 768px) {
 	.number-overview .summary-number {
