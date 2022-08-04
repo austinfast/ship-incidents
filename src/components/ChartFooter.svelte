@@ -19,7 +19,7 @@
 		{#if updated_at}
 			<p class="footer-text">Last updated: {formatDate(updated_at)}</p>
 		{/if}
-		<p class="footer-text">SOURCE The USA TODAY/AP/Northeastern University mass killings database</p>
+		<p class="footer-text">SOURCE The USA TODAY/AP/Northeastern University mass killing database</p>
 	</div>
 {/if}
 <style>
