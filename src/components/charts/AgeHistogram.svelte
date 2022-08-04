@@ -36,7 +36,7 @@
 		.paddingInner(0.1)
 		.domain(d3.range(0, maxAge, 5))
 		.range([0, chartWidth]);
-	$: xTicksEvery = width < 500 ? 2 : 1;
+	$: xTicksEvery = width < 680 ? 2 : 1;
 	$: ticksY = scaleY.ticks(numYTicks);
 	$: scaleY = d3
 		.scaleLinear()
