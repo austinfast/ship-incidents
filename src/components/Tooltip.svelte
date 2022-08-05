@@ -70,7 +70,7 @@
 			</div>
 		</div>
 		<p class="tooltip-label">Details:</p>
-		<p class="tooltip-text tooltip-narrative">{cleanNarrative(incident.narrative)}</p>
+		<!-- <p class="tooltip-text tooltip-narrative">{cleanNarrative(incident.narrative)}</p> -->
 	{:else if customContent}
 		{#each customContent as item}
 		{#if item.label}
