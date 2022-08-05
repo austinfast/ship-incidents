@@ -11,6 +11,10 @@
 		<p class="data-box-text">In December 2018, a Memo of Understanding (MOU) was signed by the Associated Press, USA TODAY, and Northeastern University to formalize a joint initiative to maintain and expand the mass killing database previously housed at USA TODAY. The Associated Press hosts the database and maintains the data entry tool, USA TODAY has developed and maintains the public website for the database, and Northeastern University manages data collection and updates.</p>
 		<p class="data-box-text">The full database currently consists of four linked data tables with a total of 59 data fields (not counting indicators for the availability of offender/victim identity)—18 fields for each incident, 20 fields for each offender, 13 fields for each victim killed, and 8 fields for each weapon used. Most variables, with the notable exception of victim names, are available for public download. The remaining data are reserved for individuals affiliated with the Associated Press, USA TODAY/Gannett, and Northeastern University’s School of Criminology and Criminal Justice, and others by permission of all three organizations. Moving forward, additional variables may be added to the full database as well as the public subset.</p>
 		<p class="data-box-text"><a href="https://www.usatoday.com" target="_blank">Read more about the data.</a></p>
+		<h2 class="data-box-head">Credits</h2>
+		<p class="data-box-text"><strong>Research and reporting:</strong> Karina Zaiets and George Petras</p>
+		<p class="data-box-text"><strong>Design and development:</strong> Veronica Bravo and Mitchell Thorson</p>
+		<p class="data-box-text"><strong>Editing:</strong> Shawn J. Sullivan</p>
 	</div>
 </div>
 <style>
