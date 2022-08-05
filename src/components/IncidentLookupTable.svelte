@@ -191,7 +191,6 @@
 		<tbody>
 			{#each paginatedIncidents as incident}
 				<tr
-					on:mouseenter={(e) => onDetails(incident, [e.pageX, e.pageY])}
 					on:mousemove={(e) => onDetails(incident, [e.pageX, e.pageY])}
 					on:mouseleave={(e) => onDetails()}
 				>

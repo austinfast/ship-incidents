@@ -141,7 +141,6 @@
 								fill={colorScale(yearlyVariables[rowIdx].field)}
 								width={scaleX.bandwidth()}
 								x={scaleX(bar.data.year)}
-								on:mouseenter={(e) => onDetails(bar.data, [e.pageX, e.pageY])}
 								on:mousemove={(e) => onDetails(bar.data, [e.pageX, e.pageY])}
 								on:mouseleave={(e) => onDetails()} />
 						{/each}

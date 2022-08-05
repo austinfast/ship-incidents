@@ -134,7 +134,6 @@
 									fill={colors.orange}
 									opacity={tooltip && !(tooltip.incident.id == incident.id) ? 0.25 : 0.75}
 									stroke="#404040"
-									on:mouseenter={(e) => onDetails(incident, [e.pageX, e.pageY])}
 									on:mousemove={(e) => onDetails(incident, [e.pageX, e.pageY])}
 									on:mouseleave={(e) => onDetails()} />
 							{/each}

@@ -152,7 +152,6 @@
 									stroke="#ffffff"
 									stroke-width={1 / zoomTransform.k}
 									r={radiusScale(incidentFeature.victims)}
-									on:mouseenter={(e) => onDetails(incidentFeature, [e.pageX, e.pageY])}
 									on:mousemove={(e) => onDetails(incidentFeature, [e.pageX, e.pageY])}
 									on:mouseleave={(e) => onDetails()} />
 							{/if}
