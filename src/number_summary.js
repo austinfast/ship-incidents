@@ -4,6 +4,8 @@ import NumberSummary from "./components/NumberSummary.svelte";
 import { getIncidentData } from "./lib/data/incidents.js";
 import { getVictimData } from "./lib/data/victims.js";
 
+
+
 const mainEl = document.getElementById("MK-number_summary-embed");
 new NumberSummary({
 	target: mainEl,

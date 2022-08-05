@@ -2,11 +2,23 @@
 	import { fade } from "svelte/transition";
 	import Loading from "./Loading.svelte";
 	import { prettyNumber } from "../lib/text.js";
+	import { isMainStory } from "../lib/utils.js";
+	import { setBylineTimeStamp } from "../lib/dates.js";
+
 	export let incidentData;
 	export let victimData;
+	let dataLoading = Promise.all([victimData, incidentData]);
+
+	// since this is the first module loaded on the in-depth page, when we are on that platform, 
+	// now is the time to update the dateline on the page with the data's last updated timestamp
+	if (isMainStory()) {
+		dataLoading.then(d => {
+			setBylineTimeStamp(d[0].updated_at);
+		});
+	}
 </script>
 <div class="chart-wrapper number-overview">
-	{#await Promise.all([victimData, incidentData])}
+	{#await dataLoading}
 	<Loading />
 	{:then results}
 	<div class="summary-inner" transition:fade>

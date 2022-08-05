@@ -1,17 +1,7 @@
 <script>
 	import { formatDate } from "../lib/dates.js";
+	import { isMainStory } from "../lib/utils.js";
 	export let updated_at;
-	function isMainStory() {
-		if (window) {
-			// check if page is in an embed
-			if (window.location !== window.parent.location) {
-				return false;
-			} else if (window.location.pathname.indexOf("/story/") >= 0 || window.location.pathname.indexOf("/in-depth/") >= 0) {
-				return true;
-			}
-		}
-		return false;
-	}
 	const showFooter = !isMainStory();
 </script>
 {#if showFooter}
