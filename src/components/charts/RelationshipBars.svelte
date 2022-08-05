@@ -1,6 +1,6 @@
 <script>
 	import { scaleLinear, max, sum } from "d3";
-	import { isEmbed } from "../../lib/utils.js";
+	import { isMainStory } from "../../lib/utils.js";
 	import Footer from "../ChartFooter.svelte";
 
 	export let victimData;
@@ -32,7 +32,7 @@
 </script>
 <div 
 	class="chart-wrapper"
-	class:in-depth-article-width={!isEmbed()}>
+	class:in-depth-article-width={isMainStory()}>
 	<div
 		bind:clientWidth={width}>
 		<h3 class="chart-label">Number of mass killing victims by relationship to their murderers</h3>

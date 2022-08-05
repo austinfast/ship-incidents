@@ -1,6 +1,6 @@
 <script>
 	import * as d3 from "d3";
-	import { isEmbed } from "../../lib/utils.js";
+	import { isMainStory } from "../../lib/utils.js";
 	import Footer from "../ChartFooter.svelte";
 
 	export let color = "#e3e3e3";
@@ -45,7 +45,7 @@
 		.range([chartHeight, 0]);
 </script>
 
-<div class:in-depth-article-width={!isEmbed()} class="chart-wrapper" >
+<div class:in-depth-article-width={isMainStory()} class="chart-wrapper" >
 	<div bind:clientWidth={width}>
 		{#if chartLabel}
 			<h3 class="chart-label">{chartLabel}</h3>
