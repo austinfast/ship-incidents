@@ -38,8 +38,11 @@ export function setBylineTimeStamp(realDate) {
 					.querySelector(".updated")
 					.querySelector("time");
 
-		el.innerText = stringDate;
-		el.dateTime = realDate.toISOString();
+		const currentTime = new Date(el.dateTime);
+		if (realDate > currentTime) {
+			el.innerText = stringDate;
+			el.dateTime = realDate.toISOString();
+		}
 		return true;
 	} catch {
 		return false;
