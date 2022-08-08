@@ -11,6 +11,7 @@
 
 	// PROPS
 	export let incidentData;
+	export let nobuttons = false;
 
 	let incidents = [];
 	let width = 900;
@@ -95,6 +96,7 @@
 		{:then _}
 			<h3 class="chart-label">Timeline of mass killings scaled by number of victims</h3>
 			<div class="chart-inner" transition:fade>
+				{#if !nobuttons}
 				<div class="timeline-controls">
 					<FilterSelect
 						bind:currentValue={typeFilter}
@@ -102,6 +104,7 @@
 						defaultLabel="All"
 						filterLabel="Filter by type" />
 				</div>
+				{/if}
 				<svg class="timeline-svg" {width} {height}>
 					<g class="chart-inner" transform="translate({margin.left}, {margin.top})">
 						<g class="timeline-yearinfo-group">

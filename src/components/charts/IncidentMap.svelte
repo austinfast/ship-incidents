@@ -11,6 +11,7 @@
 
 	// PROPS
 	export let incidentData;
+	export let nobuttons = false;
 
 	// Settings
 	let width = 300;
@@ -113,13 +114,15 @@
 <div class="chart-wrap-double-group">
 	<div bind:clientWidth={width}>
 		<h3 class="chart-label">Mass killings by location scaled by number of victims</h3>
-		<div class="map-controls">
-			<FilterSelect
-				bind:currentValue={typeFilter}
-				options={typeFilterOptions}
-				defaultLabel="All"
-				filterLabel="Filter by type" />
-		</div>
+		{#if !nobuttons}
+			<div class="map-controls">
+				<FilterSelect
+					bind:currentValue={typeFilter}
+					options={typeFilterOptions}
+					defaultLabel="All"
+					filterLabel="Filter by type" />
+			</div>
+		{/if}
 		<div class="map-wrap">
 			<svg {width} {height} bind:this={svgEl}>
 				<g
@@ -159,7 +162,9 @@
 					</g>
 				</g>
 			</svg>
-			<ZoomControls {zoomIn} {zoomOut} />
+			{#if !nobuttons}
+				<ZoomControls {zoomIn} {zoomOut} />
+			{/if}
 		</div>
 	</div>
 	<Footer {updated_at} />

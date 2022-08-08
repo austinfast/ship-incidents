@@ -6,8 +6,12 @@
 	import colors from "../../lib/colors.js";
 
 	export let incidentData;
+	export let nobuttons = false;
+	export let metric;
 
-	let chartValue = "incidents";
+	// initial chart value is set to incidents or overridden by metric prop
+	let chartValue = metric ? metric : "incidents";
+
 	let incidentsByYear = [];
 	let width = 300;
 	let updated_at;
@@ -19,7 +23,7 @@
 		top: 20,
 		right: 50,
 		bottom: 20,
-		left: 20,
+		left: 25,
 	};
 	const tickFormat = d3.timeFormat("%b");
 	const variableOptions = [
@@ -139,9 +143,11 @@
 			<h3 class="chart-label">
 				Number of mass killings and victims this year compared with previous years
 			</h3>
+			{#if !nobuttons}
 			<div class="chart-controls">
 				<TabButtons options={variableOptions} bind:currentValue={chartValue} />
 			</div>
+			{/if}
 			{#if lines.length > 0 && scalesX.length > 0}
 				<svg {width} {height}>
 					<g transform="translate({margin.left}, {margin.top})">
