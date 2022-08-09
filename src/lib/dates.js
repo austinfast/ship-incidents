@@ -16,8 +16,12 @@ export function yearFromStringDate(stringDate) {
 	return stringDate.split("-")[0];
 }
 
-export function formatDate(realDate) {
-	const formatter = timeFormat("%m/%d/%Y at %I:%M %p");
+export function formatDate(realDate, time = false) {
+	if (time) {
+		const formatterTime = timeFormat("%m/%d/%Y at %I:%M %p");
+		return formatterTime(realDate);
+	}
+	const formatter = timeFormat("%m/%d/%Y");
 	return formatter(realDate);
 }
 
