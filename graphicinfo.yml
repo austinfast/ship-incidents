@@ -19,7 +19,7 @@ output:
     label: Number of incidents year by year
   - filename: victim_trends
     ssr: false
-    label: Number of victims year by year
+    label: Number of victims killed by year
     title: Mass killing victim trends
   - filename: location_types
     ssr: false

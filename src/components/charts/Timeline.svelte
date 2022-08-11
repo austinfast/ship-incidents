@@ -94,7 +94,7 @@
 		{#await incidentData}
 			<Loading height={500} />
 		{:then _}
-			<h3 class="chart-label">Timeline of mass killings scaled by number of victims</h3>
+			<h3 class="chart-label">Timeline of mass killings scaled by number of victims killed</h3>
 			<div class="chart-inner" transition:fade>
 				{#if !nobuttons}
 				<div class="timeline-controls">

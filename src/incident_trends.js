@@ -25,7 +25,7 @@ new TrendBars({
 	props: {
 		yearlyVariables,
 		incidentData: getIncidentData(),
-		chartLabel: "Number of mass killings year by year"
+		chartLabel: "Number of mass killings by year"
 	},
 });
 

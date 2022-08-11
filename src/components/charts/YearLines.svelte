@@ -141,7 +141,7 @@
 			<Loading height={500} />
 		{:then _}
 			<h3 class="chart-label">
-				Number of mass killings and victims this year compared with previous years
+				Number of mass killings and victims killed this year compared with previous years
 			</h3>
 			{#if !nobuttons}
 			<div class="chart-controls">
