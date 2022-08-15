@@ -3,6 +3,7 @@ author: USA TODAY Graphics
 dataSources:
   local: static/data/cache
   production: https://www.gannett-cdn.com/experiments/usatoday/_data/mass-killings
+  development: https://www.gannett-cdn.com/experiments/usatoday/_data/mass-killings-dev
 output:
   - filename: index
     ssr: false

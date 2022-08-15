@@ -135,7 +135,8 @@ function getEntries(outputs, production) {
 module.exports = (env, argv) => {
 	const production = argv.mode == "production";
 	const dataRoot =
-		process.env.MK_DATA_SRC == "remote" || production
+		process.env.MK_DATA_SRC == "development" ? helper.graphic_info.dataSources.development
+		: process.env.MK_DATA_SRC == "production" || production
 			? helper.graphic_info.dataSources.production
 			: helper.graphic_info.dataSources.local;
 	const ASSET_PATH = production

@@ -13,7 +13,7 @@ PUBLIC_PATH="https://www.gannett-cdn.com/experiments/$DEPLOY_PATH"
 CDN_PATH="https://$CDN_AUTH@www.gannett-cdn.com/experiments/$DEPLOY_PATH"
 while [ "$1" != "" ]; do
 	case $1 in
-		--staging )
+		--dev )
 			shift
 			BUCKET="dev"
 			;;

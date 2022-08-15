@@ -9,23 +9,26 @@
         "url": "https://github.com/USATODAY/mass-killings-front-end"
     },
     "engines": {
-        "node": ">=14.16.0",
+        "node": ">=16.15.0",
         "npm": ">=8.3.2"
     },
     "scripts": {
         "start": "npm run dev",
         "dev": "webpack-dev-server --config ./webpack.config.js --mode development --open",
-        "dev:remote-data": "MK_DATA_SRC=remote npm run dev",
+        "dev:production-data": "MK_DATA_SRC=production npm run dev",
+        "dev:development-data": "MK_DATA_SRC=development npm run dev",
         "build": "npm run build:production",
-        "build:staging": "DEPLOY_ENV=dev webpack --config ./webpack.config.js --mode production && DEPLOY_ENV=dev npm run embed",
-        "build:production": "DEPLOY_ENV=master webpack --config ./webpack.config.js --mode production && DEPLOY_ENV=master npm run embed",
-        "deploy": "npm run build && ./scripts/deploy.sh --production --storytelling-embed",
-        "deploy:staging": "npm run build:staging && ./scripts/deploy.sh --staging",
+        "build:dev": "DEPLOY_ENV=dev MK_DATA_SRC=development webpack --config ./webpack.config.js --mode production && DEPLOY_ENV=dev MK_DATA_SRC=development npm run embed",
+        "build:production": "DEPLOY_ENV=master MK_DATA_SRC=production webpack --config ./webpack.config.js --mode production && DEPLOY_ENV=master MK_DATA_SRC=production npm run embed",
+        "deploy": "npm run deploy:production",
+        "deploy:production": "npm run build:production && ./scripts/deploy.sh --production --storytelling-embed",
+        "deploy:dev": "npm run build:dev && ./scripts/deploy.sh --dev --storytelling-embed",
         "embed": "node scripts/embed.js",
-        "setup": "npm install && node scripts/configure.js && rm -rf .git && git init",
         "fetch-data": "curl https://www.gannett-cdn.com/experiments/usatoday/_data/mass-killings/incidents.json > src/static/data/incidents.json",
-        "data:cache": "mkdir -p src/static/data/cache && gsutil rsync gs://experiments-www-gannett-cdn-com/experiments/usatoday/_data/mass-killings/ src/static/data/cache",
-        "postinstall": "make && npm run data:cache"
+        "data": "npm run data:production",
+        "data:production": "mkdir -p src/static/data/cache && gsutil rsync gs://experiments-www-gannett-cdn-com/experiments/usatoday/_data/mass-killings/ src/static/data/cache",
+        "data:development": "mkdir -p src/static/data/cache && gsutil rsync gs://experiments-www-gannett-cdn-com/experiments/usatoday/_data/mass-killings-dev/ src/static/data/cache",
+        "postinstall": "make && npm run data"
     },
     "devDependencies": {
         "@babel/core": "^7.16.12",
