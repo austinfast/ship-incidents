@@ -50,6 +50,7 @@
 	flex-wrap: wrap;
 	max-width: 900px;
 	margin: 0 auto;
+	padding: 0 20px;
 }
 .group-item {
 	width: 100%;

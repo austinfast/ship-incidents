@@ -106,6 +106,9 @@ body {
 	padding: 0 20px;
 	width: 100%;
 }
+.usat-interactive-graphic .chart-group .chart-wrapper {
+	padding: 0;
+}
 .usat-interactive-graphic .chart-wrap-double-group {
 	padding: 0 20px;
 	width: 100%;
