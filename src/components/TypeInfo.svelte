@@ -8,7 +8,7 @@
 		}
 		const docHeight = window.document.documentElement.scrollHeight;
 		const elYPosition = el.getBoundingClientRect().y;
-		return (docHeight - elYPosition) + "px";
+		return (docHeight - elYPosition - 20) + "px";
 	}
 	function toggleInfo() {
 		maxHeight = getMaxHeight(detailEl);
@@ -97,6 +97,7 @@
 	}
 	.type-info-details-wrapper p {
 		font-size: var(--mk-font-size-small);
+		font-family: var(--mk-font-family-sans);
 		line-height: var(--mk-line-height-small);
 		margin: 0;
 	}
