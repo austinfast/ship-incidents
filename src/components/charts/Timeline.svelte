@@ -101,6 +101,7 @@
 					<FilterSelect
 						bind:currentValue={typeFilter}
 						options={typeFilterOptions}
+						showTypeInfo={true}
 						defaultLabel="All"
 						filterLabel="Filter by type" />
 				</div>

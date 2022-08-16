@@ -1,4 +1,5 @@
 <script>
+	import TypeInfo from "./TypeInfo.svelte";
 	export let options = [
 		{
 			label: "Default option",
@@ -8,6 +9,7 @@
 	export let currentValue = null;
 	export let filterLabel = "Filter";
 	export let defaultLabel = "Select";
+	export let showTypeInfo = false;
 	function labelToId(text) {
 		return text
 			.toString()
@@ -19,15 +21,19 @@
 			.replace(/-+$/, ""); // Trim - from end of text
 	}
 </script>
-
-<div class="filter-select-wrap">
-	<label class="filter-label" for={labelToId(filterLabel)}>{filterLabel}</label>
-	<select bind:value={currentValue} class="filter-select" id={labelToId(filterLabel)}>
-		<option value={null}>{defaultLabel}</option>
-		{#each options as option}
-			<option value={option.value}>{option.label}</option>
-		{/each}
-	</select>
+<div class="filter-wrap">
+	<div class="filter-select-wrap">
+		<label class="filter-label" for={labelToId(filterLabel)}>{filterLabel}</label>
+		<select bind:value={currentValue} class="filter-select" id={labelToId(filterLabel)}>
+			<option value={null}>{defaultLabel}</option>
+			{#each options as option}
+				<option value={option.value}>{option.label}</option>
+			{/each}
+		</select>
+	</div>
+	{#if showTypeInfo}
+		<TypeInfo />
+	{/if}
 </div>
 
 <style>
@@ -55,5 +61,8 @@
 	}
 	.filter-label {
 		font-size: 0.8em;
+	}
+	.filter-wrap {
+		display: flex;
 	}
 </style>
