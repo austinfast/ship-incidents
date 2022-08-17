@@ -17,6 +17,7 @@
 		<p class="data-box-text"><strong>Research and reporting:</strong> Karina Zaiets and George Petras</p>
 		<p class="data-box-text"><strong>Design and development:</strong> Veronica Bravo and Mitchell Thorson</p>
 		<p class="data-box-text"><strong>Editing:</strong> Shawn J. Sullivan</p>
+		<p class="data-box-text"><em>Paul Overberg, Meghan Hoyer, Mark Hannan, Jodi Upton, Barbie Hansen, and Erin Durkin contributed to the original 2012 data reporting effort at USA TODAY.</em></p>
 	</div>
 </div>
 <style>
