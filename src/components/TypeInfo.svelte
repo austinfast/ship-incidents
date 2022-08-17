@@ -1,17 +1,6 @@
 <script>
 	let showDetail = false;
-	let detailEl;
-	let maxHeight;
-	function getMaxHeight(el) {
-		if (!window || !el) {
-			return "none";
-		}
-		const docHeight = window.document.documentElement.scrollHeight;
-		const elYPosition = el.getBoundingClientRect().y;
-		return (docHeight - elYPosition - 20) + "px";
-	}
 	function toggleInfo() {
-		maxHeight = getMaxHeight(detailEl);
 		showDetail = !showDetail;
 	}
 </script>
@@ -21,7 +10,7 @@
 		class="type-info-button"
 		aria-label="Show definitions of incident types"
 		on:click={toggleInfo}>?</button>
-	<div class="type-info-details-wrapper" class:hide={!showDetail} bind:this={detailEl} style="max-height: {maxHeight}">
+	<div class="type-info-details-wrapper" class:hide={!showDetail} >
 		<button
 			class="detail-close"
 			aria-label="close tooltip"

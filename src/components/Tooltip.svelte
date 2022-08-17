@@ -30,11 +30,6 @@
 	// make sure to adjust for nav bar in vertical position
 	$: yPos = toolTipBelow ? position[1] + 10 - navHeight: position[1] - 10 - navHeight;
 
-	function cleanNarrative(rawNarrative) {
-		return rawNarrative
-			.replace( /(<([^>]+)>)/ig, '')
-			.replaceAll("&nbsp;", " ");
-	}
 </script>
 
 <svelte:window bind:innerWidth={winWidth} bind:innerHeight={winHeight} bind:scrollY={winScroll} />
@@ -73,7 +68,7 @@
 			</div>
 		</div>
 		<!-- <p class="tooltip-label">Details:</p> -->
-		<!-- <p class="tooltip-text tooltip-narrative">{cleanNarrative(incident.narrative)}</p> -->
+		<!-- <p class="tooltip-text tooltip-narrative">{incident.narrative}</p> -->
 	{:else if customContent}
 		{#each customContent as item}
 		{#if item.label}
