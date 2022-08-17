@@ -42,6 +42,9 @@
 	<button class="tooltip-close" aria-label="close tooltip" on:click={onClose}>✖</button>
 	{#if incident}
 		<p class="tooltip-label">{prettyDate(incident.real_date)}</p>
+		{#if incident.casenickname}
+			<p class="tooltip-text tooltip-value">{incident.casenickname}</p>
+		{/if}
 		<p class="tooltip-text tooltip-value">{incident.city}, {incident.state}</p>
 		<div class="tooltip-detail-section">
 			<div class="tooltip-detail-group">
@@ -113,7 +116,7 @@
 		font-family: var(--mk-font-family-sans);
 		font-size: 1em;
 		margin-bottom: 5px;
-		margin-top: 0;
+		margin-top: 5px;
 	}
 	.tooltip-value {
 		font-weight: 700;
