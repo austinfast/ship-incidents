@@ -48,7 +48,8 @@
 			<h3 class="chart-label">{chartLabel}</h3>
 		{/if}
 
-		<svg class="ranked-bar-chart" {width} {height}>
+		<svg class="ranked-bar-chart" {width} {height} role="img">
+			<title>A bar chart showing the {chartLabel.toLowerCase()}</title>
 			<g
 				class="x-axis-g"
 				transform="translate({margin.left}, 0)">

@@ -57,7 +57,8 @@
 			{/each}
 		</div>
 		{#if counts && heightScale}
-			<svg class="relationship-bar" {width} height={maxHeight}>
+			<svg class="relationship-bar" {width} height={maxHeight} role="img">
+				<title>A bar chart showing the relationships of mass killing victims to their killers</title>
 				<!-- <g transform="translate({(width / 2) - (barWidth * 1.5 + barMargin)},0)"> -->
 					{#each bars as bar, barIndex}
 						<g transform={`translate(${(barWidth + barMargin) * barIndex}, 0)`}>

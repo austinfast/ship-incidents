@@ -125,7 +125,8 @@
 			</div>
 		{/if}
 		<div class="map-wrap">
-			<svg {width} {height} bind:this={svgEl}>
+			<svg {width} {height} bind:this={svgEl} role="img">
+				<title>A map showing the locations of mass killings in the U.S.</title>
 				<g
 					class="zoomGroup"
 					transform="translate({zoomTransform.x}, {zoomTransform.y}) scale({zoomTransform.k})">

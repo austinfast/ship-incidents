@@ -116,7 +116,8 @@
 			<h3 class="chart-label">{chartLabel}</h3>
 		{/if}
 		{#if chartsData.length > 0}
-			<svg {width} {height}>
+			<svg {width} {height} role="img">
+				<title>A chart showing the {chartLabel.toLowerCase()}</title>
 				{#each chartsData as chartRow, rowIdx}
 					<g transform="translate(0, {getWaffleYPosition(rowIdx)})" class="chart-row">
 						{#each chartRow as chartData, chartIdx}

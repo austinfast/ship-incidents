@@ -63,7 +63,8 @@
 				</div>
 			{/each}
 		</div>
-		<svg class="stacked-bar" {width} {height}>
+		<svg class="stacked-bar" {width} {height} role="img">
+			<title>A bar chart showing the number of {chartLabel.toLowerCase()}</title>
 			<g
 				class="scale-g"
 				bind:this={scaleEl}

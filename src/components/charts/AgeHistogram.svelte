@@ -51,7 +51,8 @@
 			<h3 class="chart-label">{chartLabel}</h3>
 		{/if}
 		{#if binnedData}
-			<svg class="age-histogram-svg" {width} {height}>
+			<svg class="age-histogram-svg" {width} {height} role="img">
+				<title>A bar chart showing the {chartLabel.toLowerCase()}</title>
 				<g class="chart-group" transform="translate({margin.left}, {margin.top})">
 					<g
 						class="x-axis-g"

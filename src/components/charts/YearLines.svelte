@@ -149,7 +149,8 @@
 			</div>
 			{/if}
 			{#if lines.length > 0 && scalesX.length > 0}
-				<svg {width} {height}>
+				<svg {width} {height} role="img">
+					<title>A line chart comparing number of mass killings and victims to date this year compared with past years</title>
 					<g transform="translate({margin.left}, {margin.top})">
 						<g class="x-axis-g" transform="translate(0, {chartHeight})">
 							{#each ticksX as tick, i}

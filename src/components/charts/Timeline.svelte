@@ -106,7 +106,8 @@
 						filterLabel="Filter by type" />
 				</div>
 				{/if}
-				<svg class="timeline-svg" {width} {height}>
+				<svg class="timeline-svg" {width} {height} role="img">
+					<title>A timeline chart showing mass killing incidents scaled by number of victims killed</title>
 					<g class="chart-inner" transform="translate({margin.left}, {margin.top})">
 						<g class="timeline-yearinfo-group">
 							{#each years as year}

@@ -104,7 +104,8 @@
 				</div>
 			{/each}
 		</div>
-		<svg {width} {height}>
+		<svg {width} {height} role="img">
+			<title>A bar chart showing the {chartLabel.toLowerCase()}</title>
 			<g class="chart-g" transform="translate({margin.left}, {margin.top})">
 				<g class="x-axis-g" transform="translate(0, {chartHeight})">
 					{#each scaleX.domain() as tick, i}
