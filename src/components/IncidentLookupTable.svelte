@@ -206,6 +206,7 @@
 		</tbody>
 	</table>
 	<div class="incident-lookup-table-page-info">
+		<p class="data-download-link"><a href="https://data.world/associatedpress/mass-killings-public" target="_blank">Download the data</a></p>
 		<p class="incident-result-num">{filteredIncidents.length} incidents</p>
 		{#if filteredIncidents.length > 0}
 			<div class="incident-page-control-group">
@@ -372,6 +373,14 @@
 	.incident-page-control-group {
 		text-align: right;
 		justify-self: end;
+	}
+	p.data-download-link {
+		justify-self: start;
+		text-align: left;
+		font-family: var(--mk-font-family-sans);
+	}
+	p.data-download-link a, p.data-download-link a:visited {
+		color: var(--mk-color-grey-dark);
 	}
 	.incident-page-num {
 		font-size: 0.8em;
