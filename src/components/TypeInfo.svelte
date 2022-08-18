@@ -103,4 +103,11 @@
 		right: 10px;
 		color: var(--mk-color-grey-dark);
 	}
+	@media(max-width: 620px) {
+		.type-info-details-wrapper {
+			left: 50%;
+			transform: translate(-50%, 0);
+		}
+
+	}
 </style>

@@ -349,9 +349,11 @@
 	.table-ui-button {
 		background-color: var(--mk-color-grey-light);
 		border: solid 1px var(--mk-color-grey);
+		color: var(--mk-color-grey-dark);
 		border-radius: 5px;
 		cursor: pointer;
 		transition: background-color 250ms ease;
+		padding: 0;
 	}
 	.incident-lookup-table-page-button {
 		width: 40px;

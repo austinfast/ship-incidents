@@ -40,6 +40,7 @@
 		width: 29px;
 		height: 29px;
 		cursor: pointer;
+		padding: 0;
 	}
 	.map-zoom-button-top {
 		border-radius: 3px 3px 0 0;
