@@ -24,7 +24,7 @@
 	<div class="summary-inner" transition:fade>
 		<div class="victim-count">
 			<p class="summary-number">{prettyNumber(results[0].totalVictims)}</p>
-			<p class="summary-description">people have been killed in</p>
+			<p class="summary-description">victims have lost their lives in</p>
 		</div>
 		<div class="incident-count">
 			<p class="summary-number">{prettyNumber(results[1].incidents.length)}</p>
