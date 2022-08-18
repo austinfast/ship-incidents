@@ -104,6 +104,9 @@
 		color: var(--mk-color-grey-dark);
 	}
 	@media(max-width: 620px) {
+		.type-info-wrapper {
+			position: static;
+		}
 		.type-info-details-wrapper {
 			left: 50%;
 			transform: translate(-50%, 0);

@@ -46,7 +46,7 @@
 		font-family: var(--mk-font-family-sans, sans-serif);
 		padding: 8px 25px 8px 5px;
 		display: block;
-		min-width: 160px;
+		min-width: 130px;
 		background: var(--mk-color-grey-light);
 		/* note: bg image below uses 2 urls. The first is an svg data uri for the arrow icon, and the second is the gradient. 
         for the icon, if you want to change the color, be sure to use `%23` instead of `#`, since it's a url. You can also swap in a different svg icon or an external image reference

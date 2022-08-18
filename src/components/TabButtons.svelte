@@ -18,6 +18,7 @@ export let currentValue = options.length > 0 ? options[0].value : null;
 		border: solid 1px var(--mk-color-grey);
 		padding: 8px 5px;
 		transition: background 250ms ease;
+		margin: 0;
 		cursor: pointer;
 		font-family: var(--mk-font-family-sans);
 	}
