@@ -112,7 +112,7 @@
 </script>
 
 <div class="chart-wrap-double-group">
-	<div bind:clientWidth={width}>
+	<div class="chart-inner-wrapper" bind:clientWidth={width}>
 		<h3 class="chart-label">Mass killings by location scaled by number of victims</h3>
 		{#if !nobuttons}
 			<div class="map-controls">

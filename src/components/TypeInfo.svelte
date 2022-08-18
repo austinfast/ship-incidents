@@ -1,7 +1,11 @@
 <script>
 	let showDetail = false;
-	function toggleInfo() {
+	let yPos;
+	let xPos;
+	function toggleInfo(e) {
 		showDetail = !showDetail;
+		yPos = e.pageY;
+		xPos = e.pageX
 	}
 </script>
 
@@ -10,7 +14,7 @@
 		class="type-info-button"
 		aria-label="Show definitions of incident types"
 		on:click={toggleInfo}>?</button>
-	<div class="type-info-details-wrapper" class:hide={!showDetail} >
+	<div class="type-info-details-wrapper" class:hide={!showDetail} style="top: {yPos}px !important; left: {xPos - 10}px">
 		<button
 			class="detail-close"
 			aria-label="close tooltip"
@@ -56,7 +60,7 @@
 		align-self: flex-end;
 		padding-left: 10px;
 		padding-bottom: 3px;
-		position: relative;
+		/* position: relative; */
 		z-index: 500;
 	}
 	.type-info-button {
@@ -80,6 +84,7 @@
 		width: 375px;
 		max-width: 80vw;
 		overflow-y: auto;
+		transform: translate(-100%, 0);
 	}
 	.type-info-details-wrapper.hide {
 		display: none;
@@ -108,7 +113,7 @@
 			position: static;
 		}
 		.type-info-details-wrapper {
-			left: 50%;
+			left: 50% !important;
 			transform: translate(-50%, 0);
 		}
 

@@ -90,7 +90,7 @@
 </script>
 
 <div class="chart-wrapper">
-	<div bind:clientWidth={width}>
+	<div class="chart-inner-wrapper" bind:clientWidth={width}>
 		{#await incidentData}
 			<Loading height={500} />
 		{:then _}
