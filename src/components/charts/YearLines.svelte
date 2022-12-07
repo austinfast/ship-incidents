@@ -18,7 +18,8 @@
 	const xTicksEvery = 1;
 	const numYTicks = 10;
 	const tickHeight = 12;
-	const currentYear = new Date().getFullYear();
+	const currentDate = new Date();
+	const currentYear = currentDate.getFullYear();
 	const margin = {
 		top: 20,
 		right: 50,
@@ -115,16 +116,15 @@
 				});
 			}
 			// add a final value for December 31 for all past years
-			if (!isCurrentYear(year)) {
-				const lastEntry = results[yearIdx].counts[results[yearIdx].counts.length - 1];
-				// final value contains the last entry's values with a data of December 31
-				const finalValue = {
-					date: new Date(year, 11, 31),
-					incidents: lastEntry.incidents,
-					victims: lastEntry.victims,
-				};
-				results[yearIdx].counts.push(finalValue);
-			}
+			const lastEntry = results[yearIdx].counts[results[yearIdx].counts.length - 1];
+			// final value contains the last entry's values with a data of December 31 or current date
+			const lastDate = isCurrentYear(year) ? currentDate : new Date(year, 11, 31);
+			const finalValue = {
+				date: lastDate,
+				incidents: lastEntry.incidents,
+				victims: lastEntry.victims,
+			};
+			results[yearIdx].counts.push(finalValue);
 		}
 		return results;
 	}
