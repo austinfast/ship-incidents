@@ -67,8 +67,8 @@
 				<p class="tooltip-text tooltip-value">{incident.location_type}</p>
 			</div>
 		</div>
-		<!-- <p class="tooltip-label">Details:</p> -->
-		<!-- <p class="tooltip-text tooltip-narrative">{incident.narrative}</p> -->
+		<p class="tooltip-label">Details:</p> 
+		<p class="tooltip-text tooltip-narrative">{incident.narrative}</p> 
 	{:else if customContent}
 		{#each customContent as item}
 		{#if item.label}
