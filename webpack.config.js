@@ -17,8 +17,10 @@ module.exports = (env, argv) => {
     let plugins = [
         new HtmlWebpackPlugin({
             inject: true,
-            template: './src/timeline.html',
-            filename: "timeline.html",
+            //template: './src/timeline.html',
+            //filename: "timeline.html",
+            template: 'index.html',
+            filename: "index.html",
             chunks: ["timeline"],
             minify: {
                 removeComments: true,
