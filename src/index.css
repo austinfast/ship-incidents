@@ -1,0 +1,167 @@
+body,
+html,
+div,
+h1,
+h2,
+h3,
+h4,
+.h5,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+.usat-interactive-graphic {
+  font-family: "Unify Sans", sans-serif;
+  font-size: 16px;
+  color: #404040;
+  background: #ffffff;
+  overflow: auto;
+}
+
+.usat-interactive-graphic,
+.usat-interactive-graphic * {
+  box-sizing: border-box;
+}
+
+.usat-interactive-graphic {
+  padding: 20px 0px;
+}
+
+#header-wrap {
+  display: none;
+}
+
+.header-wrap {
+  margin: 0 auto;
+  padding-bottom: 20px;
+}
+
+p.graphic-chatter {
+  margin-top: 0;
+}
+
+p.graphic-chatter.extra-height {
+  line-height: 1.5;
+}
+
+.footer-wrap {
+  margin: 10px auto 0;
+  /* max-width: 1100px; */
+}
+
+img.graphic-img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.usat-interactive-graphic h1,
+.usat-interactive-graphic h2,
+.usat-interactive-graphic h3,
+.usat-interactive-graphic h4,
+.usat-interactive-graphic h5,
+.usat-interactive-graphic h6 {
+  font-family: "Unify Sans", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+h2.graphic-header {
+  font-size: 20px;
+  margin: 0;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 800px) {
+  h2.graphic-header {
+    font-size: 20px;
+  }
+}
+
+p.source-line {
+  display: block;
+  font-family: "Unify Sans", sans-serif;
+  font-size: 14px;
+  margin: 0 0 0.5em;
+}
+
+.mapboxgl-popup-content p {
+  font-family: "Unify Sans", sans-serif;
+  font-weight: 400;
+}
+
+.mapboxgl-popup-content h2 {
+  margin-bottom: 1em;
+}
+
+.mapboxgl-popup-content p strong {
+  font-weight: 700;
+}
+
+.toggle-buttons-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+button.toggle-button {
+  background: #d7d7d7;
+  border: solid 1px #afafaf;
+  font-size: 1rem;
+  font-family: "Unify Sans", sans-serif;
+  border-radius: 0 5px 5px 0;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin: 0;
+}
+
+button.toggle-button:first-child {
+  border-radius: 5px 0 0 5px;
+}
+
+button.toggle-button.active {
+  background: #ffffff;
+  font-weight: 700;
+}
+
+p.chatter-center {
+  text-align: center;
+}
+
+.header-wrap h2 {
+  font-size: 22px;
+}
+
+.tooltip {
+  position: absolute;
+  width: auto;
+  max-width: 250px;
+  height: auto;
+  max-height: 100px;
+  padding: 10px;
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 0px;
+  border-radius: 8px;
+}
+
+canvas:focus {
+  outline: none;
+}
+
+.article-inner {
+  padding: 0 20px;
+}
+
+@media (min-width: 768px) {
+  .article-inner {
+    padding: 0 18vw;
+  }
+}
+@media (min-width: 1024px) {
+  .article-inner {
+    padding: 0 26vw;
+  }
+}

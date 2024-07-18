@@ -1,0 +1,188 @@
+:root {
+    --mk-font-family-sans: "Unify Sans", sans-serif;
+    --mk-font-family-serif: "Unify Serif", serif;
+    --mk-font-size-small: 12px;
+    --mk-line-height-small: 16px;
+    --mk-font-size-medium: 16px;
+    --mk-line-height-medium: 22px;
+    --mk-font-size-medium-2: 18px;
+    --mk-line-height-medium-2: 24px;
+    --mk-font-size-large: 20px;
+    --mk-line-height-large: 28px;
+    --mk-font-size-extra-large: 28px;
+    --mk-line-height-extra-large: 34px;
+    --mk-color-background: #fff;
+    --mk-color-text: #404040;
+    --mk-color-orange: #c96743;
+    --mk-color-orange-light: #e6a38a;
+    --mk-color-orange-dark: #4e2b1f;
+    --mk-color-blue: #416986;
+    --mk-color-blue-light: #8da2b5;
+    --mk-color-grey: #ababab;
+    --mk-color-grey-light: #f0f0f0;
+    --mk-color-grey-dark: #404040;
+}
+
+body, html {
+    color: var(--mk-color-text);
+    font-size: var(--mk-font-size-medium);
+    margin: 0;
+    padding: 0;
+}
+
+.usat-interactive-graphic, .usat-interactive-graphic * {
+    box-sizing: border-box;
+}
+
+.usat-interactive-graphic div, .usat-interactive-graphic h1, .usat-interactive-graphic h2, .usat-interactive-graphic h3, .usat-interactive-graphic h4, .usat-interactive-graphic h5, .usat-interactive-graphic h6, .usat-interactive-graphic li, .usat-interactive-graphic ol, .usat-interactive-graphic ul {
+    color: var(--mk-color-text);
+    margin: 0;
+    padding: 0;
+}
+
+.usat-interactive-graphic, .usat-interactive-graphic h1, .usat-interactive-graphic h2, .usat-interactive-graphic h3, .usat-interactive-graphic h4, .usat-interactive-graphic h5, .usat-interactive-graphic h6, .usat-interactive-graphic li, .usat-interactive-graphic ol, .usat-interactive-graphic p, .usat-interactive-graphic ul {
+    font-size: var(--mk-font-size-medium);
+}
+
+.usat-interactive-graphic {
+    background-color: var(--mk-color-background);
+    font-family: var(--mk-font-family-sans, sans-serif);
+    line-height: var(--mk-line-height-medium);
+}
+
+.usat-interactive-graphic p {
+    margin: 0 0 22px;
+    padding: 0;
+}
+
+.usat-interactive-graphic h1, .usat-interactive-graphic h2, .usat-interactive-graphic h3, .usat-interactive-graphic h4, .usat-interactive-graphic h5, .usat-interactive-graphic h6 {
+    font-family: var(--mk-font-family-sans, sans-serif);
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+}
+
+.usat-interactive-graphic h2 {
+    font-family: var(--mk-font-family-serif, serif);
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 36px;
+    margin-bottom: 10px;
+}
+
+.usat-interactive-graphic .chart-wrapper {
+    margin: 0 auto;
+    max-width: 900px;
+    overflow: auto;
+    padding: 0 20px;
+    width: 100%;
+}
+
+.usat-interactive-graphic .chart-group .chart-wrapper {
+    overflow: visible;
+    padding: 0;
+}
+
+.chart-inner-wrapper {
+    position: static !important;
+}
+
+.usat-interactive-graphic .chart-wrap-double-group {
+    padding: 0 20px;
+    width: 100%;
+}
+
+.usat-interactive-graphic .in-depth-article-width {
+    max-width: 100%;
+    padding: 0 20px;
+    width: 100%;
+}
+
+.usat-interactive-graphic h3.chart-label {
+    font-size: var(--mk-font-size-medium);
+    font-weight: 700;
+    margin-bottom: 1.5em;
+    margin-top: 1.5em;
+}
+
+@media (min-width: 768px) {
+    .usat-interactive-graphic .in-depth-article-width {
+        padding: 0 18vw;
+    }
+
+    .usat-interactive-graphic .chart-wrap-double-group {
+        margin: 0 auto;
+        max-width: 1200px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .usat-interactive-graphic .in-depth-article-width {
+        padding: 0 26vw;
+    }
+}
+
+@font-face {
+    font-family: "Unify Sans";
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySans_W_Rg.eot);
+    src: url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySans_W_Rg.eot?#iefix) format("embedded-opentype"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySans_W_Rg.woff) format("woff"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySans_Rg.ttf) format("truetype"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySans_Rg.svg#UnifySans) format("svg");
+}
+
+@font-face {
+    font-family: "Unify Sans";
+    font-style: normal;
+    font-weight: 700;
+    src: url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySans_W_SBd.eot);
+    src: url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySans_W_SBd.eot?#iefix) format("embedded-opentype"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySans_W_SBd.woff) format("woff"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySans_SBd.ttf) format("truetype"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySans_SBd.svg#UnifySans_SBd) format("svg");
+}
+
+@font-face {
+    font-family: "Unify Sans";
+    font-style: normal;
+    font-weight: 900;
+    src: url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySans_W_Rg.eot);
+    src: url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySans_W_Rg.eot?#iefix) format("embedded-opentype"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySans_W_Bd.woff) format("woff"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySans_Bd.ttf) format("truetype"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySans_Bd.svg#UnifySans_Bd) format("svg");
+}
+
+@font-face {
+    font-family: "Unify Serif";
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySerif_W_Rg.eot);
+    src: url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySerif_W_Rg.eot?#iefix) format("embedded-opentype"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySerif_W_Rg.woff) format("woff"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySerif_Rg.ttf) format("truetype"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySerif_W_Rg.svg#UnifySerif_A_Rg) format("svg");
+}
+
+@font-face {
+    font-family: "Unify Serif";
+    font-style: normal;
+    font-weight: 700;
+    src: url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySerif_W_SBdIt.eot);
+    src: url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySerif_W_SBdIt.eot?#iefix) format("embedded-opentype"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySerif_W_SBd.woff) format("woff"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySerif_SBd.ttf) format("truetype"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySerif_W_SBd.svg#UnifySerif_A_Rg) format("svg");
+}
+
+@font-face {
+    font-family: "Unify Serif";
+    font-style: normal;
+    font-weight: 900;
+    src: url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySerif_W_Bd.eot);
+    src: url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySerif_W_Bd.eot?#iefix) format("embedded-opentype"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySerif_W_Bd.woff) format("woff"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySerif_Bd.ttf) format("truetype"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySerif_W_Bd.svg#UnifySerif_A_Rg) format("svg");
+}
+
+@font-face {
+    font-family: "Unify Sans Condensed";
+    font-style: normal;
+    font-weight: 900;
+    src: url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySansCd_W_Bd.eot);
+    src: url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySansCd_W_Bd.eot?#iefix) format("embedded-opentype"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySansCd_W_Bd.woff) format("woff"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySansCd_W_Bd.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Unify Sans Condensed";
+    font-style: normal;
+    font-weight: 700;
+    src: url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySansCd_W_SBd.eot);
+    src: url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySansCd_W_SBd.eot?#iefix) format("embedded-opentype"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySansCd_W_SBd.woff) format("woff"), url(https://www.gannett-cdn.com/experiments/usatoday/_common/_fonts/UnifySansCd_W_SBd.ttf) format("truetype");
+}

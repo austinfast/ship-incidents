@@ -31,9 +31,11 @@
 			{/each}
 		</select>
 	</div>
+	<!-- USE THIS TO INCLUDE grey button to provide more details?
 	{#if showTypeInfo}
 		<TypeInfo />
 	{/if}
+	-->
 </div>
 
 <style>

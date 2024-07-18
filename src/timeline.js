@@ -1,5 +1,5 @@
-//import  "./fonts.css" // eslint-disable-line
-//import styles from "./index.css" // eslint-disable-line
+import  "./fonts.css" // eslint-disable-line
+import styles from "./index.css" // eslint-disable-line
 import Timeline from "./components/charts/Timeline.svelte";
 import { getIncidentData } from "./lib/data/incidents.js";
 //import 'whatwg-fetch';

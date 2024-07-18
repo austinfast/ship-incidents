@@ -2,7 +2,8 @@
 //Source: https://www.gannett-cdn.com/experiments/storytelling-embed/master/mass-killings-front-end/timeline.html
 //https://www.usatoday.com/in-depth/graphics/2022/12/08/2022-usatoday-graphics-year-in-review/10789310002/
 //https://github.com/USATODAY/mass-killings-front-end
-	import { onMount } from "svelte";
+	import { onMount, afterUpdate, setContext } from "svelte";
+
   import { getIncidentData } from "../../lib/data/incidents.js";
  
   import { fade } from "svelte/transition";
@@ -19,12 +20,15 @@
 	import { parseDate } from "../dates.js";
 	import rawIncidents from "../casualties.json"; // Import JSON file
   
+  	let svgElement; 
+  //    export let svgElement; // Assume you have a reference to your SVG element
+
 
   let incidents = [];
   let width = 900;
   const arc = d3.arc();
   const monthTickHeight = 10;
-  let typeFilter = 'Synergy';
+  let typeFilter = null; //'Synergy';
   //let typeFilter = "All";
   let tooltip = null;
 //  let updated_at;
@@ -104,6 +108,7 @@ import { fade } from "svelte/transition";
 	$: typeFilterOptions = incidents
 		.map((d) => d.umbrella) //<<TO SET FILTER, set to match JSON umbrella for company
 		.filter(filterUnique)
+		.sort((a, b) => a.localeCompare(b)) // Sort alphabetically
 		.map((d) => {
 			return {
 				label: d,
@@ -175,7 +180,12 @@ import { fade } from "svelte/transition";
    function getColor(severity) {
     return severity === 'Fatal' ? colors['orange'] : colors['blue-light'];
   } 
-
+  
+  let legendItems = [
+    { label: "Fatal", color: colors['orange'] },
+    { label: "Injury", color: colors['blue-light'] }
+  ];
+  
 </script>
 
 <div class="chart-wrapper">
@@ -183,8 +193,18 @@ import { fade } from "svelte/transition";
 		<!--{#await incidentData}
 			<Loading height={500} />
 		{:then _}-->
-			<h3 class="chart-label">Fatal or injury-causing incidents among 10 largest ship managers, scaled by victims</h3>
+			<h3 class="chart-label">Incidents among 10 largest ship managers, since May 2019</h3>
 			<div class="chart-inner" transition:fade>
+			
+			  <div class="legend-controls">
+<div class="legend">
+      {#each legendItems as item}
+        <div class="legend-item">
+          <div class="legend-color-box" style="background-color: {item.color};"></div>
+          <div class="legend-label">{item.label}</div>
+        </div>
+      {/each}
+    </div>
 				{#if !nobuttons}
 				<div class="timeline-controls">
 					<FilterSelect
@@ -195,6 +215,7 @@ import { fade } from "svelte/transition";
 						filterLabel="Filter by company" />
 				</div>
 				{/if}
+				</div>
 				<svg class="timeline-svg" {width} {height} role="img">
 					<!--<title>A timeline chart showing fatal or injury-causing shipping incidents scaled by number of victims killed</title>
 					-->
@@ -257,6 +278,10 @@ import { fade } from "svelte/transition";
 			</div>
 		<!--{/await}-->
 	</div>
+	<div class="article-inner">
+  <p class="source-line">NOTE Bubbles are scaled by victim count.</p>
+  <p class="source-line">SOURCE USA TODAY analysis of data from Lloyd's List Intelligence and the U.S. Coast Guard.</p>
+</div>
 	<!-- <Footer {updated_at} /> -->
 </div>
 {#if tooltip}
@@ -283,6 +308,31 @@ import { fade } from "svelte/transition";
 	.incident-bubble {
 		cursor: crosshair;
 	}
+	.legend {
+    display: flex;
+    align-items: center;
+    margin-left: 1em;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin-right: 1em;
+  }
+  .legend-color-box {
+    width: 20px;
+    height: 20px;
+    border: 1px solid black;
+    margin-right: 5px;
+  }
+  .legend-label {
+    font-size: 12px;
+    font-family: var(--mk-font-family-sans, sans-serif);
+  }
+  .legend-controls {
+    display: flex;
+    justify-content: space-between; /* Push items to opposite sides */
+    align-items: center;
+  }
 	:global(.timeline-chart-month-axis .domain) {
 		display: none;
 		opacity: 0;
