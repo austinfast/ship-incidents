@@ -24,7 +24,7 @@
   let width = 900;
   const arc = d3.arc();
   const monthTickHeight = 10;
-  let typeFilter = null;
+  let typeFilter = 'Synergy';
   //let typeFilter = "All";
   let tooltip = null;
 //  let updated_at;
@@ -102,7 +102,7 @@ import { fade } from "svelte/transition";
 		.range(years.map((_, i) => i * maxRadius + 10));
 	$: xScale = d3.scaleLinear().domain([0, 366]).range([0, chartWidth]);
 	$: typeFilterOptions = incidents
-		.map((d) => d.umbrella) //<<TO SET FILTER, set to match JSON
+		.map((d) => d.umbrella) //<<TO SET FILTER, set to match JSON umbrella for company
 		.filter(filterUnique)
 		.map((d) => {
 			return {
@@ -158,15 +158,24 @@ import { fade } from "svelte/transition";
         };
       });
   
-  let umbrella_colors = ["#C96743","#E6A38A","#4E2B1F",
+  /* base colors on umbrella randomly
+  let severity_colors = ["#C96743","#E6A38A","#4E2B1F",
     		"#416986", "#8DA2B5", "#1F2B36",
 			"#ABABAB", "#F0F0F0", "#404040"] 
       	
   const colorScale = d3.scaleOrdinal()
     .domain(typeFilterOptions.map(d => d.value))
-    .range(umbrella_colors);
+    .range(severity_colors);
+   
+   function getColor(umbrella) {
+    return umbrella === 'Synergy' ? colors['orange'] : colors['blue-light'];
+  }
+   */ 
+  
+   function getColor(severity) {
+    return severity === 'Fatal' ? colors['orange'] : colors['blue-light'];
+  } 
 
-	
 </script>
 
 <div class="chart-wrapper">
@@ -187,7 +196,8 @@ import { fade } from "svelte/transition";
 				</div>
 				{/if}
 				<svg class="timeline-svg" {width} {height} role="img">
-					<title>A timeline chart showing fatal or injury-causing shipping incidents scaled by number of victims killed</title>
+					<!--<title>A timeline chart showing fatal or injury-causing shipping incidents scaled by number of victims killed</title>
+					-->
 					<g class="chart-inner" transform="translate({margin.left}, {margin.top})">
 						<g class="timeline-yearinfo-group">
 							{#each years as year}
@@ -204,6 +214,7 @@ import { fade } from "svelte/transition";
 							{/each}
 						</g>
 						<g class="timeline-incident-group">
+							<!--REMOVED THIS BELOW: fill={colorScale(incident.severity)} -->
 							{#each filteredIncidents as incident}
 								<path
 									class="incident-bubble"
@@ -216,7 +227,7 @@ import { fade } from "svelte/transition";
 										startAngle: -Math.PI * 0.5,
 										endAngle: Math.PI * 0.5,
 									})}
-									fill={colorScale(incident.umbrella)} 
+									fill={getColor(incident.severity)}
 									opacity={tooltip && !(tooltip.incident.id == incident.id) ? 0.25 : 0.75}
 									stroke="#404040"
 									on:mousemove={(e) => onDetails(incident, [e.pageX, e.pageY])}

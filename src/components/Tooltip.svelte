@@ -41,8 +41,13 @@
 			<p class="tooltip-text tooltip-value">{incident.casenickname}</p>
 		{/if}
 		<!--<p class="tooltip-text tooltip-value">{incident.city}, {incident.state}</p>-->
-		<p class="tooltip-text tooltip-value">{incident.umbrella}</p>		
-		<p class="tooltip-text tooltip-value">{incident.vessel_name} - {incident.vessel_type}</p>
+		<p class="tooltip-text tooltip-value">{incident.vessel_name} [{incident.vessel_type}]</p>
+		<div class="tooltip-detail-section">
+			<div class="tooltip-detail-group">
+				<p class="tooltip-label">Company:</p>
+				<p class="tooltip-text tooltip-value">{incident.umbrella} [{incident.subsidiary_list}]</p>
+			</div>
+		</div>			
 		<div class="tooltip-detail-section">
 			<div class="tooltip-detail-group">
 				<p class="tooltip-label">Deaths:</p>
@@ -73,6 +78,11 @@
 				<p class="tooltip-label">Location:</p>
 				<p class="tooltip-text tooltip-value">{incident.location}</p>
 			</div>
+			<!-- <div class="tooltip-detail-group">
+				<p class="tooltip-label">Company role(s):</p>
+				<p class="tooltip-text tooltip-value">{incident.summary}</p>
+			</div>
+			-->
 		</div>
 		<p class="tooltip-label">Details:</p> 
 		<p class="tooltip-text tooltip-narrative">{incident.incident_precis}</p> 
