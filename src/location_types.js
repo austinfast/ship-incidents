@@ -6,6 +6,7 @@ import colors from "./lib/colors.js";
 
 const mainEl = document.getElementById("MK-location_types-embed");
 
+/*
 new Bars({
 	target: mainEl,
 	props: {
@@ -15,6 +16,7 @@ new Bars({
 		chartLabel: "Number of mass killings by location type"
 	}
 });
+*/
 
 // Set up height resizer for embeds
 if (window.IframeResizer) {

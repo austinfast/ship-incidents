@@ -1,23 +1,24 @@
 <script>
 	import Header from "./components/Header.svelte";
-	import VizModule from "./components/VizModule.svelte";
-	import Popup from "./components/Popup.svelte";
-	import Loading from "./components/Loading.svelte";
+	//import VizModule from "./components/VizModule.svelte";
+	//import Popup from "./components/Popup.svelte";
+	//import Loading from "./components/Loading.svelte";
 	import Timeline from "./components/charts/Timeline.svelte";
-	import YearlySummary from "./components/charts/YearlySummary.svelte";
-	import TrendLine from "./components/charts/TrendLine.svelte";
-	import TrendArea from "./components/charts/TrendArea.svelte";
-	import IncidentMap from "./components/charts/IncidentMap.svelte";
-	import IncidentTypeWaffleChart from "./components/charts/IncidentTypeWaffleChart.svelte";
-	import RankedBar from "./components/charts/RankedBar.svelte";
-	import GunType from "./components/charts/GunType.svelte";
-	import RelationshipBars from "./components/charts/RelationshipBars.svelte";
-	import AgeHistogram from "./components/charts/AgeHistogram.svelte";
-	import StackedBar from "./components/charts/StackedBar.svelte";
-	import DataManager from "./lib/data.js";
-	import { popupDetails } from "./stores/popup.js";
+	//import YearlySummary from "./components/charts/YearlySummary.svelte";
+	//import TrendLine from "./components/charts/TrendLine.svelte";
+	//import TrendArea from "./components/charts/TrendArea.svelte";
+	//import IncidentMap from "./components/charts/IncidentMap.svelte";
+	//import IncidentTypeWaffleChart from "./components/charts/IncidentTypeWaffleChart.svelte";
+	//import RankedBar from "./components/charts/RankedBar.svelte";
+	//import GunType from "./components/charts/GunType.svelte";
+	//import RelationshipBars from "./components/charts/RelationshipBars.svelte";
+	//import AgeHistogram from "./components/charts/AgeHistogram.svelte";
+	//import StackedBar from "./components/charts/StackedBar.svelte";
+	//import DataManager from "./lib/data.js";
+	//import { popupDetails } from "./stores/popup.js";
 	import { prettyNumber } from "./lib/text.js";
 
+/*
 	let dataManager = new DataManager();
 	let data = null;
 
@@ -25,6 +26,7 @@
 		data = responseData;
 		console.log(data);
 	});
+	*/
 </script>
 
 <style>
@@ -67,7 +69,7 @@
 			>
 				<Timeline incidents={data.timeline} />
 			</VizModule>
-			<!-- incident location map -->
+			<!-- incident location map 
 			<VizModule
 				subhead="Incidents by location"
 				leadInText="In gravida eros nisi. Quisque in lectus condimentum, lobortis magna quis, rutrum nisi. Etiam a nulla pulvinar, dapibus tortor vel, egestas leo. Aliquam erat volutpat."
@@ -75,7 +77,7 @@
 			>
 				<IncidentMap incidents={data.incidents_geo} />
 			</VizModule>
-			<!-- trends in mass killings -->
+			<!-- trends in mass killings 
 			<VizModule
 				subhead="Trends in mass killing incidents"
 				leadInText="Explain the significance of mass shootings and mass public shootings as indicators."
@@ -90,7 +92,7 @@
 				/>
 			</VizModule>
 
-			<!-- trends in mass killings victims -->
+			<!-- trends in mass killings victims 
 			<VizModule subhead="Trends in mass killing victims">
 				<TrendArea
 					yearlyData={data.yearly_summaries}
@@ -114,7 +116,7 @@
 				/>
 			</VizModule>
 
-			<!-- incident type breakdown -->
+			<!-- incident type breakdown 
 			<VizModule
 				subhead="Incidents by type"
 				leadInText="In gravida eros nisi. Quisque in lectus condimentum, lobortis magna quis, rutrum nisi. Etiam a nulla pulvinar, dapibus tortor vel, egestas leo. Aliquam erat volutpat."
@@ -122,7 +124,7 @@
 				<IncidentTypeWaffleChart incidents={data.incidents} />
 			</VizModule>
 
-			<!-- location type breakdown -->
+			<!-- location type breakdown 
 			<VizModule
 				subhead="Location types"
 				leadInText="In gravida eros nisi. Quisque in lectus condimentum, lobortis magna quis, rutrum nisi. Etiam a nulla pulvinar, dapibus tortor vel, egestas leo. Aliquam erat volutpat."
@@ -130,35 +132,36 @@
 				<RankedBar items={data.location_type_counts} />
 			</VizModule>
 
-			<!-- weapon type breakdown -->
+			<!-- weapon type breakdown
 			<VizModule subhead="Weapons used" leadInText="Which types of weapons were used in the most incidents." theme="dark">
-				<!-- <GunType gunTypes={data.gun_type_counts} /> -->
+				<!-- <GunType gunTypes={data.gun_type_counts} />
 			</VizModule>
 
-			<!-- relationships -->
+			<!-- relationships 
 			<VizModule subhead="Relationships" leadInText="Information about relationships between victims and their killers.">
 				<RelationshipBars counts={data.victim_relationship_counts} />
 			</VizModule>
 
-			<!-- victim ages -->
+			<!-- victim ages
 			<VizModule subhead="Victims by age" leadInText="Age distribution">
 				<AgeHistogram binned_data={data.victim_binned_ages} age_scale={data.victim_age_scale} color="#d9501e" />
 			</VizModule>
 
-			<!-- victim sex -->
+			<!-- victim sex
 			<VizModule subhead="Victims by sex" leadInText="" vizSize="wide">
 				<StackedBar counts={data.victim_gender_counts} colors={["#d9501e", "#f08c67"]} />
 			</VizModule>
 
-			<!-- offender ages -->
+			<!-- offender ages 
 			<VizModule subhead="Offenders by age" leadInText="Age distribution">
 				<AgeHistogram binned_data={data.offender_binned_ages} age_scale={data.offender_age_scale} color="#416986" />
 			</VizModule>
 
-			<!-- offender gender -->
+			<!-- offender gender 
 			<VizModule subhead="Offenders by sex" leadInText="Offenders were most likely to be male." vizSize="wide">
 				<StackedBar counts={data.offender_gender_counts} colors={["#416986", "#90a4b3", "#8c8c8c"]} />
 			</VizModule>
+			-->
 		</section>
 		{#if ($popupDetails.incidentId || $popupDetails.customContent) && $popupDetails.position}
 			<Popup details={$popupDetails} incidentLookup={data.incidentLookup} />

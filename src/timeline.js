@@ -1,23 +1,57 @@
-import "./style/fonts.css";
-import "./style/index.css";
+//import  "./fonts.css" // eslint-disable-line
+//import styles from "./index.css" // eslint-disable-line
 import Timeline from "./components/charts/Timeline.svelte";
 import { getIncidentData } from "./lib/data/incidents.js";
-import { getParameterByName } from "./lib/params.js";
+//import 'whatwg-fetch';
+//import { urlFor, getTimeStamp, smartResizeListener, numberWithCommas } from "./utils.js";
+//import * as topojson from "topojson-client";
 
-const nobuttonsParam = getParameterByName("nobuttons");
+/*
+function main(data) {
 
-const name = "timeline";
-const mainEl = document.getElementById(`MK-${name}-embed`);
-new Timeline({
-	target: mainEl,
-	props: {
-		popupSlot: "incident-timeline",
-		incidentData: getIncidentData(),
-		nobuttons: nobuttonsParam == "true"
-	},
-});
-// Set up height resizer for embeds
-if (window.IframeResizer) {
-	const myResizer = new window.IframeResizer(mainEl, 3000);
-	myResizer.watch();
+  const map = new Map({
+    target: document.getElementById("root"),
+    props: {
+      data,
+    }
+  });
+
+  if (window.IframeResizer) {
+    var watch_resize = function() {
+        var my_el = document.getElementById('root'),
+            my_resizer = new window.IframeResizer(my_el, 3000);
+        my_resizer.watch();
+    };
+    watch_resize();
+  };
 }
+
+
+window.addEventListener("DOMContentLoaded", function() {
+  main();
+      });
+*/
+function main(data) {
+  // Instantiate the Timeline Svelte component
+  const timeline = new Timeline({
+    target: document.getElementById("root"),
+    props: {
+      data: data || []
+    }
+  });
+
+  // Handle iframe resizer if available
+  if (window.IframeResizer) {
+    const watch_resize = function() {
+      const my_el = document.getElementById('root');
+      const my_resizer = new window.IframeResizer(my_el, 3000);
+      my_resizer.watch();
+    };
+    watch_resize();
+  }
+}
+
+window.addEventListener("DOMContentLoaded", function() {
+  main();
+});
+

@@ -1,83 +1,25 @@
 <script>
-//Source: https://www.gannett-cdn.com/experiments/storytelling-embed/master/mass-killings-front-end/timeline.html
-//https://www.usatoday.com/in-depth/graphics/2022/12/08/2022-usatoday-graphics-year-in-review/10789310002/
-//https://github.com/USATODAY/mass-killings-front-end
-	import { onMount } from "svelte";
-  import { getIncidentData } from "../../lib/data/incidents.js";
- 
-  import { fade } from "svelte/transition";
+	import { fade } from "svelte/transition";
 	import * as d3 from "d3";
 	import Tooltip from "../Tooltip.svelte";
 	import Loading from "../Loading.svelte";
 	import FilterSelect from "../FilterSelect.svelte";
-	//import Footer from "../ChartFooter.svelte";
+	import Footer from "../ChartFooter.svelte";
 	import { filterUnique } from "../../lib/utils.js";
 	import colors from "../../lib/colors.js";
 	import months from "../../lib/months.js";
-	
-	//import { getDataURL, getDataFromURL } from "./index.js";
-	import { parseDate } from "../dates.js";
-	import rawIncidents from "../casualties.json"; // Import JSON file
-  
-
-  let incidents = [];
-  let width = 900;
-  const arc = d3.arc();
-  const monthTickHeight = 10;
-  let typeFilter = null;
-  //let typeFilter = "All";
-  let tooltip = null;
-//  let updated_at;
-
-  let incidentData = getIncidentData();
-//  let incidentPromise = getIncidentData();
-  export let nobuttons = false;
-  let years, margin, chartWidth, maxRadius, minRadius, height, extent, circleRadiusScale, monthsEvery, yScale, xScale, typeFilterOptions, filteredIncidents;
-
-  onMount(async () => {
-    const data = await incidentData;
-    incidents = data.incidents;
-    console.log(incidents)
-    // Any other initialization that depends on incidents
-  });
-
-/*
-import { fade } from "svelte/transition";
-	import * as d3 from "d3";
-	import Tooltip from "../Tooltip.svelte";
-	import Loading from "../Loading.svelte";
-	import FilterSelect from "../FilterSelect.svelte";
-	//import Footer from "../ChartFooter.svelte";
-	import { filterUnique } from "../../lib/utils.js";
-	import colors from "../../lib/colors.js";
-	import months from "../../lib/months.js";
-	
-	//import { getDataURL, getDataFromURL } from "./index.js";
-	import { parseDate } from "../dates.js";
-	import rawIncidents from "../casualties.json"; // Import JSON file
-
-	let incidents = rawIncidents.casualties
-	console.log("data:", incidents);
-
-
- //export const incidentData = getIncidentData();
-	//let incidentData = null;
-	
-//	d3.json("../static/data/hotspots_death_points3_grant_recipients_4crash_240218.json").then(function (data) {
-
 
 	// PROPS
-	let incidentData;
+	export let incidentData;
 	export let nobuttons = false;
 
-	//let incidents = [];
+	let incidents = [];
 	let width = 900;
 	const arc = d3.arc();
 	const monthTickHeight = 10;
 	let typeFilter = null;
 	let tooltip = null;
 	let updated_at;
-	*/
 
 	$: years = incidents
 		.map((d) => d.year)
@@ -102,7 +44,7 @@ import { fade } from "svelte/transition";
 		.range(years.map((_, i) => i * maxRadius + 10));
 	$: xScale = d3.scaleLinear().domain([0, 366]).range([0, chartWidth]);
 	$: typeFilterOptions = incidents
-		.map((d) => d.umbrella) //<<TO SET FILTER, set to match JSON
+		.map((d) => d.type)
 		.filter(filterUnique)
 		.map((d) => {
 			return {
@@ -113,17 +55,15 @@ import { fade } from "svelte/transition";
 	// filter incidents down based on all filters
 	$: filteredIncidents = typeFilter
 		? incidents.filter(
-				(d) => d.umbrella.toLowerCase().indexOf(typeFilter.toLowerCase()) >= 0
+				(d) => d.type.toLowerCase().indexOf(typeFilter.toLowerCase()) >= 0
 		  )
 		: incidents;
 
 	// data
-	
 	incidentData.then((d) => {
 		incidents = d.incidents;
-		//updated_at = d.updated_at;
+		updated_at = d.updated_at;
 	});
-	
 
 	// function that takes a Date object and returns the number of days into the given year
 	// January 1, 2022 would return 0
@@ -147,34 +87,14 @@ import { fade } from "svelte/transition";
 			tooltip = null;
 		}
 	}
-	
-    typeFilterOptions = incidents
-      .map((d) => d.umbrella)
-      .filter(filterUnique)
-      .map((d) => {
-        return {
-          label: d,
-          value: d,
-        };
-      });
-  
-  let umbrella_colors = ["#C96743","#E6A38A","#4E2B1F",
-    		"#416986", "#8DA2B5", "#1F2B36",
-			"#ABABAB", "#F0F0F0", "#404040"] 
-      	
-  const colorScale = d3.scaleOrdinal()
-    .domain(typeFilterOptions.map(d => d.value))
-    .range(umbrella_colors);
-
-	
 </script>
 
 <div class="chart-wrapper">
 	<div class="chart-inner-wrapper" bind:clientWidth={width}>
-		<!--{#await incidentData}
+		{#await incidentData}
 			<Loading height={500} />
-		{:then _}-->
-			<h3 class="chart-label">Fatal or injury-causing incidents among 10 largest ship managers, scaled by victims</h3>
+		{:then _}
+			<h3 class="chart-label">Timeline of mass killings scaled by number of victims killed</h3>
 			<div class="chart-inner" transition:fade>
 				{#if !nobuttons}
 				<div class="timeline-controls">
@@ -183,11 +103,11 @@ import { fade } from "svelte/transition";
 						options={typeFilterOptions}
 						showTypeInfo={true}
 						defaultLabel="All"
-						filterLabel="Filter by company" />
+						filterLabel="Filter by type" />
 				</div>
 				{/if}
 				<svg class="timeline-svg" {width} {height} role="img">
-					<title>A timeline chart showing fatal or injury-causing shipping incidents scaled by number of victims killed</title>
+					<title>A timeline chart showing mass killing incidents scaled by number of victims killed</title>
 					<g class="chart-inner" transform="translate({margin.left}, {margin.top})">
 						<g class="timeline-yearinfo-group">
 							{#each years as year}
@@ -216,7 +136,7 @@ import { fade } from "svelte/transition";
 										startAngle: -Math.PI * 0.5,
 										endAngle: Math.PI * 0.5,
 									})}
-									fill={colorScale(incident.umbrella)} 
+									fill={colors.orange}
 									opacity={tooltip && !(tooltip.incident.id == incident.id) ? 0.25 : 0.75}
 									stroke="#404040"
 									on:mousemove={(e) => onDetails(incident, [e.pageX, e.pageY])}
@@ -244,9 +164,9 @@ import { fade } from "svelte/transition";
 					</g>
 				</svg>
 			</div>
-		<!--{/await}-->
+		{/await}
 	</div>
-	<!-- <Footer {updated_at} /> -->
+	<Footer {updated_at} />
 </div>
 {#if tooltip}
 	<Tooltip incident={tooltip.incident} position={tooltip.position} onClose={() => tooltip = null}/>

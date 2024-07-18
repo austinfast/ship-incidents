@@ -40,23 +40,16 @@
 		{#if incident.casenickname}
 			<p class="tooltip-text tooltip-value">{incident.casenickname}</p>
 		{/if}
-		<!--<p class="tooltip-text tooltip-value">{incident.city}, {incident.state}</p>-->
-		<p class="tooltip-text tooltip-value">{incident.umbrella}</p>		
-		<p class="tooltip-text tooltip-value">{incident.vessel_name} - {incident.vessel_type}</p>
+		<p class="tooltip-text tooltip-value">{incident.city}, {incident.state}</p>
 		<div class="tooltip-detail-section">
 			<div class="tooltip-detail-group">
-				<p class="tooltip-label">Deaths:</p>
-				<p class="tooltip-text tooltip-value">{incident.number_dead}</p>
+				<p class="tooltip-label">Victims:</p>
+				<p class="tooltip-text tooltip-value">{incident.victims}</p>
 			</div>
 			<div class="tooltip-detail-group">
 				<p class="tooltip-label">Injured:</p>
-				<p class="tooltip-text tooltip-value">{incident.number_injured}</p>
+				<p class="tooltip-text tooltip-value">{incident.numinjured}</p>
 			</div>
-			<div class="tooltip-detail-group">
-				<p class="tooltip-label">Missing:</p>
-				<p class="tooltip-text tooltip-value">{incident.number_missing}</p>
-			</div>
-			<!--
 			<div class="tooltip-detail-group">
 				<p class="tooltip-label">Number of offenders:</p>
 				<p class="tooltip-text tooltip-value">{incident.offenders}</p>
@@ -68,14 +61,14 @@
 			<div class="tooltip-detail-group">
 				<p class="tooltip-label">Incident type:</p>
 				<p class="tooltip-text tooltip-value">{incident.type}</p>
-			</div>-->
+			</div>
 			<div class="tooltip-detail-group">
-				<p class="tooltip-label">Location:</p>
-				<p class="tooltip-text tooltip-value">{incident.location}</p>
+				<p class="tooltip-label">Location type:</p>
+				<p class="tooltip-text tooltip-value">{incident.location_type}</p>
 			</div>
 		</div>
 		<p class="tooltip-label">Details:</p> 
-		<p class="tooltip-text tooltip-narrative">{incident.incident_precis}</p> 
+		<p class="tooltip-text tooltip-narrative">{incident.narrative}</p> 
 	{:else if customContent}
 		{#each customContent as item}
 		{#if item.label}

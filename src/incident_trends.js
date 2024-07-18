@@ -20,6 +20,7 @@ const yearlyVariables = [
 	},
 ];
 
+/*
 new TrendBars({
 	target: mainEl,
 	props: {
@@ -29,6 +30,7 @@ new TrendBars({
 	},
 });
 
+*/
 // Set up height resizer for embeds
 if (window.IframeResizer) {
 	const myResizer = new window.IframeResizer(mainEl, 3000);
