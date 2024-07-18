@@ -70,6 +70,6 @@
     ],
     "config": {
         "graphic_slug": "ship-incidents",
-        "asset_path":  "https://github.com/austinfast/ship-incidents"
+        "asset_path":  "https://github.com/austinfast/ship-incidents/docs"
     }
 }
