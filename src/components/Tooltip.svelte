@@ -47,6 +47,9 @@
 	$: incidentYear = incident ? new Date(incident.real_date).getFullYear() : null;
 	// Set toolTipBelow based on the incident year
 	$: toolTipBelow = (incidentYear === 2019 || incidentYear === 2020);
+    //$: toolTipBelow = (size === "small" && incidentYear === 2019) ||
+     //               (size === "large" && (incidentYear === 2019 || incidentYear === 2020));
+
 	// make sure to adjust for nav bar in vertical position
 	$: yPos = toolTipBelow ? position[1] + 10 + navHeight: position[1] - 10 - navHeight;
 	$: console.log ("tooltipbelow", toolTipBelow, "yPos", yPos, "xPos", xPos)
@@ -226,6 +229,9 @@ function adjustTooltipPosition() {
 	}
 </style> -->
 
+<!--.tooltip-wrapper.small {
+    font-size: var(--mk-font-size-small);
+    width: 220px;-->
 <style>
 .tooltip-wrapper {
     background: #fff;
@@ -242,9 +248,10 @@ function adjustTooltipPosition() {
     z-index: 500;
 }
 
+
 .tooltip-wrapper.small {
     font-size: var(--mk-font-size-small);
-    width: 220px;
+    max-width: 100%;
 }
 
 .tooltip-wrapper.below {
