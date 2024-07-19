@@ -36,8 +36,9 @@
   let incidentData = getIncidentData();
 //  let incidentPromise = getIncidentData();
   export let nobuttons = false;
-  let windowWidth, years, margin, chartWidth, maxRadius, minRadius, height, extent, circleRadiusScale, monthsEvery, yScale, xScale, typeFilterOptions, filteredIncidents;
-  let size="large";
+  let years, margin, chartWidth, maxRadius, minRadius, height, extent, circleRadiusScale, monthsEvery, yScale, xScale, typeFilterOptions, filteredIncidents;
+  //let size="large";
+  //let windowWidth;
 
   onMount(async () => {
     const data = await incidentData;
@@ -145,17 +146,17 @@ import { fade } from "svelte/transition";
 
 	function onDetails(incident, position) {
 		if (incident) {
-		    windowWidth = window.innerWidth;
-		    size = windowWidth < 640 ? 'small' : "large";
-		    console.log("size", size)
+		    //windowWidth = window.innerWidth;
+		    //size = windowWidth < 640 ? 'small' : "large";
+		    //console.log("size", size)
 			tooltip = {
 				incident,
 				position
 			}
 		} else {
 			tooltip = null;
-			size = "large";
-		    console.log("size", size)
+			//size = "large";
+		    //console.log("size", size)
 		}
 	}
 	
@@ -291,8 +292,8 @@ import { fade } from "svelte/transition";
 	<!-- <Footer {updated_at} /> -->
 </div>
 {#if tooltip}
-	<!--ORIG<Tooltip incident={tooltip.incident} position={tooltip.position} onClose={() => tooltip = null}/>-->
-	<Tooltip incident={tooltip.incident} position={tooltip.position} size={size} onClose={() => tooltip = null}/>
+	<Tooltip incident={tooltip.incident} position={tooltip.position} onClose={() => tooltip = null}/>
+	<!--Reactive in OnDemand<Tooltip incident={tooltip.incident} position={tooltip.position} size={size} onClose={() => tooltip = null}/>-->
 {/if}
 
 <style>
