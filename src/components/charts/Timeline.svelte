@@ -193,7 +193,7 @@ import { fade } from "svelte/transition";
 		<!--{#await incidentData}
 			<Loading height={500} />
 		{:then _}-->
-			<h3 class="chart-label">Incidents among 10 largest ship managers, since May 2019</h3>
+			<h3 class="chart-label">Incidents among 10 largest ship managers, since 2019</h3>
 			<div class="chart-inner" transition:fade>
 			
 			  <div class="legend-controls">
@@ -280,7 +280,7 @@ import { fade } from "svelte/transition";
 	</div>
 	<div class="article-inner">
   <p class="source-line">NOTE Bubbles are scaled by victim count.</p>
-  <p class="source-line">SOURCE USA TODAY analysis of data from Lloyd's List Intelligence and the U.S. Coast Guard.</p>
+  <p class="source-line">SOURCE <a href="https://www.seasearcher.com/" target="_blank">Lloyd's List Intelligence</a> and the <a href="https://cgmix.uscg.mil/IIR/IIRSearch.aspx" target="_blank">U.S. Coast Guard</a></p>
 </div>
 	<!-- <Footer {updated_at} /> -->
 </div>

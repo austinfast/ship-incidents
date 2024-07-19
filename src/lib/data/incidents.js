@@ -47,7 +47,7 @@ async function generateIncidentData() {
 */
 
 import { parseDate } from "../dates.js";
-import rawIncidents from "./casualties.json"; // Import JSON file
+import rawIncidents from "./casualties2.json"; // Import JSON file
 
 let incidentData = null;
 
